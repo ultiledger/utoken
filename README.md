@@ -17,6 +17,7 @@ Private support, encrypted storage
 - Manage trust lines, account data.
 - Federation protocol support，Deposit/withdraw CNY(in progress).
 - Contacts support.
+- 
 
 ## Build yourself
 
@@ -30,7 +31,7 @@ Private support, encrypted storage
 
 ## 主要功能
 
-- 无需注册，一套助记词加密文件存在本地。
+- 无需注册，一套助记词管理跨连钱包，加密存在本地。
 - 交易本地签名。密钥不会暴露到因特网。
 - 瑞波恒星支持发送、兑换任意资产（正在开发)。
 - 支持发送接收 ETH 和 ERC20 tokens.
@@ -39,7 +40,9 @@ Private support, encrypted storage
 - 管理授信、账户数据。
 - 全面支持联邦协议。(正在开发)。
 - 支持设置联系人。
-
+- 同一个链支持多账户(正在开发)
+- 支持指纹
+- 支持DAPP钱包支付（正在开发)
 ## 编译
 
 
