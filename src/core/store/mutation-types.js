@@ -1,0 +1,20 @@
+export const SET_LOGIN_STATE = 'SET_LOGIN_STATE';// 设置登录状态
+export const SET_ROUTER_MAP = 'SET_ROUTER_MAP';// 设置路由映射
+export const SET_PREVIOUS_ROUTER = 'SET_PREVIOUS_ROUTER';// 设置前一个路由
+export const SET_CUR_ROUTER = 'SET_CUR_ROUTER';// 设置当前路由
+export const SET_DIRECTION = 'SET_DIRECTION'; // 设置路由方向
+
+export const SET_ACCOUNT = 'SET_ACCOUNT'; // 设置账户
+export const SET_BALANCES = 'SET_BALANCES'; // 设置余额
+export const SET_NETWORK = 'SET_NETWORK'; // 设置网络
+export const SET_SETTING = 'SET_SETTING'; // 设置配置
+export const SET_MARKET = 'SET_MARKET'; // 设置行情
+export const SET_CURRENCY_UNIT = 'SET_CURRENCY_UNIT'; // 设置货币单位
+export const SET_LANGUAGE = 'SET_LANGUAGE'; // 设置语种
+export const SET_GESTUREPWD = 'SET_GESTUREPWD'; // 设置手势密码
+export const SET_ACTIVATED_MAP = 'SET_ACTIVATED_MAP'; // 设置激活
+export const SET_DEFAULT_ADDRESS = 'SET_DEFAULT_ADDRESS'; // 设置默认地址
+export const SET_PASSWORD_MAP = 'SET_PASSWORD_MAP'; // 设置密码
+export const SET_TOKEN_CONFIG = 'SET_TOKEN_CONFIG'; // 设置配置版本
+export const SET_PRIVACY_MODE = 'SET_PRIVACY_MODE'; // 设置隐私模式
+export const SET_APP_VERSION = 'SET_APP_VERSION'; // 设置app版本号

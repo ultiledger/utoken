@@ -1,0 +1,96 @@
+import Vue from 'vue';
+import {
+  Button,
+  Cell,
+  List,
+  CellGroup,
+  Field,
+  Toast,
+  NavBar,
+  PullRefresh,
+  Dialog,
+  Tabbar,
+  TabbarItem,
+  Icon,
+  Popup,
+  NumberKeyboard,
+  Row,
+  Col,
+  Tag,
+  DatetimePicker,
+  Tab,
+  Tabs,
+  NoticeBar,
+  Step,
+  Steps,
+  Loading,
+  Swipe,
+  SwipeItem,
+  Search,
+  Checkbox,
+  Area,
+  SwitchCell,
+  PasswordInput,
+  Actionsheet,
+  Picker,
+  Uploader,
+  Radio,
+  RadioGroup,
+  CheckboxGroup,
+  Collapse,
+  CollapseItem,
+  Switch,
+  Badge,
+  Slider,
+  Card,
+  SwipeCell
+} from 'vant';
+Toast.setDefaultOptions({
+  duration: 3000
+});
+
+Vue.use(Button);
+Vue.use(Cell);
+Vue.use(List);
+Vue.use(Cell);
+Vue.use(CellGroup);
+Vue.use(Field);
+Vue.use(Toast);
+Vue.use(NavBar);
+Vue.use(PullRefresh);
+Vue.use(Dialog);
+Vue.use(Tabbar).use(TabbarItem);
+Vue.use(Icon);
+Vue.use(Popup);
+Vue.use(NumberKeyboard);
+Vue.use(Row);
+Vue.use(Col);
+Vue.use(Tag);
+Vue.use(DatetimePicker);
+Vue.use(Tab);
+Vue.use(Tabs);
+Vue.use(NoticeBar);
+Vue.use(Step);
+Vue.use(Steps);
+Vue.use(Loading);
+Vue.use(Swipe);
+Vue.use(SwipeItem);
+Vue.use(Search);
+Vue.use(Checkbox);
+Vue.use(Area);
+Vue.use(SwitchCell);
+Vue.use(PasswordInput);
+Vue.use(NumberKeyboard);
+Vue.use(Actionsheet);
+Vue.use(Picker);
+Vue.use(Uploader);
+Vue.use(CheckboxGroup);
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
+Vue.use(Switch);
+Vue.use(Badge);
+Vue.use(Slider);
+Vue.use(Card);
+Vue.use(SwipeCell);

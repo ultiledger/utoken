@@ -1,0 +1,74 @@
+/*栅格宽度*/
+$grid-gutter-width:         30px !default;
+/*系统头高度*/
+$header-height:             60px !default;
+/*左菜单的宽度*/
+$left-menu-bar-width:       200px !default;
+/*盒模型组成模式*/
+$box-sizing:                border-box !default;
+/*首要颜色*/
+/*$primary-color:             #f59f1e !default;*/
+$primary-color:             #00c2c2 !default;
+$primary-color-light: mix(#fff, $primary-color, 90%) !default;
+$primary-color-light-1: mix(#fff, $primary-color, 80%) !default;
+/*辅助颜色*/
+$success-color:             #67c23a !default;
+$info-color:                #20A0FF !default;
+$warning-color:             #eb9e05 !default;
+$danger-color:              #fa5555 !default;
+$danger-color-light: mix(#fff, $danger-color, 90%) !default;
+$muted-color:               #93a0aa !default;
+$primay-gradient: #00a6da !default;
+$primay-gradient-light: #00c2c2 !default;
+
+$danger-gradient: #f94342 !default;
+$danger-gradient-light: #fd8023 !default;
+
+$gray-gradient: #a59c9c !default;
+$gray-gradient-light: #c3beba !default;
+
+$eth-gradient: #00a6da !default;
+$eth-gradient-light: #00c2c2 !default;
+$btc-gradient: #f94342 !default;
+$btc-gradient-light: #fd8023 !default;
+$stellar-gradient:#73a8b7;
+$stellar-gradient-light:#a4d2dc;
+$ripple-gradient-light:#4ca5d8;
+$ripple-gradient:#016198;
+
+$gray-color: #6e7f8d;
+$text-color: #6E7F8D;
+
+/*边框阴影色*/
+$border-shadow-color:       #cccccc !default;
+/*边框颜色*/
+$border-color:              #e5e5e5 !default;
+/*边框圆角*/
+$border-radius:             8px !default;
+/*主背景色*/
+$main-background-color:     #f0f2f5 !default;
+/*辅助背景色*/
+$success-bg-color:          $success-color !default;
+$info-bg-color:             $info-color !default;
+$warning-bg-color:          $warning-color !default;
+$danger-bg-color:           $danger-color !default;
+$primary-bg-color:          $primary-color !default;
+/*浅色*/
+$dark-white:                #F9FAFC !default;
+/*字体颜色*/
+$font-color:                #222  !default;
+/*浅字体颜色*/
+$font-color-light:          #8D8D8D !default;
+
+$black-gray:                #2d2d2d;
+$black-gray-text:           #767676;
+/**
+*字体大小
+*/
+$x-small-font: 0.65rem;
+$small-font: 0.75rem;
+$normal-font: 0.88rem;
+$big-font: 1rem;
+$large-font: 1.125rem;
+$x-large-font: 1.25rem;
+$x-x-large-font: 1.7rem;
