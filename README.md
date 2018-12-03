@@ -1,4 +1,4 @@
-# 官网地址和下载：https://utoken.cash
+# 官网地址(下载)：https://utoken.cash
 # Utoken (The first mobile wallet to support Ripple, Stellar and other mainstream block chain networks)
 
 Supporting Ripple/Stellar/BTC/ETH multi-chain assets
