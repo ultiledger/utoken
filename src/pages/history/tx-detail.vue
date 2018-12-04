@@ -90,13 +90,13 @@
       background-image: radial-gradient(circle at center top, #0bbcbc, #FFF, $main-background-color);
     }
     &.ripple {
-      background-image: radial-gradient(circle at center top, #016198, #FFF, $main-background-color);
+      background-image: radial-gradient(circle at center top, #0bbcbc, #FFF, $main-background-color);
     }
     &.stellar {
-      background-image: radial-gradient(circle at center top, #73a8b7, #FFF, $main-background-color);
+      background-image: radial-gradient(circle at center top, #0bbcbc, #FFF, $main-background-color);
     }
     &.bitcoin {
-      background-image: radial-gradient(circle at center top, #fd8023, #FFF, $main-background-color);
+      background-image: radial-gradient(circle at center top, #0bbcbc, #FFF, $main-background-color);
     }
     background-size: 100% 100%;
     background-repeat: no-repeat;
