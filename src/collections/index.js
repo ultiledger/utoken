@@ -1,14 +1,16 @@
 import Vue from 'vue';
 import Loki from 'lokijs';
 import LokiCordovaFSAdapter from 'loki-cordova-fs-adapter';
-let adapter = new LokiCordovaFSAdapter({'prefix': 'loki'});
 import account from './account';
 import identity from './identity';
 import asset from './asset';
 import setting from './setting';
 import address from './address';
 import history from './history';
+import assetConfig from './assetConfig';
+import tempHistory from './tempHistory';
 
+let adapter = new LokiCordovaFSAdapter({'prefix': 'loki'});
 // const env = process.env.NODE_ENV;
 
 // db = new Loki('walletDB', {
@@ -49,7 +51,9 @@ const loadData  = (callback) => {
       asset: asset.newInstance(db),
       setting: setting.newInstance(db),
       address: address.newInstance(db),
-      history: history.newInstance(db)
+      history: history.newInstance(db),
+      tempHistory: tempHistory.newInstance(db),
+      assetConfig: assetConfig.newInstance(db)
     };
     callback();
   });

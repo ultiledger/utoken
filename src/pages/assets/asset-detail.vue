@@ -32,7 +32,7 @@
           <div class="asset-blc text-center item-block">
             <img v-if="asset.logo" :src="asset.logo" style="width:36px;height: 36px;">
             <img v-else-if="asset.code === 'XRP'" :src="`static/img/${asset.code}-1@3x.png`" style="width:36px;height: 36px;"/>
-            <img v-else :src="`static/img/${asset.code}@3x.png`" style="width:36px;height: 36px;"/>
+            <img v-else :src="`static/img/${asset.code}@3x.png`" style="width:36px;height: 36px;" onerror="this.src='static/img/unknown.png'"/>
             <p class="x-x-large-font text-main" style="line-height: 45px;">{{balance | currency('', '7') | cutTail}}</p>
             <p class="small-font text-primary" style="line-height: 20px;">≈&nbsp;{{balance | market(asset.code, asset.issuer)}}</p>
           </div>
@@ -52,7 +52,7 @@
       </van-row>
     </pl-stick>
     <receive-asset ref="receiveAsset"  @scanQrcode="toScan" :short-code="asset.code" :nav-title="reNavTitle" :can-change-asset="false"></receive-asset>
-    <send-transaction ref="sendTransaction"></send-transaction>
+    <send-transaction ref="sendTransaction" @done="onRefresh"></send-transaction>
     <tx-detail ref="txDetail"></tx-detail>
     <address-add ref="addressAdd"></address-add>
   </van-popup>

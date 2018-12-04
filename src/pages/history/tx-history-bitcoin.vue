@@ -55,7 +55,8 @@
     },
     methods: {
       clearHistory () {
-        this.history = [];
+        this.tempHistory = [];
+        this.normalHistory = [];
       },
       getHistory () {
         this.getRemoteHistory();
@@ -73,7 +74,7 @@
             this.total = data.wallet.n_tx;
             data.txs.forEach(item => {
               let history = this.toHistory(item);
-              this.history.push(history);
+              this.normalHistory.push(history);
             });
             this.nextLoading = false;
           }).catch(err => {

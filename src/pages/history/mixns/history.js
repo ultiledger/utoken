@@ -19,9 +19,13 @@ export default{
   data () {
     return {
       tabActive: 0,
-      history: [],
+      // history: [],
+      tempHistory: [],
+      normalHistory: [],
+      tempHistoryMap: {},
       lastHistory: null,
       firstHistory: null,
+      timers: [],
       nextLoading: false,
       limit: 30,
       sticky: true
@@ -33,7 +37,10 @@ export default{
     },
     asset () {
       this.tabActive = 0;
-      this.history = [];
+      // this.history = [];
+      this.tempHistory = [];
+      this.normalHistory = [];
+      this.tempHistoryMap = {};
       this.setRegion();
     }
   },
@@ -53,7 +60,13 @@ export default{
         return false;
       }
       return true;
+    },
+    history () {
+      return [...this.tempHistory, ...this.normalHistory];
     }
+  },
+  beforeDestroy () {
+    this.clearTimers();
   },
   methods: {
     showDetail (item) {
@@ -67,14 +80,34 @@ export default{
       this.$emit('addAddress', address);
     },
     getHistory () {
-      let history = this.$collecitons.history.findHistory(this.$store.state.account.type, this.$store.state.account.address, this.asset.code, this.asset.issuer);
+      let history = this.getLocalHistory();
+      // this.getLocalHistory();
       this.setRegion();
       if (!history || history.length === 0) {
         this.getRemoteHistory();
       } else {
-        this.history = history;
+        // this.history = history;
         this.setRegion();
       }
+    },
+    clearTimers () {
+      this.timers.forEach(timer => {
+        clearInterval(timer);
+      });
+      this.timers = [];
+    },
+    updateConfirmations () {},
+    getLocalHistory () {
+      this.normalHistory =  this.$collecitons.history.findHistory(this.$store.state.account.type, this.$store.state.account.address, this.asset.code, this.asset.issuer);
+      this.tempHistory =  this.$collecitons.tempHistory.findHistory(this.$store.state.account.type, this.$store.state.account.address, this.asset.code, this.asset.issuer);
+      this.tempHistoryMap = {};
+      this.tempHistory.forEach(item => {
+        this.tempHistoryMap[item.txHash] = item;
+      });
+      // console.info(this.tempHistoryMap);
+      let history = [...this.tempHistory, ...this.normalHistory];
+      this.updateConfirmations();
+      return history;
     },
     getRemoteHistory (param, direction = 'up') {
       let option = this.getOption(param, direction);
@@ -84,9 +117,7 @@ export default{
       }
       this.$wallet.getTransactions(this.$store.state.account.address, option)
         .then(async txs => {
-          // console.info(txs);
           for (const item of txs) {
-            this.toHistory(item);
             let historyItem = await this.toHistory(item);
             if (!historyItem) {
               continue;
@@ -95,13 +126,18 @@ export default{
             if (!this.history || this.history.length == 0 ||
               (direction === 'up' && historyItem.txTime > this.lastHistory.txTime) ||
               (direction !== 'up' && historyItem.txTime < this.firstHistory.txTime)) {
-              this.$collecitons.history.insertHistory(historyItem);
+
+              let storeNormalHistory =  this.$collecitons.history.findHistory(this.$store.state.account.type, this.$store.state.account.address, this.asset.code, this.asset.issuer, historyItem.txHash);
+              if (!storeNormalHistory || storeNormalHistory.length === 0) {
+                this.$collecitons.history.insertHistory(historyItem);
+              }
             }
           }
 
           let hasFirstHistory = this.firstHistory ? true : false;
 
-          this.history = this.$collecitons.history.findHistory(this.$store.state.account.type, this.$store.state.account.address, this.asset.code, this.asset.issuer);
+          // this.history = this.getLocalHistory();
+          this.getLocalHistory();
           this.setRegion();
 
           if ((direction !== 'up' || !hasFirstHistory) && (!txs || txs.length === 0 || txs.length < this.limit)) {

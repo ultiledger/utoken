@@ -2,11 +2,11 @@
   <div class="view-account-item">
     <!--头部标题信息-->
     <van-row class="wallet-title">
-      <van-col span="12">
+      <van-col span="13">
         <div class="text-font-weight-bold">{{title}}</div>
       </van-col>
       <van-col
-        span="12"
+        span="11"
         @click.native="toEmitOpt"
         class="text-right"
         v-if="optFalg">

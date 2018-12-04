@@ -4,37 +4,64 @@
       <div class="text-center padding">
         <van-icon name="checked" class="text-primary" style="font-size: 40px;vertical-align: middle;"/>
       </div>
-      <div class="text-center">
-        <b class="x-x-large-font">
-          {{item.txType === '1' ? '+' : '-'}}&nbsp;{{item.amount | currency('', '7') | cutTail}}</b>&nbsp;
-        <span class="big-font">{{tempItem.assetCode}}</span>
-      </div>
-      <div class="tip text-muted small-font text-center" v-text="$t('common.transactionSuccess')"></div>
+      <div class="text-center big-font" v-if="tempItem.txType === '1'"><strong>{{$t('history.receivableSuccess')}}</strong></div>
+      <div class="text-center big-font" v-else><strong>{{$t('history.transferSuccess')}}</strong></div>
+      <div class="text-center text-muted small-font" style="margin-top: 10px;">{{tempItem.txTime | date('YYYY/MM/DD hh:mm:ss')}}</div>
     </pl-block>
 
-    <pl-block>
+    <pl-block style="padding-left: 0px;">
       <div class="text-block">
-        <p class="text-muted small-font" v-text="$t('history.transactionTime')"></p>
-        <div>{{tempItem.txTime | date('YYYY/MM/DD hh:mm:ss')}}</div>
-      </div>
-      <div class="text-block">
-        <p class="text-muted small-font" v-text="$t('common.receivablesAddress')"></p>
-        <pl-wallet-addr :address="tempItem.to" complete></pl-wallet-addr>
-      </div>
-      <div class="text-block">
-        <p class="text-muted small-font" v-text="$t('common.paymentAddress')"></p>
-        <pl-wallet-addr :address="tempItem.from" complete></pl-wallet-addr>
+        <van-row>
+          <van-col span="6" type="flex">
+            <div class="text-muted small-font">{{$t('history.amount')}}</div>
+          </van-col>
+          <van-col span="18">
+            <div class="big-font">{{tempItem.amount}}&nbsp;&nbsp;{{item.assetCode}}</div>
+          </van-col>
+        </van-row>
       </div>
       <div class="text-block"  v-if="tempItem && tempItem.data && tempItem.data.memo_type && tempItem.data.memo_type !== 'none'">
-        <p class="text-muted small-font">Memo-{{tempItem.data.memo_type}}</p>
-        <div>{{tempItem.data.memo}}</div>
+        <van-row>
+          <van-col span="6" type="flex">
+            <div class="text-muted small-font">Memo-{{tempItem.data.memo_type}}</div>
+          </van-col>
+          <van-col span="18">
+            <div>{{tempItem.data.memo}}</div>
+          </van-col>
+        </van-row>
+      </div>
+      <div class="text-block">
+        <van-row>
+          <van-col span="6">
+            <p class="text-muted small-font" v-text="$t('common.receivablesAddress')"></p>
+          </van-col>
+          <van-col span="18">
+            <pl-wallet-addr class="small-font" :address="tempItem.to" complete></pl-wallet-addr>
+          </van-col>
+        </van-row>
+      </div>
+      <div class="text-block">
+        <van-row>
+          <van-col span="6">
+            <p class="text-muted small-font"  v-text="$t('common.paymentAddress')"></p>
+          </van-col>
+          <van-col span="18">
+            <pl-wallet-addr class="small-font" :address="tempItem.from" complete></pl-wallet-addr>
+          </van-col>
+        </van-row>
       </div>
     </pl-block>
 
-    <pl-block class="margin-top">
+    <pl-block class="margin-top van-hairline--top" style="padding-left: 0px;">
       <div class="text-block">
-        <p class="text-muted small-font" v-text="$t('history.transactionHash')"></p>
-        <pl-wallet-addr :address="tempItem.txHash" :length="16"></pl-wallet-addr>
+        <van-row>
+          <van-col span="6">
+            <p class="text-muted small-font" v-text="$t('history.transactionHash')"></p>
+          </van-col>
+          <van-col span="18">
+            <pl-wallet-addr :address="tempItem.txHash" :length="16"></pl-wallet-addr>
+          </van-col>
+        </van-row>
       </div>
     </pl-block>
     <br>

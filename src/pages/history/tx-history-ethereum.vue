@@ -44,13 +44,39 @@
     mixins: [history],
     methods: {
       setRegion () {
-        if (this.history && this.history.length > 0) {
-          this.lastHistory = this.history[0];
-          this.firstHistory = this.history[this.history.length - 1];
+        if (this.normalHistory && this.normalHistory.length > 0) {
+          this.lastHistory = this.normalHistory[0];
+          this.firstHistory = this.normalHistory[this.normalHistory.length - 1];
         } else {
           this.lastHistory = null;
           this.firstHistory = null;
         }
+      },
+      updateConfirmations () {
+        let confirmations = 6;
+        this.clearTimers();
+        this.tempHistory.forEach(item => {
+          let timer = setInterval(async () => {
+            const trxConfirmations = await this.$wallet.getConfirmations(item.txHash);
+            console.log('trxConfirmations:', trxConfirmations);
+            if (trxConfirmations === -1) {
+              this.$collecitons.tempHistory.removeHistory({txHash: item.txHash});
+              this.getRemoteHistory();
+            }
+            if (trxConfirmations > confirmations) {
+              this.$collecitons.tempHistory.removeHistory({txHash: item.txHash});
+              clearInterval(timer);
+              this.$store.dispatch('setBalances', this.$store.state.account.address);
+              this.getRemoteHistory();
+            } else {
+              this.$collecitons.tempHistory.updateHistory(item.txHash, history => {
+                history.confirmations = trxConfirmations;
+              });
+              item.confirmations = trxConfirmations;
+            }
+          }, 20 * 1000);
+          this.timers.push(timer);
+        });
       },
       getOption (param, direction) {
         let option = {
@@ -70,16 +96,58 @@
         }
         return option;
       },
-      async toHistory (data) {
-        // console.info(data);
+      checkTempHistory (data, isContract) {
+        let storeTempHistory =  this.$collecitons.tempHistory.findHistory(this.$store.state.account.type, this.$store.state.account.address, this.asset.code, this.asset.issuer, data.hash);
+        if (storeTempHistory && storeTempHistory.length > 0) {
+          this.$collecitons.tempHistory.updateHistory(data.hash, history => {
+            history.confirmations = data.confirmations;
+          });
+          this.tempHistory =  this.$collecitons.tempHistory.findHistory(this.$store.state.account.type, this.$store.state.account.address, this.asset.code, this.asset.issuer);
+          return true;
+        }
+
         let fee = '0';
         if (data.gasUsed && data.gasPrice) {
           fee = new Big(data.gasUsed).times(data.gasPrice).toFixed();
         }
+
+
+        if (data.confirmations <= 6) {
+          let tempHistory = {
+            address: this.$store.state.account.address,
+            acctType: this.$store.state.account.type,
+            assetCode: this.asset.code,
+            assetIssuer: this.asset.issuer,
+            txHash: data.hash,
+            amount: this.$wallet.getInstance().utils.fromWei(data.value, 'ether'),
+            blockNumber: data.blockNumber,
+            to: data.to,
+            from: data.from,
+            fee:  this.$wallet.getInstance().utils.fromWei(fee, 'ether'),
+            txType: isContract ? '2' : data.to.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0',
+            txTime: new moment().format('YYYYMMDD HH:mm:ss'),
+            data: data,
+            confirmations: data.confirmations
+          };
+          this.$collecitons.tempHistory.insertHistory(tempHistory);
+          return true;
+        }
+        return false;
+      },
+      async toHistory (data) {
         let isContract = false;
         if (this.asset.code === CoinType.ETH) {
           isContract = await  this.$wallet.isContract(data.to);
         }
+
+        if (this.checkTempHistory(data, isContract)) {
+          return null;
+        }
+        let fee = '0';
+        if (data.gasUsed && data.gasPrice) {
+          fee = new Big(data.gasUsed).times(data.gasPrice).toFixed();
+        }
+
         let history = {
           address: this.$store.state.account.address,
           acctType: this.$store.state.account.type,

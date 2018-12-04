@@ -12,7 +12,7 @@
         @click-left="close">
         <span slot="left"><i class="ultfont ult-left"></i></span>
       </van-nav-bar>
-     <pl-content-block>
+     <pl-content-block :offsetTop="46">
        <wallet-text-area
          class="margin-top"
          :tip="$t('wallet.recoverWalletTip')"

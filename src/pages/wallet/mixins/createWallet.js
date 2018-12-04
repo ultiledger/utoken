@@ -142,7 +142,6 @@ export default {
             address: account.address,
             code: DBT.symbol,
             name: DBT.name});
-          // this.$store.dispatch('setBalances', account.address);
         }
       }
     }

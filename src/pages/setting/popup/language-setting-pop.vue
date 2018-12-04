@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-  import {languages} from 'src/core/constants';
+  import {languages, languagesCurrencys} from 'src/core/constants';
   export default {
     data () {
       return {
@@ -56,6 +56,7 @@
         this.$collecitons.setting.updateSetting((setting) => {
           setting.language = this.activeItem;
           this.$store.dispatch('setLanguage', this.activeItem);
+          this.$store.dispatch('setCurrencyUnit', languagesCurrencys[this.activeItem]);
           this.$i18n.locale = this.activeItem; /* 加载对应配置文件*/
           return setting.language = this.activeItem;
         });

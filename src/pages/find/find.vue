@@ -55,23 +55,23 @@
             title: this.$t('find.xrpTitle'),
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
-            link: 'http://xrpinfo.stellar.chat/',
+            link: 'https://wipple.devnull.network/live/accounts',
             imgUrl: 'static/img/XRP@3x.png'
           },
           {
             title: this.$t('find.xmlTitle'),
             subTitle: this.$t('find.xmlSubTitle'),
             desc: this.$t('find.xmlDesc'),
-            link: 'https://stellar.expert/explorer/public/account/',
+            link: 'https://steexp.com/',
             imgUrl: 'static/img/XLM@3x.png'
           },
-          {
+          /* {
             title: this.$t('find.xrpMarketTitle'),
             subTitle: this.$t('find.xrpMarketSubTitle'),
             desc: this.$t('find.xrpMarketDesc'),
             link: 'http://ripple.stellar.chat/#/',
             imgUrl: 'static/img/XRP@3x.png'
-          },
+          }, */
           {
             title: this.$t('find.u919Title'),
             subTitle: this.$t('find.u919SubTitle'),
@@ -111,13 +111,13 @@
             link: ' https://steexp.com/',
             imgUrl: 'static/img/XLM@3x.png'
           },
-          {
+          /* {
             title: this.$t('find.xrpMarketTitle'),
             subTitle: this.$t('find.xrpMarketSubTitle'),
             desc: this.$t('find.xrpMarketDesc'),
             link: 'http://ripple.stellar.chat/#/',
             imgUrl: 'static/img/XRP@3x.png'
-          },
+          }, */
           {
             title: this.$t('find.u919Title'),
             subTitle: this.$t('find.u919SubTitle'),

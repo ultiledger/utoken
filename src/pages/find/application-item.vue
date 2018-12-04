@@ -3,16 +3,18 @@
     <div class="application">
       <van-card
         @click.native="to(item)"
-        :desc="item.desc"
         class="item-block"
         v-for="(item, index) in datas"
         :key="index">
         <div slot="title" class="card-title">
-          <div class="small-font">{{item.title}}</div>
-          <div class="small-font">{{item.subTitle}}</div>
+          <div class="normal-font">{{item.title}}</div>
+          <div class="small-font text-ellipsis text-main">{{item.subTitle}}</div>
         </div>
         <div slot="thumb">
           <img :src="item.imgUrl" width="60" height="60">
+        </div>
+        <div slot="desc" class="text-muted">
+          {{item.desc}}
         </div>
         <!--<div slot="footer" style="position: relative;top: -35px;">
           <van-icon name="arrow"></van-icon>

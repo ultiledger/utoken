@@ -1,5 +1,5 @@
 let instance = null;
-class History {
+class TempHistory {
   /**
    * @param address
    * @param acctType
@@ -14,9 +14,9 @@ class History {
    * @param txType
    * @param txTime
    * @param data
-   * @param firstHistory
+   * @param confirmations
    */
-  constructor (address, acctType, assetCode, assetIssuer, txHash, amount, blockNumber, to, from, fee, txType, txTime, data, firstHistory) {
+  constructor (address, acctType, assetCode, assetIssuer, txHash, amount, blockNumber, to, from, fee, txType, txTime, data, confirmations) {
     this.address = address;
     this.acctType = acctType;
     this.assetCode = assetCode;
@@ -30,7 +30,7 @@ class History {
     this.txType = txType;
     this.txTime = txTime;
     this.data = data;
-    this.firstHistory = firstHistory;
+    this.confirmations = confirmations;
   }
 
   /**
@@ -47,7 +47,7 @@ class History {
    * @param txType
    * @param txTime
    * @param data
-   * @param firstHistory
+   * @param confirmations
    * @returns {History}
    */
   static insertHistory (
@@ -65,10 +65,10 @@ class History {
       txType = '',
       txTime = '',
       data = '',
-      firstHistory = false
+      confirmations = 0
     } = {}
   ) {
-    let history = new History(address, acctType, assetCode, assetIssuer, txHash, amount, blockNumber, to, from, fee, txType, txTime, data, firstHistory);
+    let history = new TempHistory(address, acctType, assetCode, assetIssuer, txHash, amount, blockNumber, to, from, fee, txType, txTime, data, confirmations);
     instance.insert(history);
     return this;
   }
@@ -95,7 +95,20 @@ class History {
     }
 
     let resultRet = instance.chain().find(params)
-      .simplesort('blockNumber', true).data();
+      .simplesort('txTime', true).data();
+    return resultRet;
+  }
+
+  /**
+   *
+   * @param identityId
+   * @returns {*} 返回一个数组，多个
+   */
+  static findHistoryByTxHash(txHash) {
+    let params = {
+      txHash: txHash
+    };
+    let resultRet = instance.findOne(params);
     return resultRet;
   }
 
@@ -125,7 +138,7 @@ class History {
    * @returns {history}
    */
   static newInstance (db) {
-    instance = db.getCollection('history') || db.addCollection('history');
+    instance = db.getCollection('tempHistory') || db.addCollection('tempHistory');
     return this;
   }
   /**
@@ -138,5 +151,5 @@ class History {
   }
 }
 
-export default History;
+export default TempHistory;
 

@@ -103,7 +103,6 @@
           this.memorizingCodes = mnemonicCode.split(' ');
           this.isShowTag = false;
         } else { // 创建跳转
-          this.isShowTag = true;
           this.setDefaultMnemonic();
         }
         this.form.password = password;
@@ -126,7 +125,9 @@
       },
       setDefaultMnemonic () {
         this.memorizingCodeLanguage = 'english';
+        this.isShowTag = false;
         if (this.$store.state.setting.language === 'zh-CN') {
+          this.isShowTag = true;
           this.tagSelect = '1';
           this.memorizingCodeLanguage = 'chinese_simplified';
         }else {

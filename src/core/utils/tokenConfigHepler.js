@@ -20,6 +20,23 @@ export default {
       store.dispatch('setTokenConfig',  tokenCofing);
     } else {
       tokens.set(setting.tokenConfig.config);
+      // 把新增的合约加载到内存
+      let assetConfigs = Vue.collecitons.assetConfig.findAll();
+      assetConfigs.forEach(item => {
+        let tokenconfigs = tokens.get(item.type);
+        if (tokenconfigs) {
+          tokenconfigs[item.symbol] = {
+            symbol: item.symbol,
+            name: item.name,
+            displayName: item.name,
+            decimals: item.decimals,
+            address: item.address.toLocaleLowerCase(),
+            abi: item.abi
+          };
+          tokens.set(tokenconfigs);
+        }
+      });
+
     }
   }
 };

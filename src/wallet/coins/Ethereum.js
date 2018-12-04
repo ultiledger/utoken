@@ -170,6 +170,10 @@ class EthereumWallet {
     });
   }
 
+  getTransaction(txHash) {
+    return this.server.eth.getTransaction(txHash);
+  }
+
   async sendTransaction(fromSecret, to, amount, option = {}) {
     fromSecret = `0x${fromSecret}`;
     let account = this.server.eth.accounts.privateKeyToAccount(fromSecret);
@@ -248,6 +252,39 @@ class EthereumWallet {
     const account = web3.eth.accounts.privateKeyToAccount(`0x${secret}`);
     const address = account.address;
     return { secret, address};
+  }
+
+  getContractAbi (address) { // 新增合约的时候获取abi
+    let mode = 'test';
+    if (this.url && this.url.indexOf('mainnet.infura') != -1) {
+      mode = 'public';
+    }
+    let url = `${etherscanApiUrl[mode]}?module=contract&action=getabi&address=${address}&apikey=${apiKeys[0]}`;
+    return new Promise((resolve, reject) => {
+      axios.get(url).then((ret) => {
+        if (ret.data.status === '1' && ret.data.message === 'OK') {
+          resolve(JSON.parse(ret.data.result));
+        } else {
+          reject(ret.data.result);
+        }
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
+  async getConfirmations(txHash) {
+    try {
+      const trx = await this.server.eth.getTransaction(txHash);
+      const currentBlock = await this.server.eth.getBlockNumber();
+      if (!trx) {
+        return -1;
+      }
+      return trx.blockNumber === null ? 0 : currentBlock - trx.blockNumber;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
   }
 }
 

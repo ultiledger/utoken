@@ -7,5 +7,17 @@ export default (language) => {
     Locale.use(language, enUS);
   } else if (language === 'zh-CN') {
     Locale.use(language, zhCN);
+  } else if (language === 'ja-JP') {
+    const jaJP = {
+      confirm: '確認',
+      cancel: 'キャンセル'
+    };
+    Locale.use(language, jaJP);
+  } else if (language === 'ko-KO') {
+    const koKO = {
+      confirm: '확인',
+      cancel: '취소'
+    };
+    Locale.use(language, koKO);
   }
 };

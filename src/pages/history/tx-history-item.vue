@@ -36,6 +36,14 @@
         </table>
       </div>
     </div>
+    <div v-if="showPercentage">
+      <div class="text-right x-small-font" style="padding-right: 5px;">
+       {{tip}}
+      </div>
+      <div class="progressbar">
+        <div class="progressbar-stack" :style="{width: percentage + '%'}"></div>
+      </div>
+    </div>
   </van-cell>
   <!--</van-swipe-cell>-->
 </template>
@@ -48,6 +56,10 @@
         default () {
           return {};
         }
+      },
+      maxConfirmations: {
+        type: Number,
+        default: 6
       }
     },
     data () {
@@ -60,6 +72,19 @@
       };
     },
     computed: {
+      tip () {
+        if (this.item.confirmations === 0) {
+          return this.$t('history.unpackage');
+        } else {
+          return this.$t('history.confirming');
+        }
+      },
+      showPercentage () {
+        return this.item.confirmations !== undefined && this.item.confirmations <= this.maxConfirmations;
+      },
+      percentage () {
+        return this.item.confirmations / this.maxConfirmations * 100;
+      },
       type () {
         if (this.item && this.types[this.item.txType]) {
           return this.types[this.item.txType];
@@ -90,6 +115,7 @@
 </script>
 
 <style scoped lang="scss">
+  @import "../../../src/assets/scss/variables";
 .item{
   display: flex;
   .icon {
@@ -108,6 +134,17 @@
     flex: 1;
     vertical-align: middle;
     text-align: right;
+  }
+}
+.progressbar{
+  height: 3px;
+  background: $primary-color-light-1;
+  margin-left: 50px;
+  margin-right: 5px;
+  .progressbar-stack{
+    background: $primary-color;
+    width: 50%;
+    height: 5px;
   }
 }
 </style>

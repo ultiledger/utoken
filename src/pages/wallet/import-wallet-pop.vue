@@ -225,7 +225,7 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
   .import-wallet{
     .top-btn{
-      width: 110px;
+      width: 125px;
       display: inline-block;
       text-align: center;
       padding: 8px 15px;

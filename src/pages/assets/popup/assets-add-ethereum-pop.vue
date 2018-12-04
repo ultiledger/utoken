@@ -14,7 +14,7 @@
             <td width="40px">
                   <span class="img-icon">
                     <img v-if="asset.logo" :src="asset.logo">
-                    <img v-else :src="`static/img/${asset.code}@3x.png`" >
+                    <img v-else :src="`static/img/${asset.code}@3x.png`" onerror="this.src='static/img/unknown.png'">
                   </span>
             </td>
             <td>

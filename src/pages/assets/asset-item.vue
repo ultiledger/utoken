@@ -59,7 +59,7 @@
                   <span class="img-icon">
                       <img v-if="item.logo" :src="item.logo">
                       <img v-else-if="item.code === 'XRP'" :src="`static/img/${item.code}-1@3x.png`"/>
-                      <img v-else :src="`static/img/${item.code}@3x.png`"/>
+                      <img v-else :src="`static/img/${item.code}@3x.png`" onerror="this.src='static/img/unknown.png'"/>
                   </span>
                   </td>
                   <td width="115">

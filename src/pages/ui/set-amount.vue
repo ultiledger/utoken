@@ -11,7 +11,7 @@
       <span slot="left"><i class="ultfont ult-left"></i></span>
     </van-nav-bar>
     <div class="b-white padding set-amount border-radius">
-      <div class="title text-main" v-text="$t('scan.transferAmt')"></div>
+      <div class="title" v-text="$t('scan.transferAmt')"></div>
       <van-field
         type="number"
         ref="amountInput"

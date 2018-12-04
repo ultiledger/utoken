@@ -109,6 +109,7 @@
   import {AccountType} from '../../wallet/constants';
   import receiveAddress from '../ui/receive-address';
   import cryptor from 'core/utils/cryptor';
+  import moment from 'moment';
   export default{
     components: {receiveAddress},
     props: {
@@ -271,11 +272,43 @@
         this.$wallet.sendTransaction(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.form.receiveAddress, this.form.amt, options)
           .then(ret => {
             console.info(ret);
-            toast.message = this.$t('transaction.transactionBroadcastSuccess');
-            setTimeout(() => {
-              toast.clear();
-              this.$emit('done');
-            }, 1000);
+            this.setTempHistory(ret, this.form.receiveAddress, this.form.amt, options, () => {
+              toast.message = this.$t('transaction.transactionBroadcastSuccess');
+              setTimeout(() => {
+                toast.clear();
+                this.$emit('done');
+              }, 1000);
+            });
+            // this.$wallet.getTransaction(ret).then(tx => {
+            //   console.info('tx:', tx);
+            //   let account = this.$store.state.account;
+            //   let fee = '0';
+            //   if (tx.gas && tx.gasPrice) {
+            //     fee = new Big(tx.gas).times(tx.gasPrice).toFixed();
+            //   }
+            //   let tempHistory = {
+            //     address: account.address,
+            //     acctType: account.type,
+            //     assetCode: this.asset.code,
+            //     assetIssuer: this.asset.issuer,
+            //     txHash: tx.hash,
+            //     amount: this.form.amt,
+            //     blockNumber: tx.blockNumber,
+            //     to: this.form.receiveAddress,
+            //     from: tx.from,
+            //     fee:  this.$wallet.getInstance().utils.fromWei(fee, 'ether'),
+            //     txType: '0',
+            //     txTime: new moment().format('YYYYMMDD HH:mm:ss'),
+            //     data: tx,
+            //     confirmations: 0
+            //   };
+            //   this.$collecitons.tempHistory.insertHistory(tempHistory);
+            //   toast.message = this.$t('transaction.transactionBroadcastSuccess');
+            //   setTimeout(() => {
+            //     toast.clear();
+            //     this.$emit('done');
+            //   }, 1000);
+            // });
           })
           .catch(err => {
             console.info(err);
@@ -284,6 +317,73 @@
               toast.clear();
             }, 2000);
           });
+      },
+      async setTempHistory (txHash, to, amount, options, callback) {
+        // let flag = true;
+        const done = async () => {
+          let tx = await this.$wallet.getTransaction(txHash);
+          console.info('tx:', tx);
+          if (!tx) {
+            setTimeout(done, 2000);
+            return;
+          }
+          let account = this.$store.state.account;
+          let fee = '0';
+          if (tx.gas && tx.gasPrice) {
+            fee = new Big(tx.gas).times(tx.gasPrice).toFixed();
+          }
+          let tempHistory = {
+            address: account.address,
+            acctType: account.type,
+            assetCode: this.asset.code,
+            assetIssuer: this.asset.issuer,
+            txHash: tx.hash,
+            amount:amount,
+            blockNumber: tx.blockNumber,
+            to: to,
+            from: tx.from,
+            fee:  this.$wallet.getInstance().utils.fromWei(fee, 'ether'),
+            txType: '0',
+            txTime: new moment().format('YYYYMMDD HH:mm:ss'),
+            data: tx,
+            confirmations: 0
+          };
+          this.$collecitons.tempHistory.insertHistory(tempHistory);
+          callback();
+        };
+        done();
+        // while (flag)  {
+        //   let tx = await this.$wallet.getTransaction(txHash);
+        //   console.info('tx:', tx);
+        //   if (!tx) {
+        //     continue;
+        //   } else {
+        //     flag = false;
+        //   }
+        //   let account = this.$store.state.account;
+        //   let fee = '0';
+        //   if (tx.gas && tx.gasPrice) {
+        //     fee = new Big(tx.gas).times(tx.gasPrice).toFixed();
+        //   }
+        //   let tempHistory = {
+        //     address: account.address,
+        //     acctType: account.type,
+        //     assetCode: this.asset.code,
+        //     assetIssuer: this.asset.issuer,
+        //     txHash: tx.hash,
+        //     amount:amount,
+        //     blockNumber: tx.blockNumber,
+        //     to: to,
+        //     from: tx.from,
+        //     fee:  this.$wallet.getInstance().utils.fromWei(fee, 'ether'),
+        //     txType: '0',
+        //     txTime: new moment().format('YYYYMMDD HH:mm:ss'),
+        //     data: tx,
+        //     confirmations: 0
+        //   };
+        //   this.$collecitons.tempHistory.insertHistory(tempHistory);
+        //   callback();
+        // }
       },
       calcGas () {
         let minGasPrice  = new Big(this.minGasPrice);

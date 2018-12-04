@@ -10,18 +10,18 @@
       @click-left="close()">
       <div slot="title">
         <div v-if="asset.name">
-          <div style="line-height: 30px;">{{asset.code}}&nbsp;转账</div>
+          <div style="line-height: 30px;">{{asset.code}}&nbsp;{{$t('common.transferAccounts')}}</div>
           <div style="line-height: 15px;" class="text-muted small-font">&nbsp;({{asset.name}})</div>
         </div>
         <div v-else>
-          {{asset.code}}&nbsp;转账
+          {{asset.code}}&nbsp;{{$t('common.transferAccounts')}}
         </div>
       </div>
       <span slot="left"><i class="ultfont ult-left"></i></span>
       <span slot="right"><i class="ultfont ult-scan" @click="toScan"></i></span>
     </van-nav-bar>
   </div>
-    <component :is="sendType" ref="component" :asset="asset" :transfer-amt="transferAmt" :address="address"  @done="close"></component>
+    <component :is="sendType" ref="component" :asset="asset" :transfer-amt="transferAmt" :address="address"  @done="done"></component>
   </van-popup>
 </template>
 <script>
@@ -75,6 +75,10 @@
           }
         });
         this.showPop = true;
+      },
+      done () {
+        this.$emit('done');
+        this.close();
       },
       close () {
         this.showPop = false;
