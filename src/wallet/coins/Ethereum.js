@@ -38,6 +38,7 @@ class EthereumWallet {
   }
 
   async getBalances (address, assetCodes = []) {
+    this.setServer(this.url);
     // let url = `http://api.ethplorer.io/getAddressInfo/${address}?apiKey=freekey`;
     // let ret = await axios.get(url);
     // let addressInfo = ret.data;
@@ -171,10 +172,12 @@ class EthereumWallet {
   }
 
   getTransaction(txHash) {
+    this.setServer(this.url);
     return this.server.eth.getTransaction(txHash);
   }
 
   async sendTransaction(fromSecret, to, amount, option = {}) {
+    this.setServer(this.url);
     fromSecret = `0x${fromSecret}`;
     let account = this.server.eth.accounts.privateKeyToAccount(fromSecret);
     const from = account.address;
@@ -227,6 +230,7 @@ class EthereumWallet {
   }
 
   async isContract (address) {
+    this.setServer(this.url);
     let code = await this.server.eth.getCode(address);
     if(code === '0x')  {
       return false;
@@ -274,6 +278,7 @@ class EthereumWallet {
   }
 
   async getConfirmations(txHash) {
+    this.setServer(this.url);
     try {
       const trx = await this.server.eth.getTransaction(txHash);
       const currentBlock = await this.server.eth.getBlockNumber();

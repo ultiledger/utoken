@@ -40,7 +40,7 @@ export default function (value, assetCode, assetIssuer = '') {
       let index = calVal.indexOf('.');
       let decimal = calVal.substring(index);
       let integer = calVal.substring(0, index);
-      let val = `${integer.replace(/d{1,3}(?=(d{3})+(.d*)?$)/g,'$&,')}${decimal}`;
+      let val = `${integer.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,'$&,')}${decimal}`;
       return `${cutTail(val)} ${currencyUnit}`;
       // console.info(calVal);
       // console.info(decimal);

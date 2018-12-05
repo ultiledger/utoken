@@ -32,7 +32,7 @@
           v-model="form.remark"
         />
       </van-cell-group>
-      <div class="item-block">
+      <div class="item-block" @click="toSelectType">
         <van-field
           v-model="form.type"
           v-validate="'required'"
@@ -40,8 +40,7 @@
           :data-vv-as="$t('address.coinType')"
           name="type"
           icon="arrow"
-          readonly
-          @click="toSelectType">
+          readonly>
         </van-field>
       </div>
 

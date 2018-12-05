@@ -13,7 +13,7 @@
             <img :src="dprImg(`${shortType(data.type)}-w.png`)" width="25" height="25" style="vertical-align: middle">
             <span  style="vertical-align: middle">&nbsp;&nbsp;{{data.name}}</span>
           </div>
-          <div class="content x-x-large-font">
+          <div class="content" :class="setStatAmtClass">
             <span class="normal-font">&nbsp;&#8776;&nbsp;</span>
             <pl-privacy>{{statAmt  | currency('', '4') | cutTail}}&nbsp;</pl-privacy>
             <span class="small-font">&nbsp;{{$store.state.setting.currencyUnit}}
@@ -62,7 +62,7 @@
                       <img v-else :src="`static/img/${item.code}@3x.png`" onerror="this.src='static/img/unknown.png'"/>
                   </span>
                   </td>
-                  <td width="115">
+                  <td width="90">
                     <div style="vertical-align: middle;" class="big-font">{{item.code}}</div>
                     <span v-if="item.name" class="text-main">
                       <span v-if="item.name !== 'unknown'">{{item.name}}</span>
@@ -70,7 +70,7 @@
                         <pl-wallet-addr
                           class="x-small-font"
                           :complete="false"
-                          :address="item.issuer" :length="6" :show-copy="false"></pl-wallet-addr>
+                          :address="item.issuer" :length="4" :show-copy="false"></pl-wallet-addr>
                       </span>
                     </span>
                   </td>
@@ -189,6 +189,13 @@
           result = result.toFixed(4);
         }
         return Number(result);
+      },
+      setStatAmtClass () {
+        if (this.statAmt && this.statAmt.toString().length > 12) {
+          return 'x-large-font';
+        } else {
+          return 'x-x-large-font';
+        }
       }
     },
     methods: {

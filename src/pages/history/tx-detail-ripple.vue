@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="overflow-x: hidden;">
     <pl-block class="van-hairline--bottom">
       <div class="text-center padding">
         <van-icon name="checked" class="text-primary" style="font-size: 40px;vertical-align: middle;"/>
@@ -16,7 +16,7 @@
             <div class="text-muted small-font">{{$t('history.amount')}}</div>
           </van-col>
           <van-col span="18">
-            <div class="big-font">{{item.amount}}&nbsp;&nbsp;XRP</div>
+            <div class="big-font">{{item.amount | currency('', '7') | cutTail}}&nbsp;&nbsp;XRP</div>
           </van-col>
         </van-row>
       </div>
@@ -62,14 +62,14 @@
       </div>
     </pl-block>
 
-    <pl-block class="margin-top van-hairline--top" style="padding-left: 0px;">
+    <pl-block class="margin-top van-hairline--top" style="padding-left: 0px;position: relative;">
       <div class="text-block">
         <van-row>
           <van-col span="6">
             <div class="text-muted small-font" v-text="$t('history.transactionHash')"></div>
           </van-col>
           <van-col span="18">
-            <pl-wallet-addr class="small-font" :address="item.txHash"  :length="16"></pl-wallet-addr>
+            <pl-wallet-addr class="small-font" :address="item.txHash"  :length="6"></pl-wallet-addr>
           </van-col>
         </van-row>
       </div>
@@ -83,13 +83,18 @@
           </van-col>
         </van-row>
       </div>
+      <div class="qrcode-parent">
+        <qrcode class="qrcode" :value="`https://wipple.devnull.network/live/transactions/${item.txHash}`" :options="{ size: 85 }"></qrcode>
+      </div>
     </pl-block>
     <br>
     <br>
   </div>
 </template>
 <script>
+  import qrcode from '@xkeshi/vue-qrcode';
   export default{
+    components: {qrcode},
     props: {
       item: {
         type: Object,
@@ -109,5 +114,10 @@
 
   .text-block{
     padding-top: 10px;
+  }
+  .qrcode-parent{
+    position: absolute;
+    top: 15px;
+    right: -3px;
   }
 </style>

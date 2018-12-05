@@ -26,7 +26,7 @@
           </van-cell>-->
         </pl-block>
       </div>
-      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="accountType">
+      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="stellar">
         <small class="text-danger" v-show="!addressValid" v-text="$t('address.invalidAddressTip')"></small>
         <small class="text-info" v-show="!addressActivated" v-text="$t('transaction.stellarUnActivationAddressMsg')"></small>
         <small class="text-danger" v-show="!trustAsset" v-html="$t('transaction.notTrustAssetMsg', {code: asset.code})"></small>
@@ -145,7 +145,7 @@
           {text: 'Text', value: StellarSdk.MemoText},
           {text: 'Hash', value: StellarSdk.MemoHash}
         ],
-        accountType: AccountType.stellar
+        stellar: AccountType.stellar
       };
     },
     watch: {

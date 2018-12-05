@@ -27,7 +27,7 @@
       </pl-block>
     </div>
 
-   <receive-address class="item-block" v-model="form.receiveAddress" :accountType="accountType">
+   <receive-address class="item-block" v-model="form.receiveAddress" :accountType="ethereum">
      <small class="text-danger" v-show="!addressValid" v-text="$t('address.invalidAddressTip')"></small>
    </receive-address>
 
@@ -36,7 +36,7 @@
         <div style="padding: 0 0 10px;overflow: hidden;">
           <div class="pull-left normal-font">{{$t('transaction.minerFee')}}</div>
           <div class="pull-right">
-            <span class="small-font">{{fee}}&nbsp;ether&nbsp;≈&nbsp;{{fee |  market(asset.code, asset.issuer) | currency('', '7') | cutTail}}<!--&nbsp;<van-icon name="arrow" style="vertical-align: middle;" />--></span>
+            <span class="small-font">{{fee}}&nbsp;ether&nbsp;≈&nbsp;{{fee |  market(ETH, '') | currency('', '7') | cutTail}}&nbsp;{{$store.state.setting.currencyUnit}}<!--&nbsp;<van-icon name="arrow" style="vertical-align: middle;" />--></span>
           </div>
         </div>
         <div class="slider">
@@ -106,7 +106,7 @@
 </template>
 <script>
   import Big from 'big.js';
-  import {AccountType} from '../../wallet/constants';
+  import {AccountType, CoinType} from '../../wallet/constants';
   import receiveAddress from '../ui/receive-address';
   import cryptor from 'core/utils/cryptor';
   import moment from 'moment';
@@ -139,7 +139,8 @@
         rate: 0,
         loading: false,
         addressValid: true,
-        accountType: AccountType.ethereum
+        ethereum: AccountType.ethereum,
+        ETH: CoinType.ETH
       };
     },
     watch: {
@@ -254,7 +255,7 @@
           return;
         }
         let options;
-        if (this.$store.state.account.type === this.accountType) {
+        if (this.$store.state.account.type === this.ethereum) {
           options = {
             assetCode: this.asset.code,
             gasLimit: this.form.gasLimit,
@@ -320,10 +321,16 @@
       },
       async setTempHistory (txHash, to, amount, options, callback) {
         // let flag = true;
+        let count = 0;
         const done = async () => {
           let tx = await this.$wallet.getTransaction(txHash);
-          console.info('tx:', tx);
+          count++;
+          console.info(`tx(${count}):`, tx);
           if (!tx) {
+            if (count === 20) {
+              callback();
+              return;
+            }
             setTimeout(done, 2000);
             return;
           }

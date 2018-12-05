@@ -26,7 +26,7 @@
           </van-cell>-->
         </pl-block>
       </div>
-      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="accountType">
+      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="bitcoin">
         <small class="text-danger" v-show="!addressValid" v-text="$t('address.invalidAddressTip')"></small>
       </receive-address>
 
@@ -148,7 +148,7 @@
         },
         loading: false,
         addressValid: true,
-        accountType: AccountType.bitcoin
+        bitcoin: AccountType.bitcoin
       };
     },
     watch: {

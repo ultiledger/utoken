@@ -25,7 +25,7 @@
             <div class="text-muted small-font">{{$t('history.amount')}}</div>
           </van-col>
           <van-col span="18">
-            <div class="big-font">{{item.amount}}&nbsp;&nbsp;{{item.assetCode}}</div>
+            <div class="big-font">{{item.amount | currency('', '7') | cutTail}}&nbsp;&nbsp;{{item.assetCode}}</div>
           </van-col>
         </van-row>
       </div>

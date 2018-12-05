@@ -27,7 +27,7 @@
         </pl-block>
       </div>
 
-      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="accountType">
+      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="ripple">
         <small class="text-danger" v-show="!addressValid" v-text="$t('address.invalidAddressTip')"></small>
         <small class="text-danger" v-show="!addressActivated" v-text="$t('transaction.xrpUnActivationAddressMsg')"></small>
         <small class="text-danger" v-show="!trustAsset" v-html="$t('transaction.notTrustAssetMsg', {code: asset.code})"></small>
@@ -132,7 +132,7 @@
         addressValid: true,
         addressActivated: true,
         trustAsset: true,
-        accountType: AccountType.ripple
+        ripple: AccountType.ripple
       };
     },
     watch: {
