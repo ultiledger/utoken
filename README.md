@@ -20,10 +20,15 @@ Private support, encrypted storage
 - 
 
 ## Build yourself
+```sh
+npm run build
 
+```
 
 ## Development
-
+```sh
+npm run dev
+```
 
 # Utoken(首款支持Ripple，Stellar及其他主流区块链网络的移动钱包)
 
@@ -49,12 +54,12 @@ Private support, encrypted storage
 请用以下命令进行编译：
 
 ```sh
-
+npm run build
 
 ```
 
 ## 开发和调试
 
 ```sh
-
+npm run dev
 ```
