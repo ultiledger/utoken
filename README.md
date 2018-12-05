@@ -49,16 +49,12 @@ Private support, encrypted storage
 请用以下命令进行编译：
 
 ```sh
-yarn install
-yarn build
-# Or only one package with "build:linux", "build:mac" or "build:win".
+
+
 ```
 
 ## 开发和调试
 
 ```sh
-yarn install
-yarn start
-# ... do stuff ...
-yarn lintfix
+
 ```
