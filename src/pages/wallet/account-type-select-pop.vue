@@ -35,6 +35,7 @@
 <script>
   import setPwd from './set-trans-pwd-pop';
   import {SourceType} from '../../core/constants';
+  import {AccountType} from 'src/wallet/constants';
   import recoveryWallet from './recovery-wallet-pop';
   import createWallet from './mixins/createWallet';
   import topBlock from './components/top-block';
@@ -62,8 +63,11 @@
       }
     },
     methods: {
-      show (source) { // source=1表示创建钱包，source=2表示恢复钱包
+      show (source) { // source=1表示创建钱包，source=2表示恢复钱包, 3-表示创建其他账户钱包
         this.accountTypes = [];
+        if (source === '1') {
+          this.accountTypes = Object.values(AccountType);
+        }
         this.source = source;
         // 根据来源查询账户里面是否已经存在，如果存在则不允许新增了
         let identitys = this.$collecitons.identity.findBySource(SourceType.CREATED);
@@ -104,6 +108,8 @@
         try {
           let identity = this.getCreatedIdentity();
           if (identity) {
+            // 处理删除的情况,删除状态为D然后新建
+            this.deleteAccounts(identity.id);
             this.createWalletAcctByMnemonicCode(this.accountTypes, cryptor.decryptAES(identity.value, password), password, SourceType.CREATED, true);
             setTimeout(() => {
               toast.clear();
@@ -116,6 +122,12 @@
           toast.clear();
           this.$toast(this.$t('wallet.createAcctFail'));
         }
+      },
+      deleteAccounts (identityId) {
+        // mnemonicCode条件是变化的
+        this.accountTypes.forEach(item => {
+          this.$collecitons.account.findAndRemoveAcct({type: item, state: 'D', identityId: identityId});
+        });
       },
       getCreatedIdentity () { // 获取创建的身份
         let identity = {

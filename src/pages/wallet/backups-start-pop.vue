@@ -72,15 +72,15 @@
       },
       toBackups (password) {
         // cryptor.decryptAES(this.$store.state.account.mnemonicCode, password)
-        this.$refs.backupsMW.show(null, password, false, this.source, this.accountTypes);
+        this.$refs.backupsMW.show(null, password, 'create', this.source, this.accountTypes);
       }
     },
     created () {
-      let params = this.$route.params;
+      /* let params = this.$route.params;
       if (params && params.showVpop) {
-        window.canBack = false;
-        this.showVpop = true;
-      }
+        // window.canBack = false;
+        // this.showVpop = true;
+      } */
     }
   };
 </script>

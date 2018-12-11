@@ -297,7 +297,8 @@
     "confirmPwdPlaceholder": "確認用のパスワードを入力してください",
     "oldPwdErrorTip": "元のパスワードが誤って入力された",
     "deleteWallet": "ウォレットを削除",
-    "acctNotexist": "ウォレットは存在しません"
+    "acctNotexist": "ウォレットは存在しません",
+    "delAcctTip": "アカウントを削除した後、再度追加することができます"
   },
   "history": {
     "contractSuccess": "コントラクト呼び出しに成功",
@@ -326,7 +327,8 @@
     "failure": "共有障害",
     "shareWeiXinFail": "WeChatクライアントがインストールされていません",
     "shareQQFail": "QQクライアントがインストールされていない",
-    "inputIllegal": "不正な入力"
+    "inputIllegal": "不正な入力",
+    "album": "アルバム"
   },
   "gesture": {
     "gestureTitle": "グラフィックパスワードを設定してください",

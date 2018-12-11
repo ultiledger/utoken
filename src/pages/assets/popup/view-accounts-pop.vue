@@ -25,7 +25,7 @@
         @close="close"></view-account-item>
     </van-popup>
     <account-type-select ref="accountTypeSelect" @done="updateCurrentAcct"></account-type-select>
-    <wallet-type-select ref="walletTypeSelect" @done="updateImportAcct"></wallet-type-select>
+    <wallet-type-select ref="walletTypeSelect" @done="updateImportAcct" @refreshAll="refreshAccts"></wallet-type-select>
     <acct-detail ref="acctDetail" @afterDelAcct='afterDelAcct'></acct-detail>
   </div>
 </template>
@@ -68,6 +68,10 @@
       },
       afterDelAcct () {
         this.$emit('afterDelAcct');
+      },
+      refreshAccts () {
+        this.updateCurrentAcct();
+        this.updateImportAcct();
       },
       updateCurrentAcct () {
         let createIdentity = this.$collecitons.identity.findBySource(SourceType.CREATED);

@@ -10,8 +10,9 @@ class Account {
    * @param password (密码)
    * @param mnemonicCode (助记词)-对称加密
    * @param mnemonicCodeLanguage (助记词)-语言版本
+   * @param state (状态)-N-正常，D-删除
    */
-  constructor (address, identityId, type, name, password, mnemonicCode, secret, mnemonicCodeLanguage) {
+  constructor (address, identityId, type, name, password, mnemonicCode, secret, mnemonicCodeLanguage, state) {
     this.address = address;
     this.identityId = identityId;
     this.type = type;
@@ -21,6 +22,7 @@ class Account {
     this.mnemonicCode = mnemonicCode;
     this.secret = secret;
     this.mnemonicCodeLanguage = mnemonicCodeLanguage;
+    this.state = state;
   }
 
   /**
@@ -32,6 +34,7 @@ class Account {
    * @param name
    * @param password
    * @param mnemonicCodeLanguage
+   * @param state
    * @returns {*}
    */
   static insertAccount (
@@ -43,10 +46,11 @@ class Account {
       name = '',
       password = '',
       mnemonicCode = '',
+      state = 'N',
       mnemonicCodeLanguage = 'english'
     } = {}
   ) {
-    let account = new Account(address, identityId, type, name, password, mnemonicCode, secret, mnemonicCodeLanguage);
+    let account = new Account(address, identityId, type, name, password, mnemonicCode, secret, mnemonicCodeLanguage, state);
     instance.insert(account);
     return this;
   }
@@ -57,7 +61,7 @@ class Account {
    * @returns {*} 返回一个数组，多个
    */
   static findByIdentityId (identityId) {
-    let resultRet = instance.find({identityId: identityId});
+    let resultRet = instance.find({identityId: identityId, state: 'N'});
     return resultRet;
   }
 
@@ -97,14 +101,14 @@ class Account {
    * @returns {Object|*}
    */
   static findByType(type) {
-    return instance.find({type: type});
+    return instance.find({type: type, state: 'N'});
   }
 
   /**
    *查询全部
    */
   static findAll () {
-    return instance.data;
+    return instance.find({state: 'N'});
   }
 
 
@@ -112,7 +116,7 @@ class Account {
    *查询全部，按类型排序
    */
   static findAllSoryByType () {
-    let resultRet = instance.chain().find()
+    let resultRet = instance.chain().find({state: 'N'})
       .simplesort('type', true).data();
     return resultRet;
   }
@@ -123,7 +127,7 @@ class Account {
    * @returns {*}
    */
   static genAccountName(type) {
-    let results = instance.find({type: type});
+    let results = instance.find({type: type, state: 'N'});
     let accountNames = results.map(item => {
       return item.name;
     });

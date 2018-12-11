@@ -77,17 +77,23 @@
       viewHelp () {
         this.$refs.help.show('mnemonic');
       },
-      recoveryWallet () {
+      checkFormFields () {
         if (this.form.walletPwd !== this.form.confirmWalletPwd) {
           this.$toast(this.$t('common.confirmPwdTip'));
-          return;
+          return false;
         }
         if (!this.form.walletPwd) {
           this.$toast(this.$t('common.notEmptyPwd'));
-          return;
+          return false;
         }
         if (this.form.walletPwd.length < 6) {
           this.$toast(this.$t('wallet.passwordLimitTip'));
+          return false;
+        }
+        return true;
+      },
+      recoveryWallet () {
+        if (!this.checkFormFields()) {
           return;
         }
         let mnemonicCodes = this.form.memorizingWords.split(' ');
@@ -95,43 +101,40 @@
           this.$toast(this.$t('wallet.invalidMnemonicCodeTip'));
           return;
         } // trust prison patch example two remind mother behave thank coil champion certain
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            // 保存数据库操作
-            const toast = this.$toast.loading({
-              duration: 0,
-              forbidClick: true,
-              loadingType: 'circular',
-              message: this.$t('wallet.recovering')
-            });
-            try {
-              this.createWalletAcctByMnemonicCode(this.accountType, this.form.memorizingWords, this.form.walletPwd, this.source, true);
-              let firstAcct = this.getFirstAcct();
-              if (firstAcct) {
-                setTimeout(() => {
-                  toast.clear();
-                  this.$store.dispatch('setAccount', firstAcct);
-                 /* this.close();
-                  this.$emit('done');*/
-                  this.$router.push({name: 'assets', params: {refresh: true}});
-                }, 1000);
-              } else {
-                this.$toast(this.$t('wallet.recoverFail'));
-              }
-            } catch (e) {
-              console.error(e);
-              if (e.toString().indexOf('Invalid mnemonic') >= 0) {
-                this.$toast(this.$t('wallet.invalidMnemonic'));
-              } else if (e.toString().indexOf('Invalid derivation path') >= 0 ){
-                this.$toast(this.$t('wallet.invalidDevicePath'));
-              } else {
-                this.$toast(this.$t('wallet.recoverFail') + ':' +e);
-              }
-            }
-          } else {
-            this.$toast(this.validateErrors.items[0].msg);
-          }
+        // 保存数据库操作
+        const toast = this.$toast.loading({
+          duration: 0,
+          forbidClick: true,
+          loadingType: 'circular',
+          message: this.$t('wallet.recovering')
         });
+        try {
+          this.createWalletAcctByMnemonicCode(this.accountType, this.form.memorizingWords, this.form.walletPwd, this.source, true);
+          // 创建隐藏账户
+          this.filterAndCreateNotSelectAccountType(this.accountType, this.form.memorizingWords, this.form.walletPwd, this.source, true, 'D');
+
+          let firstAcct = this.getFirstAcct();
+          if (firstAcct) {
+            setTimeout(() => {
+              toast.clear();
+              this.$store.dispatch('setAccount', firstAcct);
+              /* this.close();
+               this.$emit('done');*/
+              this.$router.push({name: 'assets', params: {refresh: true}});
+            }, 1000);
+          } else {
+            this.$toast(this.$t('wallet.recoverFail'));
+          }
+        } catch (e) {
+          console.error(e);
+          if (e.toString().indexOf('Invalid mnemonic') >= 0) {
+            this.$toast(this.$t('wallet.invalidMnemonic'));
+          } else if (e.toString().indexOf('Invalid derivation path') >= 0 ){
+            this.$toast(this.$t('wallet.invalidDevicePath'));
+          } else {
+            this.$toast(this.$t('wallet.recoverFail') + ':' +e);
+          }
+        }
       }
     }
   };

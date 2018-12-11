@@ -20,6 +20,11 @@ export default{
           'describeLineSpacing': '8',        //(行间距)
           'describeColor': '#ffffff',         //(文字颜色)
 
+          //choose photo button
+          'choosePhotoEnable': 'true',         //(支持相册选取, 默认false)
+          'choosePhotoBtnTitle': vueInstance.$t('scan.album'),   //(选取按钮文字)
+          'choosePhotoBtnColor': "#4e8dec",   //(选取按钮颜色)
+
           //scan border
           'borderColor': '#4e8dec',           //(扫描框颜色)
           'borderScale': '0.6',              //(边框大小，0.1 ~ 1)
