@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="overflow-x: hidden;">
     <pl-block class="van-hairline--bottom">
       <div class="text-center padding">
         <van-icon name="checked" class="text-primary" style="font-size: 40px;vertical-align: middle;"/>

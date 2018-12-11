@@ -116,13 +116,13 @@ const initApp = () => {
       } else {
         this.$i18n.locale = setting.language; /* 设置已经设置的语言*/
         vantI18n(setting.language); /* 设置已经设置的语言*/
-        let currentAcct = this.$collecitons.account.findByAddress(setting.defaultAddress);
+        /* let currentAcct = this.$collecitons.account.findByAddress(setting.defaultAddress);
         if (currentAcct && currentAcct.identityId) {
           let identity = this.$collecitons.identity.findById(currentAcct.identityId);
           if (identity && !identity.backFlag) {
             return this.$router.push({name: 'back-mnemonicCode', params: {showVpop: true}});
           }
-        }
+        } */
       }
     }
   });

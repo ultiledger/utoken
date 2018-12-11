@@ -113,7 +113,7 @@
     "addAsset": "Add Assets",
     "scanFailTip": "Non wallet address, please re scan.",
     "scanDeviceError": "Nonsupport device.",
-    "scanTitle": "scan",
+    "scanTitle": "Scan",
     "scanTip": "Please scan the QR code.",
     "accountActivatedTitle": "Account not activated",
     "stellarAccountActivatedMsg": "All Accounts need to hold one XLM balance in Steller network to ensure authenticity of account.",
@@ -296,7 +296,8 @@
     "confirmPwdPlaceholder": "Please enter repeat password",
     "oldPwdErrorTip": "Old Password Incorrect",
     "deleteWallet": "Delete Wallet",
-    "acctNotexist": "Wallet does not exist"
+    "acctNotexist": "Wallet does not exist",
+    "delAcctTip": "After deleting the account, you can add it again"
   },
   "history": {
     "contractSuccess": "Call contract Succeeded",
@@ -325,7 +326,8 @@
     "failure": "Fail",
     "shareWeiXinFail": "No WeChat client installed",
     "shareQQFail": "No QQ client installed",
-    "inputIllegal": "Input Illegal"
+    "inputIllegal": "Input Illegal",
+    "album": "Album"
   },
   "gesture": {
     "gestureTitle": "Please set gesture password",

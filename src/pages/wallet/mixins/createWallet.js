@@ -12,8 +12,9 @@ export default {
      * @param walletPwd (交易密码)
      * @param source (来源，1-创建，2-导入)
      * @param backFlag 助记词是否已经备份
+     * @param state 账户状态
      */
-    createWalletAcctByMnemonicCode (accountType, mnemonicCode, walletPwd, source, backFlag=false) {
+    createWalletAcctByMnemonicCode (accountType, mnemonicCode, walletPwd, source, backFlag=true, state = 'N') {
       let memorizingCodeLanguage = this.getMemorizingCodeLanguage(mnemonicCode);
       let wallet = hdWallet.fromMnemonic(mnemonicCode, null,  memorizingCodeLanguage);
       if (wallet) {
@@ -32,7 +33,8 @@ export default {
             name: this.$collecitons.account.genAccountName(item),
             password: password,
             mnemonicCode: mnemonicCode,
-            mnemonicCodeLanguage: memorizingCodeLanguage
+            mnemonicCodeLanguage: memorizingCodeLanguage,
+            state
           });
           this.saveDefaultAssets(item, account);
         });
@@ -144,6 +146,25 @@ export default {
             name: DBT.name});
         }
       }
-    }
+    },
+    /**
+     * 筛选出没有选中的账户类型,并创建
+     * @param accountTypes
+     * @param mnemonicCode
+     * @param walletPwd
+     * @param source
+     * @param backFlag
+     * @param state
+     * @returns {any[]}
+     */
+    filterAndCreateNotSelectAccountType (accountTypes, mnemonicCode, walletPwd, source, backFlag, state) {
+      let values = Object.values(AccountType);
+      let filterAccounts = values.filter(item => {
+        return accountTypes.indexOf(item) < 0;
+      });
+      if (filterAccounts.length > 0) {
+        this.createWalletAcctByMnemonicCode(filterAccounts, mnemonicCode, walletPwd, source, backFlag, state);
+      }
+    },
   }
 };

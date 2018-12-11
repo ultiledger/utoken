@@ -186,6 +186,20 @@ class BitcoinWallet{
       return false;
     }
   }
+
+  async getConfirmations(item) { // 获取确认数，原理=最新区块-交易的区块
+    try {
+      const lastBlock = await axios.get(`${this.url}/latestblock?cors=true`);
+      if (!item.blockNumber) {
+        return -1;
+      }
+      return item.blockNumber === null ? 0 : lastBlock.data.height - item.blockNumber + 1;
+    }catch (error) {
+      console.log(error);
+      return error;
+    }
+
+  }
 }
 
 export default BitcoinWallet;

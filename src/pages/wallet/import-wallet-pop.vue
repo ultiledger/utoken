@@ -59,6 +59,7 @@
   import walletTip from './components/wallet-tip';
   import buttonBottom from './components/button-bottom';
   import QRCodeScanner from 'core/utils/QRCodeScanner.js';
+  import cryptor from 'core/utils/cryptor';
 
   export default {
     mixins: [createWallet],
@@ -135,17 +136,47 @@
           this.$toast(errorMsg);
         });
       },
-      importWallet () {
+      checkFormFields () { // 校验表单
         if (this.form.walletPwd !== this.form.confirmWalletPwd) {
           this.$toast(this.$t('common.confirmPwdTip'));
-          return;
+          return false;
         }
         if (!this.form.walletPwd) {
           this.$toast(this.$t('common.notEmptyPwd'));
-          return;
+          return false;
         }
         if (this.form.walletPwd.length < 6) {
           this.$toast(this.$t('wallet.passwordLimitTip'));
+          return false;
+        }
+        return true;
+      },
+      updateAccountState (hdWalletAccount) { // 更新账户状态
+        const toast = this.$toast.loading({
+          duration: 0,
+          forbidClick: true,
+          loadingType: 'circular',
+          message: this.$t('wallet.importing')
+        });
+        this.$collecitons.account.findAndUpdateAcct({address: hdWalletAccount.address}, (account) => {
+          account.password = cryptor.encryptMD5(this.form.walletPwd);
+          if (this.tagSelect === '1') {
+            account.secret = cryptor.encryptAES(hdWalletAccount.secret, this.form.walletPwd);
+            account.mnemonicCode = cryptor.encryptAES(this.form.memorizingWords, this.form.walletPwd);
+          } else if (this.tagSelect === '2') {
+            account.mnemonicCode = '';
+            account.secret = cryptor.encryptAES(hdWalletAccount.secret, this.form.walletPwd);
+          }
+          return account.state = 'N';
+        });
+        setTimeout(() => {
+          toast.clear();
+          this.close();
+          this.$emit('refreshAll');
+        }, 1000);
+      },
+      importWallet () {
+        if (!this.checkFormFields()) {
           return;
         }
         // 获取地址以判断钱包账户是否已经存在
@@ -153,7 +184,11 @@
         if (hdWalletAccount) {
           let ga = this.$collecitons.account.findByAddress(hdWalletAccount.address);
           if (ga) {
-            this.$toast(this.$t('wallet.existWalletTip'));
+            if (ga.state === 'D') { // 删除重新导入则改变状态同时更新对应信息
+              this.updateAccountState(hdWalletAccount);
+            } else {
+              this.$toast(this.$t('wallet.existWalletTip'));
+            }
             return;
           }
         } else {
@@ -164,60 +199,49 @@
           }
           return;
         }
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            const toast = this.$toast.loading({
-              duration: 0,
-              forbidClick: true,
-              loadingType: 'circular',
-              message: this.$t('wallet.importing')
-            });
-            // 保存数据库操作
-            if (this.tagSelect === '1') {
-              let mnemonicCodes = this.form.memorizingWords.split(' ');
-              if (mnemonicCodes.length < 12) {
-                this.$toast(this.$t('wallet.invalidMnemonicCodeTip'));
-                return;
-              }
-              try {
-                this.createWalletAcctByMnemonicCode([this.coin.type], this.form.memorizingWords, this.form.walletPwd, this.source, true);
-                setTimeout(() => {
-                  toast.clear();
-                  this.close();
-                  this.$emit('done');
-                }, 1000);
-              }catch (e) {
-                if (e.toString().indexOf('Invalid mnemonic') >= 0) {
-                  this.$toast(this.$t('wallet.invalidMnemonicCodeTip'));
-                }
-                console.error(e);
-              }
-            } else if (this.tagSelect === '2') {
-              if (!this.form.privateKey) {
-                this.$toast(this.$t('wallet.privateKeyNotEmpty'));
-                return;
-              }
-              /*let ga = this.$collecitons.account.findByTypeAndSecret(this.coin.type, cryptor.encryptAES(this.form.privateKey, this.form.walletPwd));
-              if (ga) {
-                this.$toast(this.$t('wallet.existWalletTip'));
-                return;
-              }*/
-              try{
-                this.createWalletAcctByPrivateKey(this.coin.type, this.form.privateKey, this.form.walletPwd, this.source, true);
-                setTimeout(() => {
-                  toast.clear();
-                  this.close();
-                  this.$emit('done');
-                }, 1000);
-              }catch (e) {
-                this.$toast(this.$t('wallet.invalidPrivateKeyTip'));
-                console.error(e);
-              }
-            }
-          } else {
-            this.$toast(this.validateErrors.items[0].msg);
-          }
+        const toast = this.$toast.loading({
+          duration: 0,
+          forbidClick: true,
+          loadingType: 'circular',
+          message: this.$t('wallet.importing')
         });
+        // 保存数据库操作
+        if (this.tagSelect === '1') {
+          let mnemonicCodes = this.form.memorizingWords.split(' ');
+          if (mnemonicCodes.length < 12) {
+            this.$toast(this.$t('wallet.invalidMnemonicCodeTip'));
+            return;
+          }
+          try {
+            this.createWalletAcctByMnemonicCode([this.coin.type], this.form.memorizingWords, this.form.walletPwd, this.source, true);
+            setTimeout(() => {
+              toast.clear();
+              this.close();
+              this.$emit('done');
+            }, 1000);
+          }catch (e) {
+            if (e.toString().indexOf('Invalid mnemonic') >= 0) {
+              this.$toast(this.$t('wallet.invalidMnemonicCodeTip'));
+            }
+            console.error(e);
+          }
+        } else if (this.tagSelect === '2') {
+          if (!this.form.privateKey) {
+            this.$toast(this.$t('wallet.privateKeyNotEmpty'));
+            return;
+          }
+          try{
+            this.createWalletAcctByPrivateKey(this.coin.type, this.form.privateKey, this.form.walletPwd, this.source, true);
+            setTimeout(() => {
+              toast.clear();
+              this.close();
+              this.$emit('done');
+            }, 1000);
+          }catch (e) {
+            this.$toast(this.$t('wallet.invalidPrivateKeyTip'));
+            console.error(e);
+          }
+        }
       }
     }
   };

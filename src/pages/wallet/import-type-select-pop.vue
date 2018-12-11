@@ -34,7 +34,7 @@
       </pl-content-block>
 
     </van-popup>
-    <import-wallet-acct ref="importWalletAcct" @done="done"></import-wallet-acct>
+    <import-wallet-acct ref="importWalletAcct" @done="done" @refreshAll="refreshAll"></import-wallet-acct>
   </div>
 </template>
 <script>
@@ -70,6 +70,10 @@
       done () {
         this.close();
         this.$emit('done');
+      },
+      refreshAll () {
+        this.close();
+        this.$emit('refreshAll');
       }
     }
   };

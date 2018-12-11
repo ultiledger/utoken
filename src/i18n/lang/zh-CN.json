@@ -184,8 +184,8 @@
     "xrpMarketTitle": "瑞波行情",
     "xrpMarketSubTitle": "瑞波市场行情",
     "xrpMarketDesc": "由StellarChat社区改进布署。数据从瑞波实时网络和RippleCharts API获取",
-    "u919Title": "U919溯源",
-    "u919SubTitle": "U919溯源",
+    "u919Title": "U919朔源",
+    "u919SubTitle": "U919朔源",
     "u919Desc": "由ultiledger.io提供"
   },
   "setting": {
@@ -296,7 +296,8 @@
     "confirmPwdPlaceholder": "请输入确认密码",
     "oldPwdErrorTip": "原密码输入不正确",
     "deleteWallet": "删除钱包",
-    "acctNotexist": "该钱包不存在"
+    "acctNotexist": "该钱包不存在",
+    "delAcctTip": "删除该账户后，您可以重新添加"
   },
   "history": {
     "contractSuccess": "调用合约成功",
@@ -325,7 +326,8 @@
     "failure": "分享失败",
     "shareWeiXinFail": "未安装微信客户端",
     "shareQQFail": "未安装QQ客户端",
-    "inputIllegal": "输入非法"
+    "inputIllegal": "输入非法",
+    "album": "相册"
   },
   "gesture": {
     "gestureTitle": "请设置您的图形密码",

@@ -296,7 +296,8 @@
     "confirmPwdPlaceholder": "확인 비밀번호를 입력하십시오.",
     "oldPwdErrorTip": "원래 암호가 잘못 입력되었습니다.",
     "deleteWallet": "지갑 삭제",
-    "acctNotexist": "지갑이 존재하지 않습니다."
+    "acctNotexist": "지갑이 존재하지 않습니다.",
+    "delAcctTip": "계정을 삭제 한 후 다시 추가 할 수 있습니다."
   },
   "history": {
     "contractSuccess": "계약을 전용하는데 성공하였습니다.",
@@ -325,7 +326,8 @@
     "failure": "공유 하지 못했습니다.",
     "shareWeiXinFail": "Wechat가 설치 되지 않았습니다.",
     "shareQQFail": "QQ가 설치 되어 있지 않습니다.",
-    "inputIllegal": "잘못 된 입력"
+    "inputIllegal": "잘못 된 입력",
+    "album": "앨범"
   },
   "gesture": {
     "gestureTitle": "그래픽 암호 설정",

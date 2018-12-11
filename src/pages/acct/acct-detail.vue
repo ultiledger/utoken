@@ -53,7 +53,7 @@
               :address="account.address"></pl-wallet-addr>
           </div>
         </pl-block>
-        <div class="single-btn margin-bottom margin-top" v-if="source == sourceType.IMPORT">
+        <div class="single-btn margin-bottom margin-top" v-if="delFlag!=='0'">
           <van-button size="large" round type="primary" @click="toCheckPassword('3')" v-text="$t('acct.deleteWallet')"></van-button>
         </div>
       </pl-content-block>
@@ -95,8 +95,6 @@
         account: {},
         acctName: '',
         showAcctNameDialog: false,
-        source: '',
-        sourceType: SourceType,
         checkType: '' /*校验类型，主要用于是对那个功能点进行密码输入*/
       };
     },
@@ -104,14 +102,24 @@
     computed: {
       currentAccount () {
         return this.$store.state.account;
+      },
+      delFlag () {
+        let identity = this.$collecitons.identity.findById(this.account.identityId);
+        if (identity && identity.source === SourceType.CREATED) {
+          let accounts = this.$collecitons.account.findByIdentityId(identity.id);
+          // 不能删除
+          if (accounts && accounts.length === 1) {
+            return '0';
+          }
+          return '1';
+        }
+        return '2';
       }
     },
     methods: {
       show (item) {
         this.account = item;
         this.acctName = item.name;
-        let identity = this.$collecitons.identity.findById(item.identityId);
-        this.source = identity.source;
         this.showPop = true;
       },
       close () {
@@ -137,33 +145,52 @@
         this.checkType = checkType;
         this.$refs.pwdDialog.show();
       },
-      delWallet () {
+      removeDataAndUpdateActions (option, identityId) {
         const toast = this.$toast.loading({
           duration: 0,
           forbidClick: true,
           loadingType: 'circular'
         });
+        if (this.delFlag === '1') {
+          this.$collecitons.account.findAndUpdateAcct(option, (account) => {
+            return account.state = 'D';
+          });
+        } else {
+          this.$collecitons.account.findAndRemoveAcct(option);
+        }
+        this.$collecitons.history.removeHistory(option);
+        this.$collecitons.asset.removAssetByAddressAndName(option);
+        let map = {};
+        map[this.account.address] = '';
+        this.$store.dispatch('setPasswordMap', map);
+        let allAccount = this.$collecitons.account.findAll();
+        if (allAccount && allAccount.length > 0) {
+          let account = {...allAccount[0],  setBalance: false};
+          this.$store.dispatch('setAccount' , account);
+          this.$emit('afterDelAcct');
+        } else {
+          this.$collecitons.identity.deleteIdentityById(identityId);
+        }
+        setTimeout(() => {
+          toast.clear();
+          this.close();
+        }, 1000);
+      },
+      delWallet () {
+
         if (this.account) {
           let identityId = this.currentAccount.identityId;
           let option = {address: this.account.address};
-          this.$collecitons.account.findAndRemoveAcct(option);
-          this.$collecitons.history.removeHistory(option);
-          this.$collecitons.asset.removAssetByAddressAndName(option);
-          let map = {};
-          map[this.account.address] = '';
-          this.$store.dispatch('setPasswordMap', map);
-          let allAccount = this.$collecitons.account.findAll();
-          if (allAccount && allAccount.length > 0) {
-            let account = {...allAccount[0],  setBalance: false};
-            this.$store.dispatch('setAccount' , account);
-            this.$emit('afterDelAcct');
+          if (this.delFlag === '1') { // 逻辑删除操作
+            this.$dialog.confirm({
+                     title: this.$t('common.tip'),
+                     message: this.$t('acct.delAcctTip')
+            }).then(() => {
+              this.removeDataAndUpdateActions(option, identityId);
+            });
           } else {
-            this.$collecitons.identity.deleteIdentityById(identityId);
+            this.removeDataAndUpdateActions(option, identityId);
           }
-          setTimeout(() => {
-            toast.clear();
-            this.close();
-          }, 1000);
         } else {
           this.$toast(this.$t('acct.acctNotexist'));
         }
@@ -173,7 +200,7 @@
           if (this.checkType === '1') {
             this.$refs.exportSecret.show(password);
           } else if (this.checkType === '2') {
-            this.$refs.backupsMemorizing.show(cryptor.decryptAES(this.currentAccount.mnemonicCode, password), password);
+            this.$refs.backupsMemorizing.show(cryptor.decryptAES(this.currentAccount.mnemonicCode, password), password, 'backups');
           } else if (this.checkType === '3') { // 删除钱包
             this.delWallet();
           }

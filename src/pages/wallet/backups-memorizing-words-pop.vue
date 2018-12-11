@@ -66,7 +66,7 @@
       <div class="van-hairline--bottom padding"></div>
       <div class="text-center text-primary normal-font" style="cursor: pointer;padding: 15px;" @click="closeDialog" v-text="$t('common.iSeeThat')"></div>
     </van-dialog>
-    <check-memorizing-words ref="checkMW" @done="close"></check-memorizing-words>
+    <check-memorizing-words ref="checkMW" @done="close" :backups-source.sync="backupsSource"></check-memorizing-words>
   </div>
 </template>
 <script>
@@ -79,6 +79,7 @@
     components: {checkMemorizingWords, topBlock, contentBlock, buttonBottom},
     data () {
       return {
+        backupsSource: '',
         showVpop: false,
         showDialog: false,
         tagSelect: '1',
@@ -97,7 +98,7 @@
       close () {
         this.showVpop = false;
       },
-      show (mnemonicCode, password, canBack = true, source, accountTypes) {
+      show (mnemonicCode, password, backupsSource, source, accountTypes) {
         if (mnemonicCode) { // 导出助记词跳转
           this.form.memorizingWords = mnemonicCode;
           this.memorizingCodes = mnemonicCode.split(' ');
@@ -111,8 +112,7 @@
           this.accountTypes = accountTypes;
         }
         this.showDialog = true;
-        /* 备份成功之后把手机设备返回按钮禁用 */
-        window.canBack = canBack;
+        this.backupsSource = backupsSource;
         this.showVpop = true;
         this.$nextTick(() => {
           let vanModals = document.getElementsByClassName('van-modal');
@@ -149,7 +149,7 @@
         this.showDialog = false;
       },
       next () {
-        this.$refs.checkMW.show(this.form, window.canBack, this.source, this.accountTypes);
+        this.$refs.checkMW.show(this.form, this.source, this.accountTypes);
       }
     }
   };

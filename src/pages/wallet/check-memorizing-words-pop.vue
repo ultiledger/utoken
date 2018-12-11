@@ -56,19 +56,22 @@
   export default {
     mixins: [createWallet],
     components: {ContentBlock, topBlock, buttonBottom},
+    props: {
+      // 两个值，一个是创建(create)，一个是备份(backups)
+      backupsSource: String
+    },
     data () {
       return {
         showVpop: false,
         selectMemorizingWords: [],
         memorizingWords: [],
         password: '',
-        backFlag: '2',
         source: '',
         accountTypes: []
       };
     },
     methods: {
-      show (form, canBack = true, source, accountTypes) {
+      show (form, source, accountTypes) {
         this.password = form.password;
         this.memorizingWords = [];
         this.selectMemorizingWords = [];
@@ -77,12 +80,6 @@
           this.memorizingWords.push({name: item, index});
         });
         this.shuffle(this.memorizingWords);
-        window.canBack = canBack;
-        if (canBack) {
-          this.backFlag = '2';
-        } else {
-          this.backFlag = '1';
-        }
         this.source = source;
         this.accountTypes = accountTypes;
         this.showVpop = true;
@@ -93,6 +90,9 @@
       createWalletAcct (mnemonicCodes) {
         // 创建账户
         this.createWalletAcctByMnemonicCode(this.accountTypes, mnemonicCodes, this.password, this.source, true);
+        // 创建隐藏账户
+        this.filterAndCreateNotSelectAccountType(this.accountTypes, mnemonicCodes, this.password, this.source, true, 'D');
+
         let firstAcct = this.getFirstAcct();
         if (firstAcct) {
           this.$store.dispatch('setAccount', firstAcct);
@@ -108,7 +108,7 @@
         if (this.selectMemorizingWords && this.selectMemorizingWords.length > 0 && hdWallet.validateMnemonic(mnemonicCodes, this.getMemorizingCodeLanguage(mnemonicCodes))) {
           /* 备份成功之后把手机设备返回按钮启动 */
           window.canBack = true;
-          if (this.backFlag == '2') {
+          if (this.backupsSource === 'backups') {
             // 保存数据库操作
             const toast = this.$toast.loading({
               duration: 0,
