@@ -78,7 +78,7 @@
                     <div class="big-font">
                       <pl-privacy :switchable="false">{{item.value | currency('', '7') | cutTail}}</pl-privacy>
                     </div>
-                    <div class="text-main small-font">
+                    <div class="text-main small-font" v-if="isShowMarket(item.value, item.code, item.issuer)">
                       &#8776;&nbsp;
                       <pl-privacy :suffix="$store.state.setting.currencyUnit" :switchable="false">
                         {{item.value | market(item.code, item.issuer)}}
@@ -102,6 +102,7 @@
   import accountActivated from './account-activated';
   import {AccountType} from 'src/wallet/constants';
   import Big from 'big.js';
+  import convertMarket from 'core/utils/convertMarket';
   export default {
     mixins: [asset],
     props: {
@@ -199,6 +200,9 @@
       }
     },
     methods: {
+      isShowMarket (value, assetCode, assetIssuer) {
+        return convertMarket(value, assetCode, assetIssuer) > 0;
+      },
       setMode (val) {
         this.$store.dispatch('setPrivacyMode', val);
       },
