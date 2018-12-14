@@ -243,6 +243,89 @@ class StellarWallet {
     const address = keypair.publicKey();
     return { secret, address };
   }
+
+  getAsset (code, issuer) {
+    if (typeof code == 'object') {
+      issuer = code.issuer;
+      code = code.code;
+    }
+    let asset;
+    if (code && issuer) {
+      asset = new StellarSdk.Asset(code, issuer);
+    } else {
+      asset = StellarSdk.Asset.native();
+    }
+    return asset;
+  }
+
+  async getExchangePath (src, dest, code, issuer, amount) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        await this.server.paths(src, dest, this.getAsset(code, issuer), amount).call().then((data) => {
+          resolve(data);
+        }).catch((err) => {
+          console.info(err);
+          reject(this.getErrMsg(err));
+        });
+      } catch (err) {
+        reject(this.getErrMsg(err));
+      }
+    });
+  }
+
+  async pathPayment (alt, address, fromSecret) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        const path = alt.origin.path.map((item) => {
+          if (item.asset_type == 'native') {
+            return new StellarSdk.Asset.native();
+          } else {
+            return new StellarSdk.Asset(item.asset_code, item.asset_issuer);
+          }
+        });
+        let max_rate = 1.0001; // 波动差, 因为市场是波动的
+        let sendMax = alt.origin.source_amount;
+        sendMax = round(max_rate * sendMax, 7).toString();
+        this.server.loadAccount(address).then((account) => {
+          const pathPayment = StellarSdk.Operation.pathPayment({
+            destination: address,
+            sendAsset  : this.getAsset(alt.srcCode, alt.srcIssuer),
+            sendMax    : sendMax,
+            destAsset  : this.getAsset(alt.dstCode, alt.dstIssuer),
+            destAmount : alt.origin.destination_amount,
+            path       : path
+          });
+          const transaction = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
+          let keypair = StellarSdk.Keypair.fromSecret(fromSecret);
+          transaction.sign(keypair);
+          return transaction;
+        }).then(transaction => {
+          return this.server.submitTransaction(transaction);
+        }).then(txResult => {
+          resolve(txResult.hash);
+        }).catch((err) => {
+          reject(this.getErrMsg(err));
+        });
+      } catch (err) {
+        reject(this.getErrMsg(err));
+      }
+    });
+  }
+
+  getErrMsg (err) {
+    let message = "";
+    if (err instanceof StellarSdk.NotFoundError) {
+      message = "NotFoundError";
+    } else if (err.response && err.response.extras && err.response.extras.reason) {
+      message = err.response.extras.reason;
+    } else {
+      message = err.detail || err.message;
+    }
+
+    if (!message) console.error("Fail in getErrMsg", err);
+    return message;
+  }
+
 }
 
 export default StellarWallet;
