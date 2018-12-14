@@ -48,7 +48,8 @@
     "weak": "弱",
     "middle": "中",
     "strong": "强",
-    "best": "最好"
+    "best": "最好",
+    "exchange": "兑换"
   },
   "wallet": {
     "selectLanguage": "选择语言",
@@ -197,12 +198,12 @@
     "officialNetwork": "官网",
     "shareUtoken": "分享Utoken",
     "aboutUs": "关于我们",
-    "newVersion": "版本新版",
+    "newVersion": "版本更新",
     "latestVersion": "已是最新版本",
     "logout": "删除钱包",
     "logoutTip": "退出后将移除钱包中的所有账户，您可以使用备份的私钥或助记词恢复钱包和账户",
     "shareTo": "分享至",
-    "wechatFriend": "微信好友",
+    "wechatFriend": "微信",
     "shareTip": "Utoken是全球首款支持Ripple/Stellar及其他主流区块链网络的移动钱包，请在浏览器打开该链接下载",
     "shareTitle": "Utoken下载",
     "version": "版本",
@@ -337,6 +338,15 @@
     "pwdError": "密码输入错误",
     "reinput": "再次输入",
     "unlock": "请解锁"
+  },
+  "exchange": {
+    "inputTitle": "把一种货币转换成另一种",
+    "inputPlaceholder": "请输入兑换金额",
+    "amountErrorTip": "请输入有效的兑换金额",
+    "notFoundError": "恒星网络未找到该账号，请先激活此账号",
+    "pathEmpty": "没有合适的兑换路径。可能是账号的资金不足",
+    "converting": "兑换中...",
+    "exchangeFail": "兑换失败"
   }
 }
 
