@@ -27,7 +27,7 @@
         </pl-block>
       </div>
 
-      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="ripple">
+      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="ripple" @change="changeReceiveAddress">
         <small class="text-danger" v-show="!addressValid" v-text="$t('address.invalidAddressTip')"></small>
         <small class="text-danger" v-show="!addressActivated" v-text="$t('transaction.xrpUnActivationAddressMsg')"></small>
         <small class="text-danger" v-show="!trustAsset" v-html="$t('transaction.notTrustAssetMsg', {code: asset.code})"></small>
@@ -261,6 +261,9 @@
         this.$nextTick(() => {
           this.$refs['password'].$refs['input'].focus();
         });
+      },
+      changeReceiveAddress (address) {
+        this.form.tag = address.labelValue;
       },
       getErrMsg (err) {
         let retMsg = this.$t('common.transactionFail');

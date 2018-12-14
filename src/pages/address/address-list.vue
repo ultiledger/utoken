@@ -94,7 +94,7 @@
         if (this.handleFalg === '1') {
           this.$refs.addressDetail.show(addressInfo);
         } else if (this.handleFalg === '2') {
-          this.$emit('done', addressInfo.value);
+          this.$emit('done', addressInfo);
           this.close();
         }
       },
