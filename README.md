@@ -42,6 +42,12 @@ cordova plugin add cordova-plugin-camera
 cordova plugin add cordova-plugin-file
 cordova plugin add cordova-plugin-themeablebrowser
 cordova plugin add gizscanqrcode
+cordova plugin add cordova-plugin-splashscreen
+cordova plugin add cordova-plugin-sharesdk
+cordova plugin add cordova-plugin-android-permissions
+cordova plugin add cordova-plugin-file-opener2
+cordova plugin add cordova-plugin-device
+cordova plugin add cordova-plugin-file-transfer
 cordova build android
 ```
 
@@ -92,6 +98,12 @@ cordova plugin add cordova-plugin-camera
 cordova plugin add cordova-plugin-file
 cordova plugin add cordova-plugin-themeablebrowser
 cordova plugin add gizscanqrcode
+cordova plugin add cordova-plugin-splashscreen
+cordova plugin add cordova-plugin-sharesdk
+cordova plugin add cordova-plugin-android-permissions
+cordova plugin add cordova-plugin-file-opener2
+cordova plugin add cordova-plugin-device
+cordova plugin add cordova-plugin-file-transfer
 cordova build android
 ```
 
