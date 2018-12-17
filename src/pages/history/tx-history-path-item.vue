@@ -6,7 +6,7 @@
     <div slot="right" style="line-height: 68px;width: 100px;" class="text-center ethereum-bg text-white small-font">
       {{$t('history.viewDetails')}}
     </div>-->
-  <van-cell :center="true" v-if="item.txType !== '3' && item.txType !== '4'">
+  <van-cell :center="true">
     <div class="item">
       <div class="icon">
         <table style="height: 100%;width: 100%;">
@@ -22,11 +22,16 @@
         </table>
       </div>
       <div class="content">
-        <div class="detail-card-line small-font" v-if="item.txType === '1'">{{item.from | longStrAbbr(8)}}</div>
-        <div class="detail-card-line small-font" v-else="">{{item.to | longStrAbbr(9)}}</div>
+        <div class="detail-card-line small-font">
+          <span>{{item.data.amount | currency('', '7') | cutTail}}&nbsp;</span>
+          <span>{{item.data.source_asset_type === 'native'? 'XLM': item.data.source_asset_code}}</span>
+          <img src="static/img/path.png" width="33" height="22" style="vertical-align: middle;transform: translateY(-2px);">
+          <span>{{item.data.source_amount | currency('', '7') | cutTail}}&nbsp;</span>
+          <span>{{item.data.asset_type === 'native'? 'XLM': item.data.asset_code}}</span>
+        </div>
         <div class="x-small-font text-muted detail-card-line">{{item.txTime | date('YYYY/MM/DD HH:mm:ss')}}</div>
       </div>
-      <div class="amount normal-font" :class="type.cls">
+      <!--<div class="amount normal-font" :class="type.cls">
         <table style="height: 100%;width: 100%;">
           <tr>
             <td>
@@ -34,7 +39,7 @@
             </td>
           </tr>
         </table>
-      </div>
+      </div>-->
     </div>
     <div v-if="showPercentage">
       <div class="text-right x-small-font" style="padding-right: 5px;">
@@ -45,14 +50,11 @@
       </div>
     </div>
   </van-cell>
-  <history-path-item v-else :item="item" :maxConfirmations="maxConfirmations"></history-path-item>
   <!--</van-swipe-cell>-->
 </template>
 
 <script>
-  import historyPathItem from './tx-history-path-item';
   export default {
-    components: {historyPathItem},
     props: {
       item: {
         type: Object,
@@ -132,14 +134,16 @@
     }
   }
   .content{
-    width: 200px;
     vertical-align: middle;
+    .vertical-align-middle {
+      vertical-align: middle;
+    }
   }
-  .amount{
+  /*.amount{
     flex: 1;
     vertical-align: middle;
     text-align: right;
-  }
+  }*/
 }
 .progressbar{
   height: 3px;

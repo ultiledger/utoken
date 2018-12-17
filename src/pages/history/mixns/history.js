@@ -70,7 +70,9 @@ export default{
   },
   methods: {
     showDetail (item) {
-      this.$emit('showDetail', item);
+      if (item.txType !== '3' && item.txType !== '4') {
+        this.$emit('showDetail', item);
+      }
     },
     addAddress (item) {
       let address = {
@@ -130,6 +132,16 @@ export default{
               let storeNormalHistory =  this.$collecitons.history.findHistory(this.$store.state.account.type, this.$store.state.account.address, this.asset.code, this.asset.issuer, historyItem.txHash);
               if (!storeNormalHistory || storeNormalHistory.length === 0) {
                 this.$collecitons.history.insertHistory(historyItem);
+              }
+              /*兑换记录处理*/
+              if (this.toPathHistory) {
+                let pathHistoryItem = await this.toPathHistory(item);
+                if (pathHistoryItem) {
+                  let storePathHistory =  this.$collecitons.history.findHistory(pathHistoryItem.acctType, pathHistoryItem.address, pathHistoryItem.assetCode, pathHistoryItem.assetIssuer, pathHistoryItem.txHash);
+                  if (!storeNormalHistory || storePathHistory.length === 0) {
+                    this.$collecitons.history.insertHistory(pathHistoryItem);
+                  }
+                }
               }
             }
           }

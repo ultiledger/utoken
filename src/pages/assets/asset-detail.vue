@@ -43,10 +43,10 @@
     <pl-stick :offset-bottom="0">
       <van-row class="van-hairline--top" v-if="isStellar">
         <van-col span="8">
-          <van-button  size="large" class="plat-btn" type="default" @click.native="exchange" v-text="$t('common.exchange')"></van-button>
+          <van-button  size="large" class="plat-btn" type="default" @click.native="receiveAsset" v-text="$t('common.receivables')"></van-button>
         </van-col>
         <van-col span="8">
-          <van-button  size="large" class="plat-btn" type="default" @click.native="receiveAsset" v-text="$t('common.receivables')"></van-button>
+          <van-button  size="large" class="plat-btn" type="gray" @click.native="exchange" v-text="$t('common.exchange')"></van-button>
         </van-col>
         <van-col span="8">
           <van-button  size="large" class="plat-btn" type="primary" @click.native="transfer" v-text="$t('common.transferAccounts')"></van-button>
