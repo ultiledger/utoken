@@ -62,13 +62,9 @@ export default {
       canvas: '',
       resetGesture: false, // 判断是否重置手势
       gestureTitleStyle: {},
-      show: false
+      show: false,
+      gestureTitle: this.$t('gesture.gestureTitle')
     };
-  },
-  computed: {
-    gestureTitle () {
-      return this.$t('gesture.gestureTitle');
-    }
   },
   methods: {
     closePopup () {
@@ -156,6 +152,7 @@ export default {
       return po;
     },
     showPopup () {
+      this.gestureTitle = this.$t('gesture.gestureTitle');
       this.show = true;
       this.$nextTick(() => {
         this.init();
