@@ -253,9 +253,17 @@ class EthereumWallet {
 
   getAccountFromSecret(secret) {
     let web3 = new Web3();
-    const account = web3.eth.accounts.privateKeyToAccount(`0x${secret}`);
+    const account = web3.eth.accounts.privateKeyToAccount(this.handleSecret(secret));
     const address = account.address;
     return { secret, address};
+  }
+
+  handleSecret (secret) {
+    /*私钥规定是64位的排除0x*/
+    if (secret.indexOf('0x') === 0 && secret.length > 64) {
+      return secret;
+    }
+    return `0x${secret}`;
   }
 
   getContractAbi (address) { // 新增合约的时候获取abi

@@ -149,6 +149,14 @@
           this.$toast(this.$t('wallet.passwordLimitTip'));
           return false;
         }
+        if (this.form.privateKey && this.form.privateKey.length < 64) {
+          this.$toast(this.$t('wallet.invalidPrivateKeyTip'));
+          return false;
+        }
+        if (this.form.memorizingWords && this.form.memorizingWords.split(' ').length < 12) {
+          this.$toast(this.$t('wallet.invalidMnemonicCodeTip'));
+          return false;
+        }
         return true;
       },
       updateAccountState (hdWalletAccount) { // 更新账户状态
@@ -230,6 +238,7 @@
             this.$toast(this.$t('wallet.privateKeyNotEmpty'));
             return;
           }
+          console.info(this.form.privateKey.length < 64);
           try{
             this.createWalletAcctByPrivateKey(this.coin.type, this.form.privateKey, this.form.walletPwd, this.source, true);
             setTimeout(() => {
