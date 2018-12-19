@@ -60,5 +60,8 @@ export default {
   },
   [types.SET_APP_VERSION] (state, value) {
     state.setting.appVersion = value;
+  },
+  [types.SET_MYTOKEN_API] (state, value) {
+    state.setting.mytokenApi = value;
   }
 };

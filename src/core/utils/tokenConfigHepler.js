@@ -2,6 +2,7 @@ import tokens from '../../wallet/tokens';
 import axios from 'axios';
 import store from '../store';
 import Vue from "vue";
+import getMarket from './market';
 
 export default {
   async settingConfig () {
@@ -11,8 +12,13 @@ export default {
     if (setting) {
       flag = !setting.tokenConfig || !setting.tokenConfig.version || setting.tokenConfig.version !== obj.data.version;
     }
+    let config = await axios.get('https://ultiledger.github.io/hd-wallet/pages/config.json');
+    // 设置行情url
+    if (config.data['mytoken-api']) {
+      store.dispatch('setMyTokenApi',  config.data['mytoken-api']['url']);
+      getMarket();
+    }
     if (flag) {
-      let config = await axios.get('https://ultiledger.github.io/hd-wallet/pages/config.json');
       let tokenCofing = {
         version: obj.data.version,
         config: config.data

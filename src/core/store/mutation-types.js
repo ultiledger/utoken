@@ -18,3 +18,4 @@ export const SET_PASSWORD_MAP = 'SET_PASSWORD_MAP'; // 设置密码
 export const SET_TOKEN_CONFIG = 'SET_TOKEN_CONFIG'; // 设置配置版本
 export const SET_PRIVACY_MODE = 'SET_PRIVACY_MODE'; // 设置隐私模式
 export const SET_APP_VERSION = 'SET_APP_VERSION'; // 设置app版本号
+export const SET_MYTOKEN_API = 'SET_MYTOKEN_API'; // 设置请求行情的api地址

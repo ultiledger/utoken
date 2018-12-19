@@ -35,9 +35,9 @@ async function getBaseMarket () {
       assetCode = asset.symbol;
       assetIssuer = asset.address;
     }
-    let url = `mytoken-api/api/ticker/search?category=currency&keyword=${assetCode}&timestamp=1540258888182&code=b7c1a42b4f643c01eb1eb85d85fc03a7&platform=web_pc&v=1.0.0&language=zh_CN&legal_currency=${currencyUnit}`;
+    let url = `mytoken-api/ticker/search?category=currency&keyword=${assetCode}&timestamp=1540258888182&code=b7c1a42b4f643c01eb1eb85d85fc03a7&platform=web_pc&v=1.0.0&language=zh_CN&legal_currency=${currencyUnit}`;
     if (env === 'production') {
-      url = `http://mytoken.io/api/ticker/search?category=currency&keyword=${assetCode}&timestamp=1540258888182&code=b7c1a42b4f643c01eb1eb85d85fc03a7&platform=web_pc&v=1.0.0&language=zh_CN&legal_currency=${currencyUnit}`;
+      url = `${store.state.setting.mytokenApi}/ticker/search?category=currency&keyword=${assetCode}&timestamp=1540258888182&code=b7c1a42b4f643c01eb1eb85d85fc03a7&platform=web_pc&v=1.0.0&language=zh_CN&legal_currency=${currencyUnit}`;
     }
     let markets = {};
     httpGet(url).then(ret => {
