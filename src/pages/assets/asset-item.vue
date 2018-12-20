@@ -76,7 +76,7 @@
                   </td>
                   <td class="text-right">
                     <div class="big-font">
-                      <pl-privacy :switchable="false">{{item.value | currency('', '7') | cutTail}}</pl-privacy>
+                      <pl-privacy :switchable="false">{{item.value | currency('', '8') | cutTail}}</pl-privacy>
                     </div>
                     <div class="text-main small-font" v-if="isShowMarket(item.value, item.code, item.issuer)">
                       &#8776;&nbsp;

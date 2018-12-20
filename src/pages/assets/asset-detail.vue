@@ -32,7 +32,7 @@
             <img v-if="asset.logo" :src="asset.logo" style="width:36px;height: 36px;">
             <img v-else-if="asset.code === 'XRP'" :src="`static/img/${asset.code}-1@3x.png`" style="width:36px;height: 36px;"/>
             <img v-else :src="`static/img/${asset.code}@3x.png`" style="width:36px;height: 36px;" onerror="this.src='static/img/unknown.png'"/>
-            <p class="x-x-large-font text-main" style="line-height: 45px;">{{balance | currency('', '7') | cutTail}}</p>
+            <p class="x-x-large-font text-main" style="line-height: 45px;">{{balance | currency('', '8') | cutTail}}</p>
             <p class="small-font text-primary" style="line-height: 20px;">≈&nbsp;{{balance | market(asset.code, asset.issuer)}}</p>
           </div>
           <tx-history :asset="asset" v-if="showPop" class="margin-top" ref="rxHistory" @showDetail="showDetail" @addAddress="addAddress"></tx-history>
