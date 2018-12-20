@@ -33,7 +33,7 @@
             <img v-else-if="asset.code === 'XRP'" :src="`static/img/${asset.code}-1@3x.png`" style="width:36px;height: 36px;"/>
             <img v-else :src="`static/img/${asset.code}@3x.png`" style="width:36px;height: 36px;" onerror="this.src='static/img/unknown.png'"/>
             <p class="x-x-large-font text-main" style="line-height: 45px;">{{balance | currency('', '8') | cutTail}}</p>
-            <p class="small-font text-primary" style="line-height: 20px;">≈&nbsp;{{balance | market(asset.code, asset.issuer)}}</p>
+            <p class="small-font text-primary" style="line-height: 20px;" v-if="isShowMarket(balance, asset.code, asset.issuer)">≈&nbsp;{{balance | market(asset.code, asset.issuer)}}</p>
           </div>
           <tx-history :asset="asset" v-if="showPop" class="margin-top" ref="rxHistory" @showDetail="showDetail" @addAddress="addAddress"></tx-history>
         <!--</div>-->
@@ -78,6 +78,7 @@
   import QRCodeScanner from 'core/utils/QRCodeScanner.js';
   import pullRefresh from './mixns/pull-refresh.js';
   import {AccountType} from 'src/wallet/constants';
+  import convertMarket from 'core/utils/convertMarket';
 
   export default{
     components: {
@@ -113,6 +114,9 @@
       }
     },
     methods: {
+      isShowMarket (value, assetCode, assetIssuer) {
+        return convertMarket(value, assetCode, assetIssuer) > 0;
+      },
       addAddress (address) {
         this.$refs.addressAdd.show(address);
       },
