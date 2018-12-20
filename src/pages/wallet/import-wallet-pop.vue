@@ -149,7 +149,7 @@
           this.$toast(this.$t('wallet.passwordLimitTip'));
           return false;
         }
-        if (this.form.privateKey && this.form.privateKey.length < 64) {
+        if (this.form.privateKey && this.form.privateKey.length < 64 && this.coin.type === 'ethereum') {
           this.$toast(this.$t('wallet.invalidPrivateKeyTip'));
           return false;
         }
