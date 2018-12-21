@@ -22,7 +22,7 @@
         </div>
         <div class="bs-block item-block">
           <div class="text-muted b-white item">
-            <span>{{$t('trade.available')}}&nbsp;&nbsp;&nbsp;{{balances[bsCode] | cutTail}}&nbsp;{{bsCode}}</span>
+            <span>{{$t('trade.youAsset')}}&nbsp;&nbsp;&nbsp;{{balances[bsCode] | cutTail}}&nbsp;{{bsCode}}</span>
           </div>
           <div class="item">
             <van-row>
