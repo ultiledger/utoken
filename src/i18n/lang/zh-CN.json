@@ -312,7 +312,8 @@
     "amount": "金额",
     "searchMore": "查询更详细信息",
     "unpackage": "未打包",
-    "confirming": "确认中"
+    "confirming": "确认中",
+    "exchangeSuccess": "兑换成功"
   },
   "scan": {
     "scanQrCode": "扫一扫，向我转入",
@@ -347,6 +348,44 @@
     "pathEmpty": "没有合适的兑换路径。可能是账号的资金不足",
     "converting": "兑换中...",
     "exchangeFail": "兑换失败"
+  },
+  "market": {
+    "name": "行情",
+    "custom": "自选",
+    "trade": "交易"
+  },
+  "trade": {
+    "name": "交易",
+    "buying": "买入",
+    "selling": "卖出",
+    "available": "可用资产",
+    "buyPrice": "买入价",
+    "sellPrice": "卖出价",
+    "amount": "数量",
+    "estVal": "预计交易额",
+    "marketDepth": "市场深度",
+    "buyAmount": "买单数量",
+    "buyPrice": "买单价格",
+    "sellPrice": "卖单价格",
+    "sellAmount": "卖单数量",
+    "lastExec": "最近成交",
+    "myOffer": "我的委托",
+    "cancel": "撤销",
+    "price": "价格",
+    "unexecuted": "实际成交",
+    "priceTip": "请输入价格",
+    "amountTip": "请输入数量",
+    "balancesTip": "可用余币不足",
+    "offerSuccess": "委托成功",
+    "offerFail": "委托失败",
+    "cancelSuccess": "撤销成功",
+    "cancelFail": "撤销失败",
+    "direction": "方向",
+    "time": "时间",
+    "networkError": "网络请求失败",
+    "addTradePair": "添加交易对",
+    "baseCoin": "基础货币",
+    "counterCoin": "对手方货币"
   }
 }
 

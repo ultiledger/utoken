@@ -46,9 +46,13 @@
               <van-icon v-else name="password-not-view" @click="setMode(false)"/>
             </span>
           </div>
-          <span class="add-btn" @click="addAssets" v-if="showAddBtn">
-          <img :src="dprImg(`add.png`)" width="20" height="20">
+          <span class="add-btn" style="right: 70px;" @click="toTrade" v-if="showTradeBtn">
+            <img :src="dprImg(`trade.png`)" width="20" height="20">
           </span>
+          <span class="add-btn" @click="addAssets" v-if="showAddBtn">
+            <img :src="dprImg(`add.png`)" width="20" height="20">
+          </span>
+
         </div>
         <div class="asset-list">
           <div class="asset-list-item item-block" v-for="(item, key) in assets" :key="key" @click="assetClick(item)">
@@ -127,6 +131,13 @@
           return false;
         } else {
           return true;
+        }
+      },
+      showTradeBtn () {
+        if (this.data && this.data.type === AccountType.stellar) {
+          return true;
+        } else {
+          return false;
         }
       },
       activated () {
@@ -236,6 +247,9 @@
       },
       addAssets () {
         this.$emit('addAssets');
+      },
+      toTrade () {
+        this.$emit('toTrade');
       }
     }
   };
