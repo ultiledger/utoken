@@ -54,7 +54,10 @@
                     </td>
                     <td class="text-right">
                       <div class="big-font">
-                        {{value.price | currency('', value.precise)}}
+                        {{value.srcAmount | currency('', value.precise)}}
+                      </div>
+                      <div class="text-main small-font">
+                        {{value.price | currency('', value.precise)}}&nbsp;{{assetCode}}
                       </div>
                     </td>
                   </tr>
@@ -323,31 +326,13 @@
     padding-left: 15px;
   }
   .exchange-coin {
-    margin: 20px 15px;
+    margin: 20px 20px;
     .title {
       margin-left: 12px;
       margin-right: 12px;
       padding-top: 6px;
       padding-bottom: 18px;
     }
-    /*.adddd {
-      display:inline-block;
-      vertical-align: middle;
-      position: relative;
-      !*border-top: 1px solid red;*!
-      width: 60%;
-      !*transform: translateY(-3px);*!
-      text-align: right;
-      &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 8px;
-        border-top: 1px dotted #222222;
-        width: 95%;
-        height: 1px;
-      }
-    }*/
   }
   .path-list{
     .path-list-item{

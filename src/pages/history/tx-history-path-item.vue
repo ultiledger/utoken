@@ -23,10 +23,10 @@
       </div>
       <div class="content">
         <div class="detail-card-line small-font">
-          <span>{{item.data.amount | currency('', '8') | cutTail}}&nbsp;</span>
+          <span>{{item.data.source_amount | currency('', '8') | cutTail}}&nbsp;</span>
           <span>{{item.data.source_asset_type === 'native'? 'XLM': item.data.source_asset_code}}</span>
           <img src="static/img/path.png" width="33" height="22" style="vertical-align: middle;transform: translateY(-2px);">
-          <span>{{item.data.source_amount | currency('', '8') | cutTail}}&nbsp;</span>
+          <span>{{item.data.amount | currency('', '8') | cutTail}}&nbsp;</span>
           <span>{{item.data.asset_type === 'native'? 'XLM': item.data.asset_code}}</span>
         </div>
         <div class="x-small-font text-muted detail-card-line">{{item.txTime | date('YYYY/MM/DD HH:mm:ss')}}</div>
