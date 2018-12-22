@@ -382,6 +382,9 @@
     "networkError": "ネットワーク要求に失敗しました",
     "addTradePair": "取引のペアを追加する",
     "baseCoin": "基本通貨",
-    "counterCoin": "相手方の通貨"
+    "counterCoin": "相手方の通貨",
+    "tradeTip": "あなたは資産を貸方に入れておらず、取引を完了することができないかもしれません。",
+    "manageOfferNoTrust": "指定資産を承認していません",
+    "manageOfferMalformed": "例外を委任する"
   }
 }

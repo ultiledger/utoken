@@ -249,7 +249,16 @@
         this.$emit('addAssets');
       },
       toTrade () {
-        this.$emit('toTrade');
+        if (this.balances.length > 1) {
+          this.$emit('toTrade');
+        } else {
+          this.$dialog.confirm({
+            title: this.$t('common.tip'),
+            message: this.$t('trade.tradeTip')
+          }).then(() => {
+            this.$emit('toTrade');
+          });
+        }
       }
     }
   };

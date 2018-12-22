@@ -108,6 +108,7 @@
   </div>
 </template>
 <script>
+  // todo: 加入撤单，成交历史记录，定时任务刷新委托单和市场深度
   import tradepairAddPop from './popup/tradepair-add-pop';
   import marketDept from './components/market-dept';
   import myOffers from './components/my-offers';
@@ -159,13 +160,19 @@
         return  {
           'Bad Request': 'Bad Request',
           'NotFoundError': this.$t('exchange.notFoundError'),
-          'Network Error': this.$t('transaction.networkError')
+          'Network Error': this.$t('transaction.networkError'),
+          'manageOfferSellNoTrust': this.$t('trade.manageOfferNoTrust'),
+          'manageOfferBuyNoTrust':this.$t('trade.manageOfferNoTrust'),
+          'manageOfferMalformed': this.$t('trade.manageOfferMalformed'),
+          'manageOfferUnderfunded': this.$t('trade.balancesTip')
         };
       },
       maxVal () {
         if (this.bsFlag === 'buy' && this.form.price > 0) {
-          let amount = new Big(this.balances[this.bsCode]);
-          return Number(amount.div(this.form.price).toFixed(8));
+          let amount = this.balances[this.bsCode];
+          if (amount) {
+            return Number(new Big(amount).div(this.form.price).toFixed(8));
+          }
         } else if (this.bsFlag === 'sell') {
           return Number(this.balances[this.bsCode]);
         }
@@ -192,20 +199,36 @@
           if (tradepair && tradepair.length > 0) {
             this.tradepair = tradepair[0];
           } else {
-            this.tradepair = {
-              acctType: account.type,
-              acctAddress: account.address,
-              baseCode: 'XLM',
-              baseIssuer: '',
-              counterCode: 'CNY',
-              counterIssuer: 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'
-            };
-            this.$collecitons.tradepair.insertTradepair(this.tradepair);
+            this.saveDefaultTradepair(account);
           }
           this.bsCode = this.tradepair.counterCode;
           this.$nextTick(() => {
             this.$refs.marketDept.getBooks();
           });
+        }
+      },
+      saveDefaultTradepair (account) {
+        let bs = this.$store.state.balances[account.address];
+        if (bs && bs.length > 1) {
+          let oneBs = bs[1];
+          this.tradepair = {
+            acctType: account.type,
+            acctAddress: account.address,
+            baseCode: 'XLM',
+            baseIssuer: '',
+            counterCode: oneBs.code,
+            counterIssuer: oneBs.issuer ? oneBs.issuer: ''
+          };
+          this.$collecitons.tradepair.insertTradepair(this.tradepair);
+        } else {
+          this.tradepair = {
+            acctType: account.type,
+            acctAddress: account.address,
+            baseCode: 'XLM',
+            baseIssuer: '',
+            counterCode: 'CNY',
+            counterIssuer: 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'
+          };
         }
       },
       toAddTradepair () {

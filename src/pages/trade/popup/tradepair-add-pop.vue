@@ -149,6 +149,7 @@
         this.showPop = true;
       },
       resetData () {
+        this.pickerPair = '';
         let account = this.$store.state.account;
         if (account) {
           let assetsMap = this.getConfigAssetsMap(account.type);
@@ -198,7 +199,9 @@
             return item.code != this.pairs.baseCode;
           });
         }
-        this.showPicker = true;
+        if (this.pickerBalances.length > 0) {
+          this.showPicker = true;
+        }
       },
       onCancel () {
         this.showPicker = false;

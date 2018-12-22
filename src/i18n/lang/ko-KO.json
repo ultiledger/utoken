@@ -381,6 +381,9 @@
     "networkError": "네트워크 요청 실패",
     "addTradePair": "거래 쌍 추가",
     "baseCoin": "기본 통화",
-    "counterCoin": "거래 상대방 통화"
+    "counterCoin": "거래 상대방 통화",
+    "tradeTip": "자산을 적립하지 않았으므로 거래를 완료하지 못할 수도 있습니다.",
+    "manageOfferNoTrust": "지정된 자산을 승인하지 않았습니다.",
+    "manageOfferMalformed": "대의원 예외"
   }
 }

@@ -238,7 +238,6 @@
             this.$toast(this.$t('wallet.privateKeyNotEmpty'));
             return;
           }
-          console.info(this.form.privateKey.length < 64);
           try{
             this.createWalletAcctByPrivateKey(this.coin.type, this.form.privateKey, this.form.walletPwd, this.source, true);
             setTimeout(() => {

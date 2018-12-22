@@ -381,6 +381,9 @@
     "networkError": "Network request failed",
     "addTradePair": "Add trade pair",
     "baseCoin": "Base asset",
-    "counterCoin": "Counter asset"
+    "counterCoin": "Counter asset",
+    "tradeTip": "You have not credited any assets and may not be able to complete the transaction.",
+    "manageOfferNoTrust": "You have not authorized the designated assets",
+    "manageOfferMalformed": "Offer malformed"
   }
 }

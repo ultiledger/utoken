@@ -73,6 +73,30 @@ class Tradepair {
   }
 
   /**
+   * 查找并删除交易对
+   * @param acctType
+   * @param acctAddress
+   * @param code
+   * @param issuer
+   */
+  static findAndRemoveTradepair(acctType, acctAddress, code, issuer) {
+    if (!acctAddress && !code) {
+      return;
+    }
+    return instance.findAndRemove({
+      acctType: acctType,
+      acctAddress: acctAddress,
+      '$or': [{
+        'baseCode': code,
+        'baseIssuer': issuer
+      },{
+        'counterCode': code,
+        'counterIssuer': issuer
+      }]
+    });
+  }
+
+  /**
    * 创建tradepair表并返回
    * @param db
    * @returns {setting}

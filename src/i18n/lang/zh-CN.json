@@ -387,7 +387,10 @@
     "networkError": "网络请求失败",
     "addTradePair": "添加交易对",
     "baseCoin": "基础货币",
-    "counterCoin": "对手方货币"
+    "counterCoin": "对手方货币",
+    "tradeTip": "您尚未授信任何资产，可能无法完成交易",
+    "manageOfferNoTrust": "您尚未授信指定资产",
+    "manageOfferMalformed": "委托异常"
   }
 }
 
