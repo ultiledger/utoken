@@ -6,12 +6,12 @@
       class="popup-wapper"
       style="width:100%;height: 100%;">
       <van-nav-bar
-        :title="$t('common.exchange')"
+        :title="$t('exchange.inputTitle')"
         @click-left="close()">
         <span slot="left"><i class="ultfont ult-left"></i></span>
       </van-nav-bar>
       <div class="b-white padding exchange-coin border-radius">
-        <div class="title">{{$t('exchange.inputTitle')}}</div>
+        <div class="title">{{$t('exchange.receive')}}</div>
         <van-field
           type="number"
           :readonly="loadingPath"

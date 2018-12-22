@@ -347,7 +347,8 @@
     "notFoundError": "恒星网络未找到该账号，请先激活此账号",
     "pathEmpty": "没有合适的兑换路径。可能是账号的资金不足",
     "converting": "兑换中...",
-    "exchangeFail": "兑换失败"
+    "exchangeFail": "兑换失败",
+    "receive": "接收"
   },
   "market": {
     "name": "行情",

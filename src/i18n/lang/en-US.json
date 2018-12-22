@@ -346,7 +346,8 @@
     "notFoundError": "The resource was not found.",
     "pathEmpty": "No acceptable path. Please make sure your account has enough funds.",
     "converting": "Converting...",
-    "exchangeFail": "Exchange Failure"
+    "exchangeFail": "Exchange Failure",
+    "receive": "Receive"
   },
   "trade": {
     "name": "Trade",

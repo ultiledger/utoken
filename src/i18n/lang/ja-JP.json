@@ -347,7 +347,8 @@
     "notFoundError": "アカウントが見つかりませんでした。このアカウントを最初に有効にしてください。",
     "pathEmpty": "適切な償還パスはありません。 アカウントの残高が不足している可能性があります",
     "converting": "償還...",
-    "exchangeFail": "償還失敗"
+    "exchangeFail": "償還失敗",
+    "receive": "受け取る"
   },
   "trade": {
     "name": "取引",
