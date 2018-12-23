@@ -108,7 +108,7 @@
   </div>
 </template>
 <script>
-  // todo: 加入撤单，成交历史记录，定时任务刷新委托单和市场深度
+  // todo: 加入撤单，成交历史记录
   import tradepairAddPop from './popup/tradepair-add-pop';
   import marketDept from './components/market-dept';
   import myOffers from './components/my-offers';
@@ -183,6 +183,16 @@
           return Number(new Big(this.maxVal).div(10).toFixed(8));
         }
         return 1;
+      }
+    },
+    watch: {
+      showPop () {
+        if (this.$refs.marketDept) {
+          this.$refs.marketDept.clearTimer();
+        }
+        if (this.$refs.myOffers) {
+          this.$refs.myOffers.clearTimer();
+        }
       }
     },
     methods: {
@@ -352,10 +362,12 @@
       tabChange () {
         if (this.tabActive === 0) {
           this.$nextTick(() => {
+            this.$refs.myOffers.clearTimer();
             this.$refs.marketDept.getBooks();
           });
         } else if (this.tabActive === 1) {
           this.$nextTick(() => {
+            this.$refs.marketDept.clearTimer();
             this.$refs.myOffers.getOffers();
           });
         }

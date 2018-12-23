@@ -32,16 +32,19 @@
           </tr>
         </table>
       </div>
+      <!--<div class="text-primary x-small-font" style="margin-top: 10px;" @click="viewOfferHistory">委托历史<i class="ultfont ult-right x-small-font"></i></div>-->
     </div>
     <password-dialog ref="pwdDialog" @done="cancelOffer"></password-dialog>
+    <offer-history ref="offerHistory"></offer-history>
   </div>
 </template>
 <script>
   import cryptor from 'core/utils/cryptor';
   import moment from 'moment';
   import passwordDialog from '../../ui/password-dialog';
+  import offerHistory from '../popup/offer-history-pop';
   export default {
-    components: {passwordDialog},
+    components: {passwordDialog, offerHistory},
     props: {
       tradePair: {
         type: Object,
@@ -54,10 +57,24 @@
     },
     data () {
       return {
-        offers: []
+        offers: [],
+        offerTimer: null
       };
     },
     methods: {
+      clearTimer () {
+        if (this.offerTimer) {
+          window.clearInterval(this.offerTimer);
+          this.offerTimer = null;
+        }
+      },
+      startTimer () {
+        if (!this.offerTimer) {
+          this.offerTimer = window.setInterval(() => {
+            this.getOffers();
+          }, 1000 * 60 * 1);
+        }
+      },
       isSameAsset (code, issuer, code2, issuer2) { /*是否是当前交易对*/
         if (code == 'XLM') {
           return code == code2;
@@ -117,8 +134,10 @@
       getOffers () {
         this.$wallet.queryOffers(this.address).then((datas) => {
           this.offers = this.processOffers(datas);
+          this.startTimer();
         }).catch(() => {
           this.offers = [];
+          this.startTimer();
         });
       },
       toCancel (item) {
@@ -178,6 +197,9 @@
             toast.clear();
           }, 2000);
         });
+      },
+      viewOfferHistory () {
+        this.$refs.offerHistory.show(this.tradePair);
       }
     }
   };

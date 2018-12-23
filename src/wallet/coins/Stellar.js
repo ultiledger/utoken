@@ -496,6 +496,38 @@ class StellarWallet {
     });
   }
 
+  async queryOfferHistorys (address, optional = {}) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        let action = await this.server.transactions().forAccount(address).order(optional.order || 'desc');
+        if (optional.limit) {
+          action = action.limit(optional.limit);
+        } else {
+          action = action.limit(20);
+        }
+        /* let action =  this.server.offers('accounts', address);*/
+        let page = await action.call();
+        let result = [];
+        for (const record of page.records) {
+          let tx = new StellarSdk.Transaction(record.envelope_xdr);
+          result.push(tx.operations[0]);
+        }
+        resolve(result);
+
+        /*let action =  this.server.trades().forAccount(address).order(optional.order || 'desc');
+        if (optional.limit) {
+          action = action.limit(optional.limit);
+        }
+        if (optional.cursor) {
+          action = action.cursor(optional.cursor);
+        }
+        let page = await action.call();
+        resolve(page.records);*/
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 
   /**
    * stellar api请求错误统一处理方法

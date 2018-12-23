@@ -6,7 +6,7 @@
       class="popup-wapper"
       style="width:100%;height: 100%;">
       <van-nav-bar
-        :title="$t('trade.lastExec')"
+        title="历史记录"
         @click-left="close()">
         <span slot="left"><i class="ultfont ult-left"></i></span>
       </van-nav-bar>
@@ -15,24 +15,28 @@
           <table style="height: 100%;width: 100%;border-collapse:collapse;">
             <tr>
               <th colspan="1" rowspan="1" class="small-font text-muted text-left">
-                {{$t('trade.amount')}}({{tradepair.baseCode}})
+                数量({{tradepair.baseCode}})
               </th>
               <th colspan="1" rowspan="1" class="small-font text-muted text-right ">
-                {{$t('trade.price')}}({{tradepair.counterCode}})
+                价格({{tradepair.counterCode}})
               </th>
-              <th colspan="1" rowspan="1" class="small-font text-muted text-right " v-text="$t('trade.direction')"></th>
-              <th colspan="1" rowspan="1" class="small-font text-muted text-right " v-text="$t('trade.time')"></th>
+              <th colspan="1" rowspan="1" class="small-font text-muted text-right ">
+                方向
+              </th>
+              <th colspan="1" rowspan="1" class="small-font text-muted text-right ">
+                时间
+              </th>
             </tr>
-            <tr v-for="(item,index) in lastBooks" :key="index">
+            <tr v-for="(item,index) in historyOffers" :key="index">
               <td colspan="1" rowspan="1" class="small-font">
                 {{item.baseAmount}}
               </td>
               <td colspan="1" rowspan="1" class="text-right small-font" :class="item.baseIsSeller? 'text-success': 'text-danger'">
-                {{item.price | currency('', '8') | cutTail}}
+                {{item.price | currency('', '4')}}
               </td>
               <td colspan="1" rowspan="1" class="text-right small-font" :class="item.baseIsSeller? 'text-success': 'text-danger'">
-                <span v-if="item.baseIsSeller" v-text="$t('trade.buying')"></span>
-                <span v-else v-text="$t('trade.selling')"></span>
+                <span v-if="item.baseIsSeller">买入</span>
+                <span v-else>卖出</span>
               </td>
               <td colspan="1" rowspan="1" class="text-right small-font text-muted">
                 {{item.ledgerCloseTime}}
@@ -51,7 +55,7 @@
     data () {
       return {
         showPop: false,
-        lastBooks: [],
+        historyOffers: [],
         tradepair: {}
       };
     },
@@ -59,23 +63,24 @@
       show (params) {
         this.showPop = true;
         this.tradepair = params;
-        this.getLastBooks();
+        this.getHistoryOffers();
       },
-      getLastBooks () {
-        this.lastBooks = [];
-        let base = {code: this.tradepair.baseCode, issuer: this.tradepair.baseIssuer};
-        let counter = {code: this.tradepair.counterCode, issuer: this.tradepair.counterIssuer};
-        this.$wallet.queryLastBook(base, counter, {limit: 50}).then((data) => {
+      getHistoryOffers () {
+        this.historyOffers = [];
+        // let base = {code: this.tradepair.baseCode, issuer: this.tradepair.baseIssuer};
+        // let counter = {code: this.tradepair.counterCode, issuer: this.tradepair.counterIssuer};
+        this.$wallet.queryOfferHistorys(this.$store.state.account.address).then((data) => {
+          console.info(data);
           data.forEach((item) => {
-            this.lastBooks.push(this.processLastBooks(item));
+            this.historyOffers.push(this.processHistoryOffers(item));
           });
         }).catch((err) => {
           console.info(err);
-          this.$toast(this.$t('trade.networkError'));
-          this.lastBooks = [];
+          this.$toast('网络请求失败');
+          this.historyOffers = [];
         });
       },
-      processLastBooks (item) {
+      processHistoryOffers (item) {
         let price = mathUtils.round(item.counter_amount / item.base_amount, 2);
         let now = moment().format('YYYY-MM-DD');
         let ledgerCloseDate = moment(item.ledger_close_time).format('YYYY-MM-DD');
@@ -101,5 +106,13 @@
   };
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../scss/trade";
+  .trade-offers {
+    th {
+      padding-bottom: 9px;
+    }
+    td {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
 </style>

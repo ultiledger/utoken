@@ -55,12 +55,26 @@
     },
     data () {
       return {
+        marketTimer: null, // 市场深度定时器
         books: [], /*买单+卖单*/
         asks: [], /*卖单*/
         bids: [] /*买单*/
       };
     },
     methods: {
+      clearTimer () {
+        if (this.marketTimer) {
+          window.clearInterval(this.marketTimer);
+          this.marketTimer = null;
+        }
+      },
+      startTimer () {
+        if (!this.marketTimer) {
+          this.marketTimer = window.setInterval(() => {
+            this.getBooks();
+          }, 1000 * 60 * 0.5);
+        }
+      },
       getBooks () {
         let base = {code: this.tradePair.baseCode, issuer: this.tradePair.baseIssuer};
         let counter = {code: this.tradePair.counterCode, issuer: this.tradePair.counterIssuer};
@@ -69,10 +83,12 @@
           this.asks = data.asks;
           this.bids = data.bids;
           this.processBooks();
+          this.startTimer();
         }).catch(() => {
           this.books = [];
           this.asks = [];
           this.bids = [];
+          this.startTimer();
         });
       },
       processBooks () {
