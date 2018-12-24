@@ -149,6 +149,14 @@
           this.$toast(this.$t('wallet.passwordLimitTip'));
           return false;
         }
+        if (this.form.privateKey && this.form.privateKey.length < 64 && this.coin.type === 'ethereum') {
+          this.$toast(this.$t('wallet.invalidPrivateKeyTip'));
+          return false;
+        }
+        if (this.form.memorizingWords && this.form.memorizingWords.split(' ').length < 12) {
+          this.$toast(this.$t('wallet.invalidMnemonicCodeTip'));
+          return false;
+        }
         return true;
       },
       updateAccountState (hdWalletAccount) { // 更新账户状态

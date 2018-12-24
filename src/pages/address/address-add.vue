@@ -44,6 +44,7 @@
         </van-field>
       </div>
 
+      <!--地址-->
       <div class="item-block" v-if="form.type">
         <pl-block :title="$t('common.address')" :title-class="false">
           <span slot="title-tip"><i class="ultfont ult-scan" @click="toScan"></i></span>
@@ -65,6 +66,37 @@
           <small class="text-danger" v-show="!addressValid">{{$t('address.invalidAddressTip')}}</small>
         </pl-block>
       </div>
+      <!--stellar和ripple特有的信息-->
+      <div class="item-block" v-if="(isStellar||isRipple) && form.value && addressValid">
+        <pl-block>
+          <div style="padding: 0 0 10px;">
+            <div class="pull-left normal-font" v-if="isStellar">Memo</div>
+            <div class="pull-left normal-font" v-else-if="isRipple">Tag</div>
+            <div class="pull-right" v-if="isStellar">
+              <span class="memo-type"
+                    @click="selectMemo(memo.value)"
+                    :class="{'active': form.labelType === memo.value, 'disabled' : !canSelectMemoType}"
+                    :key="index"
+                    v-for="(memo, index) in memoTypes">
+              <span class="icon text-success"
+                    v-if="form.labelType === memo.value">
+                <van-icon name="certificate" style="vertical-align: middle;"/>
+              </span>
+                <span style="vertical-align: middle;">{{memo.text}}</span>
+              </span>
+            </div>
+          </div>
+          <van-field
+            v-model="form.labelValue"
+            class="no-border no-padding-side"
+            style="padding-left: 0 !important;"
+            :placeholder="labelValuePlaceholder"
+            clearable>
+          </van-field>
+          <small class="text-danger" v-show="isNeedMemoOrTag && !form.labelValue">{{needMemoOrTagTip}}</small>
+          <small class="text-danger" v-show="isValidMemo">{{isValidMemo}}</small>
+        </pl-block>
+      </div>
 
       <div class="single-btn">
         <van-button size="large" round  @click="saveAddress" type="primary" v-text="$t('address.save')"></van-button>
@@ -75,9 +107,11 @@
 </template>
 <script>
   import coinTypeSelect from '../ui/coin-type-select';
+  import {AccountType} from "src/wallet/constants";
   import moment from 'moment';
   import QRCodeScanner from 'core/utils/QRCodeScanner.js';
   import coins from 'src/wallet/coins';
+  import StellarSdk from 'stellar-sdk';
 
   export default {
     components: {coinTypeSelect},
@@ -85,14 +119,63 @@
       return {
         showPop: false,
         addressValid: true,
+        canSelectMemoType: true, /*stellar是否可以选择，如果是交易所地址则不可以选择，只能是text*/
+        isNeedMemoOrTag: false, /*是否需要memo或者tag*/
+        memoTypes: [
+          {text: 'ID', value: StellarSdk.MemoID},
+          {text: 'Text', value: StellarSdk.MemoText},
+          {text: 'Hash', value: StellarSdk.MemoHash}
+        ],
         form: {
           acctType: '',
           type: '',
           name: '',
           value: '',
-          remark: ''
+          remark: '',
+          labelType: '',
+          labelValue: ''
         }
       };
+    },
+    computed: {
+      isStellar () {
+        return this.form.acctType === AccountType.stellar;
+      },
+      isRipple () {
+        return this.form.acctType === AccountType.ripple;
+      },
+      labelValuePlaceholder () {
+        if (this.isStellar) {
+          return this.$t('transaction.inputMemoPlaceholder');
+        } else if (this.isRipple) {
+          return this.$t('transaction.inputTagPlaceholder');
+        }
+      },
+      needMemoOrTagTip () {
+        if (this.isStellar) {
+          return this.$t('transaction.stellarNeedMemo');
+        } else if (this.isRipple) {
+          return this.$t('transaction.xrpExchangeAddress');
+        }
+      },
+      isValidMemo () {
+        if (this.form.labelValue && this.isStellar) {
+          let msg =  coins[this.form.acctType].wallet.isValidMemo(this.form.labelType, this.form.labelValue);
+          if (msg) {
+            return this.memoErrMsg[this.form.labelType];
+          } else {
+            return '';
+          }
+        }
+        return '';
+      },
+      memoErrMsg () {
+        return {
+          [StellarSdk.MemoID]: this.$t('transaction.memoExpectsNum'), // Expects a int64 as a string
+          [StellarSdk.MemoText]: this.$t('transaction.memoExpectsMax28Byte'), // Expects string, array or buffer, max 28 bytes
+          [StellarSdk.MemoHash]: this.$t('transaction.memoExpects32Byte') // Expects a 32 byte hash value or hex encoded string
+        };
+      }
     },
     watch: {
       'form.value' () {
@@ -101,9 +184,18 @@
             this.addressValid = false;
           } else {
             this.addressValid = true;
+            if (this.isStellar || this.isRipple) {
+              this.isNeedMemoOrTag = coins[this.form.acctType].wallet.isTradingPlatformAddress(this.form.value);
+              if (this.isNeedMemoOrTag) {
+                this.canSelectMemoType = false;
+              } else {
+                this.canSelectMemoType = true;
+              }
+            }
           }
         } else {
           this.addressValid = true;
+          this.isNeedMemoOrTag = false;
         }
       },
       'form.type' () {
@@ -136,6 +228,23 @@
         this.form.value = '';
         this.form.acctType = '';
         this.form.remark = '';
+        this.resetLabelForm();
+      },
+      resetLabelForm () {
+        this.form.labelType = '';
+        if (this.form.acctType === AccountType.ripple) {
+          this.form.labelType = 'Tag';
+        }
+        this.form.labelValue = '';
+      },
+      selectMemo (value) {
+        if (!this.canSelectMemoType) {
+          return;
+        }
+        if (value !== this.form.labelType) {
+          this.form.labelType = value;
+          this.form.labelValue = '';
+        }
       },
       toScan () {
         QRCodeScanner.scan(this).then((res) => {
@@ -163,6 +272,7 @@
       setType (type, acctType) {
         this.form.acctType = acctType;
         this.form.type = this.stringUpperCaseFirstChar(acctType);
+        this.resetLabelForm();
       },
       stringUpperCaseFirstChar (str) { // 首字母大写
         return str.charAt(0).toUpperCase() + str.substring(1);
@@ -172,7 +282,7 @@
           this.$toast(this.$t('address.addressRequire'));
           return;
         }
-        if (!this.addressValid) {
+        if (!this.addressValid || (this.isNeedMemoOrTag && !this.form.labelValue)) {
           return;
         }
         let checkAddress = this.$collecitons.address.findAddreByValue(this.form.value);
@@ -205,12 +315,38 @@
   };
 </script>
 <style lang="scss" scoped>
+  @import "~assets/scss/variables";
   .address-add-container{
     .no-padding-side{
       &.van-field{
         padding-left: 0;
         padding-right: 0;
       }
+    }
+  }
+  .memo-type {
+    height: 20px;
+    margin: 6px 0px 6px 5px;
+    line-height: 20px;
+    display: inline-block;
+    width: 55px;
+    text-align: center;
+    background: #ecebeb;
+    border-radius: 10px;
+    font-size: 12px;
+    position: relative;
+    .icon{
+      position: absolute;
+      top: -4px;
+      right: 0px;
+    }
+    &.active{
+      background: $primary-color-light-1 !important;
+      color: #222 !important;
+    }
+    &.disabled {
+      background: $dark-white;
+      color: #999;
     }
   }
 </style>

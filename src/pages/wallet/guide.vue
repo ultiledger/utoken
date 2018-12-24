@@ -24,7 +24,7 @@
       <span class="dolt">•</span>
       <span>安全</span>
     </div>-->
-    <div class="text-center big-font guide-middle-text text-tip-color" v-text="$t('wallet.guideTip')"></div>
+    <div class="text-center big-font guide-middle-text text-tip-color" v-html="$t('wallet.guideTip')"></div>
     <div class="guide-container">
       <van-button size="large" round @click="createWallet" :loading="loading" type="primary" v-text="$t('wallet.createWallet')"></van-button>
       <br>

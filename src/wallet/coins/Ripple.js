@@ -83,7 +83,7 @@ class RippleWallet{
       let native;
       // console.info(ret);
       // console.info('balances:', balances);
-      let trustlines = await this.server.getTrustlines(address);
+      // let trustlines = await this.server.getTrustlines(address);
       // console.info('trustlines:', trustlines);
       ret.forEach(item => {
         if (item.currency === CoinType.XRP) {
@@ -92,7 +92,8 @@ class RippleWallet{
             value: item.value
           };
         } else {
-          let flag = trustlines.some(line => {
+          //fix bug #6
+          /* let flag = trustlines.some(line => {
             if (line.specification.counterparty === item.counterparty && line.specification.currency === item.currency) {
               return line.specification.limit === '0';
             }
@@ -105,12 +106,12 @@ class RippleWallet{
               value: item.value,
               issuer: item.counterparty || ''
             });
-          }
-          // balances.push({
-          //   code: item.currency,
-          //   value: item.value,
-          //   issuer: item.counterparty || ''
-          // });
+          } */
+          balances.push({
+            code: item.currency,
+            value: item.value,
+            issuer: item.counterparty || ''
+          });
         }
       });
       balances.unshift(native);

@@ -26,7 +26,7 @@
           </van-cell>-->
         </pl-block>
       </div>
-      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="stellar">
+      <receive-address class="item-block" v-model="form.receiveAddress" :accountType="stellar" @change="changeReceiveAddress">
         <small class="text-danger" v-show="!addressValid" v-text="$t('address.invalidAddressTip')"></small>
         <small class="text-info" v-show="!addressActivated" v-text="$t('transaction.stellarUnActivationAddressMsg')"></small>
         <small class="text-danger" v-show="!trustAsset" v-html="$t('transaction.notTrustAssetMsg', {code: asset.code})"></small>
@@ -276,6 +276,10 @@
           this.form.memoType = value;
           this.form.memo = '';
         }
+      },
+      changeReceiveAddress (address) {
+        this.form.memoType = address.labelType;
+        this.form.memo = address.labelValue;
       },
       firstStep () {
         let amt = new Big(this.form.amt);

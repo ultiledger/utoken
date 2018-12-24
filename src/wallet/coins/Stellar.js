@@ -11,6 +11,10 @@ const round = function(dight, howMany) {
   }
   return dight;
 };
+const _seq = {
+  snapshot : "",
+  time : new Date()
+};
 class StellarWallet {
   constructor(url, option = {}) {
     if (url) {
@@ -243,6 +247,314 @@ class StellarWallet {
     const address = keypair.publicKey();
     return { secret, address };
   }
+
+  /**
+   * 通过StellarSdk API对资产进行相应的转换
+   * @param code 资产代码（简称）
+   * @param issuer （资产合约，XLM是空）
+   * @returns {*}
+   */
+  getAsset (code, issuer) {
+    if (typeof code == 'object') {
+      issuer = code.issuer;
+      code = code.code;
+    }
+    let asset;
+    if (code && issuer) {
+      asset = new StellarSdk.Asset(code, issuer);
+    } else {
+      asset = StellarSdk.Asset.native();
+    }
+    return asset;
+  }
+
+  /**
+   * 获取兑换path，返回数组形式
+   * @param src （兑换原地址）
+   * @param dest （兑换目标地址）
+   * @param code （当前资产的code，简称）
+   * @param issuer （当前资产合约，xlm是空）
+   * @param amount （兑换金额）
+   * @returns {Promise<any>}
+   */
+  async getExchangePath (src, dest, code, issuer, amount) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        await this.server.paths(src, dest, this.getAsset(code, issuer), amount).call().then((data) => {
+          resolve(data);
+        }).catch((err) => {
+          console.info(err);
+          reject(this.getErrMsg(err));
+        });
+      } catch (err) {
+        reject(this.getErrMsg(err));
+      }
+    });
+  }
+
+  /**
+   * 进行兑换
+   * @param alt （各种参数，getPath获得）
+   * @param address （当前账户的stellar地址）
+   * @param fromSecret （当前账户的stellar私钥）
+   * @returns {Promise<any>}
+   */
+  async pathPayment (alt, address, fromSecret) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        const path = alt.origin.path.map((item) => {
+          if (item.asset_type == 'native') {
+            return new StellarSdk.Asset.native();
+          } else {
+            return new StellarSdk.Asset(item.asset_code, item.asset_issuer);
+          }
+        });
+        let max_rate = 1.0001; // 波动差, 因为市场是波动的
+        let sendMax = alt.origin.source_amount;
+        sendMax = round(max_rate * sendMax, 7).toString();
+        this.server.loadAccount(address).then((account) => {
+          const pathPayment = StellarSdk.Operation.pathPayment({
+            destination: address,
+            sendAsset  : this.getAsset(alt.srcCode, alt.srcIssuer),
+            sendMax    : sendMax,
+            destAsset  : this.getAsset(alt.dstCode, alt.dstIssuer),
+            destAmount : alt.origin.destination_amount,
+            path       : path
+          });
+          const transaction = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
+          let keypair = StellarSdk.Keypair.fromSecret(fromSecret);
+          transaction.sign(keypair);
+          return transaction;
+        }).then(transaction => {
+          return this.server.submitTransaction(transaction);
+        }).then(txResult => {
+          resolve(txResult.hash);
+        }).catch((err) => {
+          reject(this.getErrMsg(err));
+        });
+      } catch (err) {
+        reject(this.getErrMsg(err));
+      }
+    });
+  }
+
+  /**
+   * 查询交易对的挂单记录
+   * @param baseBuy （基础货币，包含code和合约）
+   * @param counterSelling (对手货币，包含code和合约)
+   * @returns {Promise<any>}
+   */
+  async queryBook (baseBuy, counterSelling) {
+    console.debug('orderbook', `${baseBuy.code}/${counterSelling.code}`);
+    return new Promise(async (resolve, reject)=>{
+      try {
+        await this.server.orderbook(this.getAsset(baseBuy), this.getAsset(counterSelling)).call().then((data) => {
+          resolve(data);
+        }).catch((err) => {
+          console.error(err, `${baseBuy.code}/${counterSelling.code}`);
+          reject(this.getErrMsg(err));
+        });
+      } catch (err) {
+        reject(this.getErrMsg(err));
+      }
+    });
+
+  }
+
+  /**
+   * 查询交易对的最近成交历史
+   * @param baseBuy （基础货币，包含code和合约）
+   * @param counterSelling (对手货币，包含code和合约)
+   * @param optional （可选项）
+   * @returns {Promise<any>}
+   */
+  async queryLastBook (baseBuy, counterSelling, optional = {}) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        let action =  this.server.trades().forAssetPair(this.getAsset(baseBuy), this.getAsset(counterSelling)).order(optional.order || 'desc');
+        if (optional.limit) {
+          action = action.limit(optional.limit);
+        }
+        if (optional.cursor) {
+          action = action.cursor(optional.cursor);
+        }
+        let page = await action.call();
+        resolve(page.records);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  /**
+   * 发起挂单交易请求
+   * @param selling (卖方数据)
+   * @param buying (买方数据)
+   * @param amount (数量)
+   * @param price (价格)
+   * @param address (账户地址)
+   * @param fromSecret (账户私钥)
+   * @returns {Promise<any>}
+   */
+  async sendOffer(selling, buying, amount, price , address, fromSecret) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.server.loadAccount(address).then((account) => {
+          const op = StellarSdk.Operation.manageOffer({
+            selling: this.getAsset(selling.code, selling.issuer),
+            buying: this.getAsset(buying.code, buying.issuer),
+            amount: round(amount, 7).toString(),
+            price : price.toString()
+          });
+          const transaction = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+          let keypair = StellarSdk.Keypair.fromSecret(fromSecret);
+          transaction.sign(keypair);
+          return transaction;
+        }).then(transaction => {
+          return this.server.submitTransaction(transaction);
+        }).then(txResult => {
+          resolve(txResult.hash);
+        }).catch((err) => {
+          reject(this.getErrMsg(err));
+        });
+      } catch (err) {
+        reject(this.getErrMsg(err));
+      }
+    });
+  }
+
+  /**
+   * 查询我的委托单
+   * @param address (账户地址)
+   * @param optional (可选项)
+   * @returns {Promise<any>}
+   */
+  async queryOffers (address, optional = {}) {
+    console.debug('offers', address);
+    return new Promise(async (resolve, reject)=>{
+      try {
+        let action =  this.server.offers('accounts', address);
+        if (optional.limit) {
+          action = action.limit(optional.limit);
+        } else {
+          action = action.limit(200);
+        }
+        let page = await action.call();
+        resolve(page.records);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  _updateSeq(account) {
+    const now = new Date();
+    // In the same ledger
+    if (now - _seq.time < 5000) {
+      for (;account.sequence <= _seq.snapshot;) {
+        account.incrementSequenceNumber();
+        console.debug('Sequence: ' + _seq.snapshot + ' -> ' + account.sequence);
+      }
+    }
+    _seq.snapshot = account.sequence;
+    _seq.time = now;
+  }
+
+  /**
+   * 撤单操作
+   * @param offer
+   * @param address
+   * @param fromSecret
+   * @returns {Promise<any>}
+   */
+  async cancelOffer (offer , address, fromSecret) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.server.loadAccount(address).then((account) => {
+          this._updateSeq(account);
+          const op = StellarSdk.Operation.manageOffer({
+            selling: this.getAsset(offer.selling.code, offer.selling.issuer),
+            buying: this.getAsset(offer.buying.code, offer.buying.issuer),
+            amount: '0',
+            price : offer.price.toString(),
+            offerId : offer.id
+          });
+          const transaction = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+          let keypair = StellarSdk.Keypair.fromSecret(fromSecret);
+          transaction.sign(keypair);
+          return transaction;
+        }).then(transaction => {
+          return this.server.submitTransaction(transaction);
+        }).then(txResult => {
+          resolve(txResult.hash);
+        }).catch((err) => {
+          reject(this.getErrMsg(err));
+        });
+      } catch (err) {
+        reject(this.getErrMsg(err));
+      }
+    });
+  }
+
+  async queryOfferHistorys (address, optional = {}) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        let action = await this.server.transactions().forAccount(address).order(optional.order || 'desc');
+        if (optional.limit) {
+          action = action.limit(optional.limit);
+        } else {
+          action = action.limit(20);
+        }
+        /* let action =  this.server.offers('accounts', address);*/
+        let page = await action.call();
+        let result = [];
+        for (const record of page.records) {
+          let tx = new StellarSdk.Transaction(record.envelope_xdr);
+          result.push(tx.operations[0]);
+        }
+        resolve(result);
+
+        /*let action =  this.server.trades().forAccount(address).order(optional.order || 'desc');
+        if (optional.limit) {
+          action = action.limit(optional.limit);
+        }
+        if (optional.cursor) {
+          action = action.cursor(optional.cursor);
+        }
+        let page = await action.call();
+        resolve(page.records);*/
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  /**
+   * stellar api请求错误统一处理方法
+   * @param err
+   * @returns {*|string}
+   */
+  getErrMsg (err) {
+    let message = "";
+    if (err instanceof StellarSdk.NotFoundError) {
+      message = "NotFoundError";
+    } else if (err.response && err.response.extras && err.response.extras.reason) {
+      message = err.response.extras.reason;
+    } else if (err.response && err.response.data && err.response.data.extras && err.response.data.extras.result_xdr) {
+      const resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.response.data.extras.result_xdr, 'base64');
+      if (resultXdr.result().results()) {
+        message = resultXdr.result().results()[0].value().value().switch().name;
+      } else {
+        message = resultXdr.result().switch().name;
+      }
+    }else {
+      message = err.detail || err.message;
+    }
+
+    if (!message) console.error("Fail in getErrMsg", err);
+    return message;
+  }
+
 }
 
 export default StellarWallet;

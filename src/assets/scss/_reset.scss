@@ -23,6 +23,11 @@
   background-color: #e8e8e8 !important;
   border: 1px solid #e5e5e5 !important;
 }
+.van-button--gray {
+  color: #fff !important;
+  background-image: radial-gradient(circle at left top, #7d8286, #555);
+}
+
 .van-button {
  font-size: $normal-font;
 }

@@ -31,14 +31,34 @@
           <br>
         </div>
       </van-tab>
+      <van-tab :title="$t('common.exchange')">
+        <van-cell-group>
+          <history-path-item :key="index" v-for="(item, index) in pathHistory" :item="item" @click.native="showDetail(item)"></history-path-item>
+         <!-- <tx-history-item :key="index" v-for="(item, index) in pathHistory" :item="item"
+                           @leftClick="addAddress(item)"  @rightClick="showDetail(item)"  @click.native="showDetail(item)"></tx-history-item>-->
+        </van-cell-group>
+        <div class="text-center">
+          <load-more-btn :loading="nextLoading" @load-more="getRemoteHistory({}, 'down')" :has-next="hasNext"></load-more-btn>
+          <br>
+        </div>
+      </van-tab>
     </van-tabs>
   </div>
 </template>
 <script>
   import moment from 'moment';
   import history from './mixns/history';
+  import historyPathItem from './tx-history-path-item';
   export default{
+    components: {historyPathItem},
     mixins: [history],
+    computed: {
+      pathHistory () {
+        return this.history.filter(item => {
+          return item.txType === '3' || item.txType === '4';
+        });
+      }
+    },
     methods: {
       setRegion () {
         let tempAllHistorys = this.$collecitons.history.findHistory(this.$store.state.account.type, this.$store.state.account.address);
@@ -87,11 +107,32 @@
           from: fromAddress,
           txTime: moment(data.created_at).format('YYYYMMDD HH:mm:ss'),
           fee:  fee,
-          txType: toAddress.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0',
+          txType: data.type === 'path_payment'? '3' : toAddress.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0', /*3表示兑换-入*/
           data: data
         };
 
         return history;
+      },
+      async toPathHistory (data) { /* 兑换历史*/
+        if (data.type === 'path_payment') {
+          let history = {
+            address: data.source_account,
+            acctType: this.$store.state.account.type,
+            assetCode: data.source_asset_type === 'native' ? 'XLM' : data.source_asset_code,
+            assetIssuer: data.source_asset_issuer || '',
+            txHash: data.transaction_hash,
+            amount: data.source_amount,
+            blockNumber: data.paging_token,
+            to: data.to,
+            from: data.from,
+            txTime: moment(data.created_at).format('YYYYMMDD HH:mm:ss'),
+            fee:  null,
+            txType: '4', /*4表示兑换-出*/
+            data: data
+          };
+          return history;
+        }
+        return null;
       }
     }
   };

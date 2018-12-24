@@ -200,7 +200,7 @@
           'inputs and outputs are undefined because no solution was found': this.$t('transaction.balanceTooLowTip'),
           'no utxo': this.$t('transaction.utxosUnExist'),
           'fee too low': this.$t('transaction.feeTooLow'),
-          'Network Error': this.$t('networkError')
+          'Network Error': this.$t('transaction.networkError')
         };
       }
     },

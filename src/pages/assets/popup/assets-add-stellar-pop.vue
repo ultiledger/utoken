@@ -139,7 +139,8 @@
         if (!asset.selected) {
           amount = '100000000000';
         }
-        let secret = cryptor.decryptAES(this.$store.state.account.secret, password);
+        let account = this.$store.state.account;
+        let secret = cryptor.decryptAES(account.secret, password);
 
         asset.loading = true;
         this.disabled = true;
@@ -148,6 +149,9 @@
           console.info(ret);
           asset.selected = !asset.selected;
           this.$store.dispatch('setBalances', this.curreAcctountAddress);
+          if (!asset.selected) {
+            this.$collecitons.tradepair.findAndRemoveTradepair(account.type, account.address, asset.code, asset.issuer);
+          }
           asset.loading = false;
           this.disabled = false;
           window.canBack = true;

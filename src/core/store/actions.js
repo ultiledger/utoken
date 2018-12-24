@@ -163,11 +163,14 @@ export const initData = ({commit, state, dispatch}) => {
     Vue.collecitons.setting.insertSetting(JSON.parse(JSON.stringify(setting)));
   }
   tokenConfigHepler.settingConfig();
+
   // 设置比特币的默认网络
   coins['bitcoin'].wallet.setServer(state.setting.network['bitcoin']);
 };
 
+
 const doInitScript = (setting, dispatch) => {
+  Vue.collecitons.history.removeHistory({acctType: 'stellar'});
   if (!window.cordova || !window.cordova.getAppVersion) {
     return;
   }
@@ -279,4 +282,13 @@ export const setAppVersion = ({commit}, value) => {
     return setting.appVersion = value;
   });
   commit(types.SET_APP_VERSION, value);
+};
+
+/**
+ * 设置请求行情的api地址
+ * @param commit
+ * @param value
+ */
+export const setMyTokenApi = ({commit}, value) => {
+  commit(types.SET_MYTOKEN_API, value);
 };

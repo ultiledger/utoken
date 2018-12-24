@@ -27,14 +27,13 @@
 
     <pl-content-block :offsetTop="46" :offsetBottom="45" ref="contentBlock">
       <pull-refresh v-model="isLoading" :animation-duration = animationDuration @refresh="onRefresh" ref="pullRefresh" style="min-height: 100%;">
-        <!--<div style="height: 800px;">-->
         <pl-content-block :offsetTop="46" :offsetBottom="45" heightType="minHeight" style="overflow-y: hidden;">
           <div class="asset-blc text-center item-block">
             <img v-if="asset.logo" :src="asset.logo" style="width:36px;height: 36px;">
             <img v-else-if="asset.code === 'XRP'" :src="`static/img/${asset.code}-1@3x.png`" style="width:36px;height: 36px;"/>
             <img v-else :src="`static/img/${asset.code}@3x.png`" style="width:36px;height: 36px;" onerror="this.src='static/img/unknown.png'"/>
-            <p class="x-x-large-font text-main" style="line-height: 45px;">{{balance | currency('', '7') | cutTail}}</p>
-            <p class="small-font text-primary" style="line-height: 20px;">≈&nbsp;{{balance | market(asset.code, asset.issuer)}}</p>
+            <p class="x-x-large-font text-main" style="line-height: 45px;">{{balance | currency('', '8') | cutTail}}</p>
+            <p class="small-font text-primary" style="line-height: 20px;" v-if="isShowMarket(balance, asset.code, asset.issuer)">≈&nbsp;{{balance | market(asset.code, asset.issuer)}}</p>
           </div>
           <tx-history :asset="asset" v-if="showPop" class="margin-top" ref="rxHistory" @showDetail="showDetail" @addAddress="addAddress"></tx-history>
         <!--</div>-->
@@ -42,7 +41,18 @@
       </pull-refresh>
     </pl-content-block>
     <pl-stick :offset-bottom="0">
-      <van-row class="van-hairline--top">
+      <van-row class="van-hairline--top" v-if="isStellar">
+        <van-col span="8">
+          <van-button  size="large" class="plat-btn" type="default" @click.native="receiveAsset" v-text="$t('common.receivables')"></van-button>
+        </van-col>
+        <van-col span="8">
+          <van-button  size="large" class="plat-btn" type="gray" @click.native="exchange" v-text="$t('common.exchange')"></van-button>
+        </van-col>
+        <van-col span="8">
+          <van-button  size="large" class="plat-btn" type="primary" @click.native="transfer" v-text="$t('common.transferAccounts')"></van-button>
+        </van-col>
+      </van-row>
+      <van-row class="van-hairline--top" v-else>
         <van-col span="12">
           <van-button  size="large" class="plat-btn" type="default" @click.native="receiveAsset" v-text="$t('common.receivables')"></van-button>
         </van-col>
@@ -55,6 +65,7 @@
     <send-transaction ref="sendTransaction" @done="onRefresh"></send-transaction>
     <tx-detail ref="txDetail"></tx-detail>
     <address-add ref="addressAdd"></address-add>
+    <stellar-exchange ref="stellarExchange"></stellar-exchange>
   </van-popup>
 </template>
 <script>
@@ -62,9 +73,13 @@
   import sendTransaction from '../transaction/send-transaction';
   import txHistory from '../history/tx-history';
   import txDetail from '../history/tx-detail';
+  import stellarExchange from '../exchange/stellar-exchange';
   import addressAdd from '../address/address-add';
   import QRCodeScanner from 'core/utils/QRCodeScanner.js';
   import pullRefresh from './mixns/pull-refresh.js';
+  import {AccountType} from 'src/wallet/constants';
+  import convertMarket from 'core/utils/convertMarket';
+
   export default{
     components: {
       receiveAsset,
@@ -72,7 +87,8 @@
       txHistory,
       txDetail,
       pullRefresh,
-      addressAdd
+      addressAdd,
+      stellarExchange
     },
     data () {
       return {
@@ -89,9 +105,18 @@
       },
       reNavTitle () {
         return this.asset.code + this.$t('common.receivables');
+      },
+      isStellar () { // 是否是恒星账户
+        if (this.$store.state.account.type === AccountType.stellar) {
+          return true;
+        }
+        return false;
       }
     },
     methods: {
+      isShowMarket (value, assetCode, assetIssuer) {
+        return convertMarket(value, assetCode, assetIssuer) > 0;
+      },
       addAddress (address) {
         this.$refs.addressAdd.show(address);
       },
@@ -147,6 +172,9 @@
       },
       transfer () {
         this.$refs.sendTransaction.show(this.asset);
+      },
+      exchange () {
+        this.$refs.stellarExchange.show(this.asset);
       },
       toScan () {
         QRCodeScanner.scan(this).then((res) => {
