@@ -52,8 +52,9 @@
         this.$refs.addressList.show('2', this.accountType);
       },
       setReceiveAddress (address) { // 设置收款地址
-        this.receiveAddress = address;
-        this.$emit('input', address);
+        this.receiveAddress = address.value;
+        this.$emit('input', address.value);
+        this.$emit('change', address);
       }
     }
   };

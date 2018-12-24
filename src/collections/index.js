@@ -9,6 +9,7 @@ import address from './address';
 import history from './history';
 import assetConfig from './assetConfig';
 import tempHistory from './tempHistory';
+import tradepair from './tradepair';
 
 let adapter = new LokiCordovaFSAdapter({'prefix': 'loki'});
 // const env = process.env.NODE_ENV;
@@ -53,7 +54,8 @@ const loadData  = (callback) => {
       address: address.newInstance(db),
       history: history.newInstance(db),
       tempHistory: tempHistory.newInstance(db),
-      assetConfig: assetConfig.newInstance(db)
+      assetConfig: assetConfig.newInstance(db),
+      tradepair: tradepair.newInstance(db)
     };
     callback();
   });

@@ -11,14 +11,18 @@ class Address {
    * @param remark
    * @param addTime (地址添加时间)
    * @param lastTxTime (最近交易时间)
+   * @param labelType (标签类型：stellar是memo,ripple是tag,btc和eth是空)
+   * @param label (标签值)
    */
-  constructor(type, value, name, remark, addTime, lastTxTime) {
+  constructor(type, value, name, remark, addTime, lastTxTime, labelType, labelValue) {
     this.type = type;
     this.value = value;
     this.name = name;
     this.remark = remark;
     this.addTime = addTime;
     this.lastTxTime = lastTxTime;
+    this.labelType = labelType;
+    this.labelValue = labelValue;
   }
 
   /**
@@ -29,6 +33,8 @@ class Address {
    * @param remark
    * @param addTime
    * @param lastTxTime
+   * @param labelType
+   * @param labelValue
    * @returns {Address}
    */
   static insertAddress(
@@ -38,10 +44,12 @@ class Address {
       name = '',
       remark = '',
       addTime = '',
-      lastTxTime = ''
+      lastTxTime = '',
+      labelType = '',
+      labelValue = ''
     } = {}
   ) {
-    let address = new Address(type, value, name, remark, addTime, lastTxTime);
+    let address = new Address(type, value, name, remark, addTime, lastTxTime, labelType, labelValue);
     instance.insert(address);
     return this;
   }

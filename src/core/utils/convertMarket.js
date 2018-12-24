@@ -1,6 +1,5 @@
-/* import Big from 'big.js';
+import Big from 'big.js';
 import store from '../store';
-
 
 const cutTail = (val) => {
   if (!val) {
@@ -26,7 +25,6 @@ const cutTail = (val) => {
 
 export default function (value, assetCode, assetIssuer = '') {
   let markets = store.state.markets;
-  let currencyUnit = store.state.setting.currencyUnit;
   if (assetCode && markets) {
     let key = assetIssuer ? `${assetCode}-${assetIssuer}` : assetCode;
     let market = markets[key];
@@ -41,20 +39,8 @@ export default function (value, assetCode, assetIssuer = '') {
       let decimal = calVal.substring(index);
       let integer = calVal.substring(0, index);
       let val = `${integer.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,'$&,')}${decimal}`;
-      return `${cutTail(val)} ${currencyUnit}`;
-      // console.info(calVal);
-      // console.info(decimal);
-      // console.info(integer);
+      return cutTail(val);
     }
   }
-  return `0 ${currencyUnit}`;
-} */
-import convertMarket from '../utils/convertMarket';
-import store from '../store';
-
-export default function (value, assetCode, assetIssuer = '') {
-  let currencyUnit = store.state.setting.currencyUnit;
-  let val = convertMarket(value, assetCode, assetIssuer);
-  return `${val} ${currencyUnit}`;
+  return 0;
 }
-

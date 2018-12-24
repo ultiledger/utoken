@@ -26,7 +26,8 @@
                       @assetClick="showAssetDetail"
                       @topCardClick="viewAcctDetail"
                       @showQRcode="showQRcode"
-                      @addAssets="addAssets"></asset-item>
+                      @addAssets="addAssets"
+                      @toTrade = "toTrade"></asset-item>
         </van-swipe-item>
       </van-swipe>
       </van-pull-refresh>
@@ -38,6 +39,7 @@
     <asset-detail ref="assetDetail"></asset-detail>
     <send-transaction ref="sendTransaction"></send-transaction>
     <address-add ref="addressAdd"></address-add>
+    <trade ref="trade"></trade>
 
     <van-actionsheet
       v-model="showActions"
@@ -57,6 +59,7 @@
   import acctDetail from '../acct/acct-detail';
   import sendTransaction from '../transaction/send-transaction.vue';
   import addressAdd from '../address/address-add.vue';
+  import trade from '../trade/trade';
   import QRCodeScanner from 'core/utils/QRCodeScanner.js';
   import coins from 'src/wallet/coins';
   export default {
@@ -79,7 +82,8 @@
       receiveAsset,
       assetDetail,
       sendTransaction,
-      addressAdd
+      addressAdd,
+      trade
     },
     computed: {
       actions () {
@@ -184,6 +188,9 @@
       },
       addAssets () { // 添加资产
         this.$refs.assetsAdd.show(this.assets);
+      },
+      toTrade () { // 交易
+        this.$refs.trade.show();
       }
     },
     activated () {

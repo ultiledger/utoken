@@ -29,6 +29,27 @@ npm run build
 ```sh
 npm run dev
 ```
+## Cordova
+- Android need to download the Android SDK and set the ANDROID_HOME='SDKPath'  in the environment variable, PATH=%PATH%;%ANDROID_HOME%\tools;%ANDROID_HOME%\platform-tools
+- iOS needs to install xcode package debugging
+- Put the files and folders under the compiled dist directory under the www directory
+
+```sh
+cordova create utolen_app
+cordova platform add android ios
+cordova plugin add cordova-plugin-app-version
+cordova plugin add cordova-plugin-camera
+cordova plugin add cordova-plugin-file
+cordova plugin add cordova-plugin-themeablebrowser
+cordova plugin add gizscanqrcode
+cordova plugin add cordova-plugin-splashscreen
+cordova plugin add cordova-plugin-sharesdk
+cordova plugin add cordova-plugin-android-permissions
+cordova plugin add cordova-plugin-file-opener2
+cordova plugin add cordova-plugin-device
+cordova plugin add cordova-plugin-file-transfer
+cordova build android
+```
 
 # Utoken(首款支持Ripple，Stellar及其他主流区块链网络的移动钱包)
 
@@ -63,3 +84,26 @@ npm run build
 ```sh
 npm run dev
 ```
+
+
+## 开发cordova打包到手机调式
+- android需要下载Android SDK并在环境变量中设置ANDROID_HOME=SDK路径， PATH=%PATH%;%ANDROID_HOME%\tools;%ANDROID_HOME%\platform-tools
+- iOS需要安装xcode打包调试
+- 把编译后的dist目录下面的文件和文件夹放到www目录下面
+```sh
+cordova create utolen_app
+cordova platform add android ios
+cordova plugin add cordova-plugin-app-version
+cordova plugin add cordova-plugin-camera
+cordova plugin add cordova-plugin-file
+cordova plugin add cordova-plugin-themeablebrowser
+cordova plugin add gizscanqrcode
+cordova plugin add cordova-plugin-splashscreen
+cordova plugin add cordova-plugin-sharesdk
+cordova plugin add cordova-plugin-android-permissions
+cordova plugin add cordova-plugin-file-opener2
+cordova plugin add cordova-plugin-device
+cordova plugin add cordova-plugin-file-transfer
+cordova build android
+```
+

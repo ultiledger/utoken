@@ -46,9 +46,13 @@
               <van-icon v-else name="password-not-view" @click="setMode(false)"/>
             </span>
           </div>
-          <span class="add-btn" @click="addAssets" v-if="showAddBtn">
-          <img :src="dprImg(`add.png`)" width="20" height="20">
+          <span class="add-btn" style="right: 70px;" @click="toTrade" v-if="showTradeBtn">
+            <img :src="dprImg(`trade.png`)" width="20" height="20">
           </span>
+          <span class="add-btn" @click="addAssets" v-if="showAddBtn">
+            <img :src="dprImg(`add.png`)" width="20" height="20">
+          </span>
+
         </div>
         <div class="asset-list">
           <div class="asset-list-item item-block" v-for="(item, key) in assets" :key="key" @click="assetClick(item)">
@@ -76,9 +80,9 @@
                   </td>
                   <td class="text-right">
                     <div class="big-font">
-                      <pl-privacy :switchable="false">{{item.value | currency('', '7') | cutTail}}</pl-privacy>
+                      <pl-privacy :switchable="false">{{item.value | currency('', '8') | cutTail}}</pl-privacy>
                     </div>
-                    <div class="text-main small-font">
+                    <div class="text-main small-font" v-if="isShowMarket(item.value, item.code, item.issuer)">
                       &#8776;&nbsp;
                       <pl-privacy :suffix="$store.state.setting.currencyUnit" :switchable="false">
                         {{item.value | market(item.code, item.issuer)}}
@@ -102,6 +106,7 @@
   import accountActivated from './account-activated';
   import {AccountType} from 'src/wallet/constants';
   import Big from 'big.js';
+  import convertMarket from 'core/utils/convertMarket';
   export default {
     mixins: [asset],
     props: {
@@ -126,6 +131,13 @@
           return false;
         } else {
           return true;
+        }
+      },
+      showTradeBtn () {
+        if (this.data && this.data.type === AccountType.stellar) {
+          return true;
+        } else {
+          return false;
         }
       },
       activated () {
@@ -199,6 +211,9 @@
       }
     },
     methods: {
+      isShowMarket (value, assetCode, assetIssuer) {
+        return convertMarket(value, assetCode, assetIssuer) > 0;
+      },
       setMode (val) {
         this.$store.dispatch('setPrivacyMode', val);
       },
@@ -232,6 +247,18 @@
       },
       addAssets () {
         this.$emit('addAssets');
+      },
+      toTrade () {
+        if (this.balances.length > 1) {
+          this.$emit('toTrade');
+        } else {
+          this.$dialog.confirm({
+            title: this.$t('common.tip'),
+            message: this.$t('trade.tradeTip')
+          }).then(() => {
+            this.$emit('toTrade');
+          });
+        }
       }
     }
   };
