@@ -35,12 +35,13 @@ export default {
   methods: {
     update () {
       // 有更新
-      if (window.device.platform === 'iOS') { // iOS跳转到官网
-        window.location.href = config.officialWebsite;
+      window.location.href = config.officialWebsite;
+      /* if (window.device.platform === 'iOS') { // iOS跳转到官网
+
         return;
-      }
+      } */
       // let downloadUrl = this.newVersion.assets[0].browser_download_url;
-      let downloadUrl = config.downloadUrl;
+      /* let downloadUrl = config.downloadUrl;
       let targetPath = 'cdvfile://localhost/persistent/Utoken.apk';
       if (window.device.version.toString().replace(/\./g, '').substring(0, 1) < 6) {
         targetPath = window.cordova.file.externalRootDirectory + '/Utoken.apk';
@@ -53,7 +54,7 @@ export default {
           this.$toast(errMsg);
         }
         window.location.href = downloadUrl;
-      });
+      }); */
     },
     cancel () {
       this.show = false;
