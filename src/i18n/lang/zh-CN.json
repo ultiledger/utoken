@@ -329,7 +329,8 @@
     "shareWeiXinFail": "未安装微信客户端",
     "shareQQFail": "未安装QQ客户端",
     "inputIllegal": "输入非法",
-    "album": "相册"
+    "album": "相册",
+    "noPermission": "您尚未开启相机权限!"
   },
   "gesture": {
     "gestureTitle": "请设置您的图形密码",

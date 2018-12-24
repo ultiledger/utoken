@@ -329,7 +329,8 @@
     "shareWeiXinFail": "WeChatクライアントがインストールされていません",
     "shareQQFail": "QQクライアントがインストールされていない",
     "inputIllegal": "不正な入力",
-    "album": "アルバム"
+    "album": "アルバム",
+    "noPermission": "カメラの権限をオンにしていません"
   },
   "gesture": {
     "gestureTitle": "グラフィックパスワードを設定してください",
