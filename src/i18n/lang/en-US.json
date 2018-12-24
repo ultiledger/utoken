@@ -328,7 +328,8 @@
     "shareWeiXinFail": "No WeChat client installed",
     "shareQQFail": "No QQ client installed",
     "inputIllegal": "Input Illegal",
-    "album": "Album"
+    "album": "Album",
+    "noPermission": "You have not turned on camera permissions."
   },
   "gesture": {
     "gestureTitle": "Please set gesture password",
