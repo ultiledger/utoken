@@ -88,7 +88,7 @@
           <van-button size="large" round type="primary" @click="toInputPassword" v-if="bsFlag === 'buy'">{{$t('trade.buying')}}{{tradepair.baseCode}}</van-button>
           <van-button size="large" round type="danger" @click="toInputPassword" v-else-if="bsFlag === 'sell'">{{$t('trade.selling')}}{{tradepair.baseCode}}</van-button>
         </div>
-        <van-tabs v-model="tabActive" swipeable sticky @change="tabChange">
+        <van-tabs v-model="tabActive" sticky @change="tabChange">
           <van-tab  :title="$t('trade.marketDepth')">
             <market-dept ref="marketDept" v-model="form.price" :tradePair.sync="tradepair"></market-dept>
           </van-tab>

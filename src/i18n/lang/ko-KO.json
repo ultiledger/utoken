@@ -140,7 +140,8 @@
     "contractAddressValid": "계약 주소 또는 ENS가 잘못되었습니다.",
     "contractAddressExist": "계약 주소가 이미 있습니다.",
     "contractERC-20Valid": "무효 ERC-20 Token",
-    "contractAddressFail": "애셋 계약 취득에 실패했습니다."
+    "contractAddressFail": "애셋 계약 취득에 실패했습니다.",
+    "frozenNative":"냉동"
   },
   "find": {
     "discovery": "발견",

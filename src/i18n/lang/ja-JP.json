@@ -140,7 +140,8 @@
     "contractAddressValid": "契約住所またはENSが無効です",
     "contractAddressExist": "契約アドレスは既に存在します",
     "contractERC-20Valid": "無効ですERC-20 Token",
-    "contractAddressFail": "資産契約取得に失敗しました"
+    "contractAddressFail": "資産契約取得に失敗しました",
+    "frozenNative":"冷凍"
   },
   "find": {
     "discovery": "発見",

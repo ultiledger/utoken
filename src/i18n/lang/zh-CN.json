@@ -140,7 +140,8 @@
     "contractAddressValid": "合约地址或ENS无效",
     "contractAddressExist": "该合约地址已经存在",
     "contractERC-20Valid": "非法的ERC-20 Token",
-    "contractAddressFail": "资产合约获取失败"
+    "contractAddressFail": "资产合约获取失败",
+    "frozenNative":"冻结"
   },
   "find": {
     "discovery": "发现",

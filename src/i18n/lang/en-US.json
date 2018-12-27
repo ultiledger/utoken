@@ -140,7 +140,8 @@
     "contractAddressValid": "Contract address or ENS is invalid",
     "contractAddressExist": "contract address already exists",
     "contractERC-20Valid": "Valid ERC-20 Token",
-    "contractAddressFail": "Asset contract acquisition failed"
+    "contractAddressFail": "Asset contract acquisition failed",
+    "frozenNative":"Frozen"
   },
   "find": {
     "discovery": "Discovery",

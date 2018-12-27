@@ -83,10 +83,20 @@
                       <pl-privacy :switchable="false">{{item.value | currency('', '8') | cutTail}}</pl-privacy>
                     </div>
                     <div class="text-main small-font" v-if="isShowMarket(item.value, item.code, item.issuer)">
-                      &#8776;&nbsp;
-                      <pl-privacy :suffix="$store.state.setting.currencyUnit" :switchable="false">
-                        {{item.value | market(item.code, item.issuer)}}
-                      </pl-privacy>
+                      <div v-if="item.code !== 'XLM'">
+                        &#8776;&nbsp;
+                        <pl-privacy :suffix="$store.state.setting.currencyUnit"
+                                    :switchable="false">
+                          {{item.value | market(item.code, item.issuer)}}
+                        </pl-privacy>
+                      </div>
+                      <div v-if="item.code === 'XLM'">
+                        {{$t('assets.frozenNative')}}
+                        <pl-privacy :suffix="$store.state.setting.currencyUnit"
+                                    :switchable="false">
+                          {{item.frozenNative}} XLM
+                        </pl-privacy>
+                      </div>
                     </div>
                   </td>
                 </tr>
