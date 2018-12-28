@@ -68,7 +68,7 @@
           <van-cell
             v-for="(item, index) in pickerBalances"
             clickable
-            @click="pickerPair = item.code"
+            @click="pickerPair = item.code+item.issuer"
             :key="index">
             <div slot="title">
               <table style="width: 100%;">
@@ -92,7 +92,7 @@
                     </span>
                   </td>
                   <td class="text-right">
-                    <van-radio :name="item.code" />
+                    <van-radio :name="item.code+item.issuer" />
                   </td>
                 </tr>
               </table>
@@ -192,11 +192,13 @@
         this.pairType = type;
         if (this.pairType === '1') {
           this.pickerBalances = this.balances.filter((item) => {
-            return item.code != this.pairs.counterCode;
+            let codeIssuer = item.code + (item.issuer || '');
+            return codeIssuer != this.pairs.counterCode + this.pairs.counterIssuer;
           });
         } else if (this.pairType === '2') {
           this.pickerBalances = this.balances.filter((item) => {
-            return item.code != this.pairs.baseCode;
+            let codeIssuer = item.code + (item.issuer || '');
+            return codeIssuer != this.pairs.baseCode + this.pairs.baseIssuer;
           });
         }
         if (this.pickerBalances.length > 0) {
@@ -208,7 +210,7 @@
       },
       onConfirm () {
         let pp = this.pickerBalances.filter((item) => {
-          return item.code === this.pickerPair;
+          return (item.code + item.issuer) === this.pickerPair;
         });
         let assetsMap = this.getConfigAssetsMap(this.$store.state.account.type);
         if (this.pairType === '1') {
