@@ -56,16 +56,20 @@
       };
     },
     methods: {
-      show (params) {
+      show (params,addr) {
         this.showPop = true;
         this.tradepair = params;
-        this.getLastBooks();
+        this.getLastBooks(addr);
       },
-      getLastBooks () {
+      getLastBooks (addr) {
         this.lastBooks = [];
         let base = {code: this.tradepair.baseCode, issuer: this.tradepair.baseIssuer};
         let counter = {code: this.tradepair.counterCode, issuer: this.tradepair.counterIssuer};
-        this.$wallet.queryLastBook(base, counter, {limit: 50}).then((data) => {
+        let option = {limit: 50};
+        if (addr){
+          option.forAccount = addr;
+        }
+        this.$wallet.queryLastBook(base, counter, option).then((data) => {
           data.forEach((item) => {
             this.lastBooks.push(this.processLastBooks(item));
           });

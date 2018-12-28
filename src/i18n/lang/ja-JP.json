@@ -368,6 +368,7 @@
     "sellPrice": "売り注文価格",
     "sellAmount": "売り注文の数",
     "lastExec": "最近の取引",
+    "myExec": "私の契約",
     "myOffer": "私の手数料",
     "cancel": "キャンセル",
     "price": "価格",

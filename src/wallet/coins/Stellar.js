@@ -90,6 +90,9 @@ class StellarWallet {
     if (CoinType.XLM === assetCode && !assetIssuer) {
       return true;
     }
+    if (address && assetIssuer && address === assetIssuer) {
+      return true;
+    }
     let balances = await  this.getBalances(address);
     if (!balances && balances.length === 0) {
       return false;
@@ -271,6 +274,25 @@ class StellarWallet {
     }
     return asset;
   }
+  /**
+   * 判断两个资产是否是同一个
+   * @param code 资产代码（简称）
+   * @param issuer （资产合约，XLM是空）
+   * @returns {*}
+   */
+  compareAsset (asset1, asset2) {
+    if (asset1.issuer || asset2.issuer) {
+      if (asset1.issuer === asset2.issuer
+      && asset1.code === asset2.code) {
+        return true;
+      }
+    }else {
+      if (asset1.code === asset2.code) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /**
    * 获取兑换path，返回数组形式
@@ -374,18 +396,46 @@ class StellarWallet {
    */
   async queryLastBook (baseBuy, counterSelling, optional = {}) {
     return new Promise(async (resolve, reject)=>{
-      try {
-        let action =  this.server.trades().forAssetPair(this.getAsset(baseBuy), this.getAsset(counterSelling)).order(optional.order || 'desc');
-        if (optional.limit) {
-          action = action.limit(optional.limit);
+      //my last book
+      if (optional.forAccount) {
+        try {
+          let action = this.server.trades().forAccount(optional.forAccount).order(optional.order || 'desc');
+          if (optional.limit) {
+            action = action.limit(optional.limit);
+          }
+          if (optional.cursor) {
+            action = action.cursor(optional.cursor);
+          }
+          let page = await action.call();
+          let records=[];
+          if (page.records) {
+            page.records.forEach((item) => {
+              let baseAsset = this.getAsset(item.base_asset_code,item.base_asset_issuer);
+              let counterAsset = this.getAsset(item.counter_asset_code,item.counter_asset_issuer);
+              if (this.compareAsset(baseAsset,this.getAsset(baseBuy))
+                && this.compareAsset(counterAsset,this.getAsset(counterSelling))){
+                records.push(item);
+              }
+            });
+          }
+          resolve(records);
+        } catch (err) {
+          reject(err);
         }
-        if (optional.cursor) {
-          action = action.cursor(optional.cursor);
+      }else {
+        try {
+          let action =  this.server.trades().forAssetPair(this.getAsset(baseBuy), this.getAsset(counterSelling)).order(optional.order || 'desc');
+          if (optional.limit) {
+            action = action.limit(optional.limit);
+          }
+          if (optional.cursor) {
+            action = action.cursor(optional.cursor);
+          }
+          let page = await action.call();
+          resolve(page.records);
+        } catch (err) {
+          reject(err);
         }
-        let page = await action.call();
-        resolve(page.records);
-      } catch (err) {
-        reject(err);
       }
     });
   }

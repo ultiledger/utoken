@@ -367,6 +367,7 @@
     "sellPrice": "Sell Price",
     "sellAmount": "Sell Amount",
     "lastExec": "Latest Execution",
+    "myExec": "My Deal",
     "myOffer": "My Offer",
     "cancel": "Cancel",
     "price": "Price",

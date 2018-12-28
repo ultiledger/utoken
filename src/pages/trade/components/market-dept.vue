@@ -35,7 +35,14 @@
           </div>
         </van-col>
       </van-row>
-      <div class="text-primary x-small-font" style="margin-top: 10px;" @click="viewLastBooks">{{$t('trade.lastExec')}}<i class="ultfont ult-right x-small-font"></i></div>
+      <van-row>
+        <van-col span="12" class="text-left">
+          <div class="text-primary x-small-font" style="margin-top: 10px;" @click="viewLastBooks">{{$t('trade.lastExec')}}<i class="ultfont ult-right x-small-font"></i></div>
+        </van-col>
+        <van-col span="12" class="text-right">
+          <div class="text-primary x-small-font" style="margin-top: 10px;" @click="viewMyBooks">{{$t('trade.myExec')}}<i class="ultfont ult-right x-small-font"></i></div>
+        </van-col>
+      </van-row>
     </div>
     <trade-last-book-pop ref="tradeLastBookPop"></trade-last-book-pop>
   </div>
@@ -129,6 +136,9 @@
       },
       viewLastBooks () {
         this.$refs.tradeLastBookPop.show(this.tradePair);
+      },
+      viewMyBooks () {
+        this.$refs.tradeLastBookPop.show(this.tradePair, this.$store.state.account.address);
       },
       selectOnePrice (item) {
         this.$emit('input', item.price);

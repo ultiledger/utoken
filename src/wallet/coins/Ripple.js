@@ -129,6 +129,9 @@ class RippleWallet{
     if (CoinType.XRP === assetCode && !assetIssuer) {
       return true;
     }
+    if (address && assetIssuer && address === assetIssuer) {
+      return true;
+    }
     let trustlines = await this.server.getTrustlines(address);
     // console.info(trustlines);
     if (!trustlines && trustlines.length === 0) {

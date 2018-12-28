@@ -151,6 +151,7 @@
     watch: {
       'form.receiveAddress' () {
         if (this.form.receiveAddress) {
+
           if (!this.$wallet.isValidAddress(this.form.receiveAddress)) {
             this.addressValid = false;
             this.addressActivated = true;

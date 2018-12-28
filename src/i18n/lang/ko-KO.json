@@ -367,6 +367,7 @@
     "sellPrice": "판매 가격",
     "sellAmount": "판매 주문 수",
     "lastExec": "최근 거래",
+    "myExec": "내 거래",
     "myOffer": "나의 커미션",
     "cancel": "취소",
     "price": "가격",

@@ -373,6 +373,7 @@
     "sellPrice": "卖单价格",
     "sellAmount": "卖单数量",
     "lastExec": "最近成交",
+    "myExec": "我的成交",
     "myOffer": "我的委托",
     "cancel": "撤销",
     "price": "价格",
