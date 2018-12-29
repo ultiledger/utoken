@@ -255,7 +255,7 @@
           this.bsIssuer = this.tradepair.counterIssuer ? this.tradepair.counterIssuer:'';
         } else if (flag === 'sell') {
           this.bsCode = this.tradepair.baseCode;
-          this.bsIssuer = this.tradepair.counterIssuer ? this.tradepair.counterIssuer:'';
+          this.bsIssuer = this.tradepair.baseIssuer ? this.tradepair.baseIssuer:'';
         }
       },
       pairAddDone (tradePair) {

@@ -417,8 +417,15 @@ class StellarWallet {
           let records=[];
           if (page.records) {
             page.records.forEach((item) => {
-              let baseAsset = this.getAsset(item.base_asset_code,item.base_asset_issuer);
-              let counterAsset = this.getAsset(item.counter_asset_code,item.counter_asset_issuer);
+              let baseAsset;
+              let counterAsset;
+              if (item.base_is_seller) {
+                baseAsset = this.getAsset(item.base_asset_code,item.base_asset_issuer);
+                counterAsset = this.getAsset(item.counter_asset_code,item.counter_asset_issuer);
+              }else {
+                counterAsset = this.getAsset(item.base_asset_code,item.base_asset_issuer);
+                baseAsset = this.getAsset(item.counter_asset_code,item.counter_asset_issuer);
+              }
               if (this.compareAsset(baseAsset,this.getAsset(baseBuy))
                 && this.compareAsset(counterAsset,this.getAsset(counterSelling))){
                 records.push(item);
