@@ -205,7 +205,12 @@
     },
     computed: {
       balance () {
-        return this.getBalance(this.asset.code, this.asset.issuer).value;
+        let value = this.getBalance(this.asset.code, this.asset.issuer).value;
+        let frozenNative = this.getBalance(this.asset.code, this.asset.issuer).frozenNative;
+        if (frozenNative && frozenNative <= value){
+          value = value - frozenNative;
+        }
+        return value;
       },
       isValidMemo () {
         if (this.form.memo) {

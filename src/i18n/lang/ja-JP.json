@@ -239,7 +239,7 @@
     "nameNotEmpty": "名前は空ではありません！"
   },
   "transaction": {
-    "balance": "残高",
+    "balance": "利用可能残高",
     "amtPlaceholder": "クリックして金額を入力します",
     "minerFee": "マイナー手数料",
     "slow": "遅い",

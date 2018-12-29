@@ -238,7 +238,7 @@
     "nameNotEmpty": "名称不能为空！"
   },
   "transaction": {
-    "balance": "余额",
+    "balance": "可用余额",
     "amtPlaceholder": "点击输入金额",
     "minerFee": "矿工费",
     "slow": "慢",

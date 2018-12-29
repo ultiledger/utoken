@@ -64,15 +64,22 @@ class StellarWallet {
             code: CoinType.XLM,
             value: item.balance
           };
-          frozenNative = frozenNative +1;
+          frozenNative = frozenNative + 1;
         } else {
           balances.push({
             code: item.asset_code,
             value: item.balance,
             issuer: item.asset_issuer
           });
-          frozenNative = frozenNative +0.5;
+          frozenNative = frozenNative + 0.5;
         }
+      });
+      await this.queryOffers(address).then((datas) => {
+        if (datas){
+          frozenNative = frozenNative + datas.length;
+        }
+      }).catch(() => {
+
       });
       native.frozenNative = frozenNative;
       balances.unshift(native);

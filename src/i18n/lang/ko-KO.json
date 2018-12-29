@@ -238,7 +238,7 @@
     "nameNotEmpty": "이름은 비워 둘 수 없습니다."
   },
   "transaction": {
-    "balance": "균형",
+    "balance": "사용 가능한 잔액",
     "amtPlaceholder": "금액을 입력하려면 클릭하십시오.",
     "minerFee": "광 회비",
     "slow": "느리게",

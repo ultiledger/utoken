@@ -22,7 +22,7 @@
         </div>
         <div class="bs-block item-block">
           <div class="text-muted b-white item">
-            <span>{{$t('trade.youAsset')}}&nbsp;&nbsp;&nbsp;{{balances[bsCode] | cutTail}}&nbsp;{{bsCode}}</span>
+            <span>{{$t('trade.youAsset')}}&nbsp;&nbsp;&nbsp;{{balances[bsCode+bsIssuer] | cutTail}}&nbsp;{{bsCode}}</span>
           </div>
           <div class="item">
             <van-row>
@@ -125,6 +125,7 @@
         // bsNum: 0, /*滑动百分比*/
         bsFlag: 'buy', /*选中买入按钮还是卖出按钮, 默认buy*/
         bsCode: '', /*买入Code，卖出Code*/
+        bsIssuer:'',
         tradepair: {}, /*交易对*/
         form: {
           price: '',
@@ -143,7 +144,8 @@
           if (bs) {
             let result = {};
             bs.forEach((item) => {
-              result[item.code] = item.value;
+              let issuer = item.issuer?item.issuer:'';
+              result[item.code+issuer] = item.value;
             });
             return result;
           }
@@ -169,12 +171,12 @@
       },
       maxVal () {
         if (this.bsFlag === 'buy' && this.form.price > 0) {
-          let amount = this.balances[this.bsCode];
+          let amount = this.balances[this.bsCode+this.bsIssuer];
           if (amount) {
             return Number(new Big(amount).div(this.form.price).toFixed(8));
           }
         } else if (this.bsFlag === 'sell') {
-          return Number(this.balances[this.bsCode]);
+          return Number(this.balances[this.bsCode+this.bsIssuer]);
         }
         return 100;
       },
@@ -212,6 +214,7 @@
             this.saveDefaultTradepair(account);
           }
           this.bsCode = this.tradepair.counterCode;
+          this.bsIssuer = this.tradepair.counterIssuer ? this.tradepair.counterIssuer:'';
           this.$nextTick(() => {
             this.$refs.marketDept.getBooks();
           });
@@ -249,13 +252,16 @@
         this.bsFlag = flag;
         if (flag === 'buy') {
           this.bsCode = this.tradepair.counterCode;
+          this.bsIssuer = this.tradepair.counterIssuer ? this.tradepair.counterIssuer:'';
         } else if (flag === 'sell') {
           this.bsCode = this.tradepair.baseCode;
+          this.bsIssuer = this.tradepair.counterIssuer ? this.tradepair.counterIssuer:'';
         }
       },
       pairAddDone (tradePair) {
         this.tradepair = tradePair;
         this.bsCode = this.tradepair.counterCode;
+        this.bsIssuer = this.tradepair.counterIssuer ? this.tradepair.counterIssuer:'';
         this.tabActive == 0;
         this.toBs('buy');
         this.$nextTick(() => {
@@ -272,14 +278,14 @@
           return false;
         }
         if (this.bsFlag === 'buy') {
-          if (Number(this.balances[this.bsCode]) < Number(this.expectedTradePrice)) {
+          if (Number(this.balances[this.bsCode+this.bsIssuer]) < Number(this.expectedTradePrice)) {
             this.$toast(this.$t('trade.balancesTip'));
             return false;
           } else {
             return true;
           }
         } else if (this.bsFlag === 'sell') {
-          if (Number(this.balances[this.bsCode]) < Number(this.form.amount)) {
+          if (Number(this.balances[this.bsCode+this.bsIssuer]) < Number(this.form.amount)) {
             this.$toast(this.$t('trade.balancesTip'));
             return false;
           } else {

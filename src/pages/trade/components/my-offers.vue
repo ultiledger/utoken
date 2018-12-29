@@ -133,6 +133,7 @@
       },
       getOffers () {
         this.$wallet.queryOffers(this.address).then((datas) => {
+          debugger;
           this.offers = this.processOffers(datas);
           this.startTimer();
         }).catch(() => {

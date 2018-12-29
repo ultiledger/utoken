@@ -62,7 +62,8 @@ Vue.mixin({
       let balance = {
         code: assetCode,
         issuer: issuer || '',
-        value: 0
+        value: 0,
+        frozenNative:0
       };
       if (!balances) {
         return balance;

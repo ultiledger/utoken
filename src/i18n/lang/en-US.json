@@ -238,7 +238,7 @@
     "privacyMode": "Privacy Mode"
   },
   "transaction": {
-    "balance": "Balance",
+    "balance": "Available Balance",
     "amtPlaceholder": "Click And Input Amount",
     "minerFee": "Gas Fee",
     "slow": "Slow",
