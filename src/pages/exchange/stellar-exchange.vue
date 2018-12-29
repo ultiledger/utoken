@@ -119,6 +119,7 @@
         amount: '',
         asset: {}, // 需要兑换资产
         assetCode: '', // 当前选择的资产code
+        assetIssuer:'',
         loading: false, // 按钮loading状态
         showPicker: false, // 是否显示选择框
         loadingPath: false, // 路径是否在加载中
@@ -168,6 +169,7 @@
         this.resetData();
         this.asset = asset;
         this.assetCode = asset.code;
+        this.assetIssuer = asset.issuer;
         this.showPop = true;
       },
       isEmptyPaths () {
@@ -222,7 +224,7 @@
               if (alt.srcAmount <= 0) {
                 isValid = false;
               } else {
-                let index = this.getColumnIndexByValue(alt.srcCode);
+                let index = this.getColumnIndexByValue(alt.srcCode,alt.srcIssuer);
                 if (this.balances[index].value - alt.srcAmount < 0) {
                   isValid = false;
                 }
@@ -251,12 +253,13 @@
           });
         }
       },
-      getColumnIndexByValue (value) {
+      getColumnIndexByValue (code,issuer) {
         let balances = this.balances;
         let index = 0;
         for (let i=0 ;i< balances.length; i++) {
           let balance = balances[i];
-          if (balance.code === value) {
+          if (balance.code === code
+          && balance.issuer === issuer) {
             index = i;
             break;
           }
@@ -266,7 +269,7 @@
       toCurrencyType () {
         this.showPicker = true;
         this.$nextTick(() => {
-          this.$refs.exchangePicker.setColumnIndex(0, this.getColumnIndexByValue(this.assetCode));
+          this.$refs.exchangePicker.setColumnIndex(0, this.getColumnIndexByValue(this.assetCode,this.assetIssuer));
         });
       },
       onCancel () {
@@ -274,6 +277,7 @@
       },
       onConfirm(value) {
         this.assetCode = value.code;
+        this.assetIssuer = value.issuer;
         this.asset = value;
         this.getExchangePath();
         this.showPicker = false;
