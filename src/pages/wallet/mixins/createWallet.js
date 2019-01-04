@@ -23,11 +23,26 @@ export default {
         // 加密密码
         let password = cryptor.encryptMD5(walletPwd);
         // 创建账户钱包
+        /* 1. 检查本地是否存在该accountType的账户
+           2. 如果不存在，则创建index=0的账户；如果存在，找出当下最大的index并计算下一个index的值，再创建账户
+
+         */
         accountType.forEach(item => {
-          let account = wallet.getAccount(coin[item], 0);
+          let accounts = this.$collecitons.account.findByType(item);
+          let pathIndex = -1;
+          accounts.forEach(item => {
+            // 因在支持多账户前，pathIndex不存在，因此如果pathIndex字段不存在，则认为是0
+            if ( ! item.pathIndex){
+              item.pathIndex = 0;
+            }
+            pathIndex = item.pathIndex > pathIndex ? item.pathIndex:pathIndex;
+          });
+          pathIndex = pathIndex + 1;
+          let account = wallet.getAccount(coin[item], pathIndex);
           this.$collecitons.account.insertAccount({
             identityId: identity.id,
             address: account.address,
+            pathIndex:pathIndex,
             type: item,
             secret: cryptor.encryptAES(account.secret, walletPwd),
             name: this.$collecitons.account.genAccountName(item),
