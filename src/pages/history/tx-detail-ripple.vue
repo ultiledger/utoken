@@ -26,7 +26,7 @@
             <p class="text-muted small-font" v-text="$t('common.transactionFee')"></p>
           </van-col>
           <van-col span="18">
-            <div class="small-font">{{item.fee}}&nbsp;&nbsp;{{item.assetCode}}</div>
+            <div class="small-font">{{item.fee}}&nbsp;&nbsp;XRP</div>
           </van-col>
         </van-row>
       </div>
