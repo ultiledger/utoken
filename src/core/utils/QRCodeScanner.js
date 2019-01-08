@@ -7,7 +7,7 @@ export default{
       }
 
       let permissions = window.cordova.plugins.permissions;
-      permissions.hasPermission(permissions.CAMERA, (status) => {
+      permissions.requestPermission(permissions.CAMERA, (status) => {
         if (!status.hasPermission) {
           reject(vueInstance.$t('scan.noPermission'));
         } else {
