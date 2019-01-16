@@ -3,7 +3,9 @@
     <slot></slot>
   </div>
 </template>
-<script></script>
+<script>
+  export default {};
+</script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   .btn {
     padding-left:20px;
