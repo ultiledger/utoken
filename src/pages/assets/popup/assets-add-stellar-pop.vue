@@ -80,10 +80,8 @@
       init () {
         let account = this.$store.state.account;
         this.searchValue = '';
-        if (!this.curreAcctountAddress || this.curreAcctountAddress !== account.address) {
-          this.curreAcctountAddress = account.address;
-          this.assets = this.getAssets(account.type);
-        }
+        this.curreAcctountAddress = account.address;
+        this.assets = this.getAssets(account.type);
       },
       getAssets (type) {
         let coin = coins[type];
@@ -103,6 +101,7 @@
         let configAssets = this.getConfigAssets(type);
         configAssets.forEach(token => {
           let selected = selectAssetsCode.indexOf(token.code + token.issuer) !== -1;
+          token.logo = (!token.logo || token.logo === '')? 'static/img/unknown.png':token.logo;
           let item = {...token, canSelect: true, selected: selected, loading: false};
           result.push(item);
         });

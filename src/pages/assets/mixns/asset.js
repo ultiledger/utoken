@@ -34,7 +34,8 @@ export default{
           });
           return ret;
         case AccountType.stellar:
-          Object.keys(coin.tokens()).forEach(key => {
+          var c = coin.tokens();
+          Object.keys(c).forEach(key => {
             let gateway = coin.tokens()[key];
             gateway.assets.forEach(item => {
               if (item.list) {

@@ -10,11 +10,12 @@
         @click-left="close"
         @click-right="addToken">
         <span slot="left"><i class="ultfont ult-left"></i></span>
-        <span slot="right" v-if="type === this.ethereum">{{$t('common.add')}}</span>
+        <span slot="right" v-if="showAddBtn">{{$t('common.add')}}</span>
       </van-nav-bar>
       <component :is="type" ref="component" ></component>
     </van-popup>
     <token-add ref="tokenAdd" @reload="reload"></token-add>
+    <token-add-stellar ref="tokenAddStellar" @reload="reload"></token-add-stellar>
   </div>
 </template>
 <script>
@@ -24,11 +25,14 @@
   import stellar from './assets-add-stellar-pop';
   import btcion from './assets-add-btcion-pop';
   import tokenAdd from './token-add-pop';
+  import tokenAddStellar from './token-add-stellar-pop';
+
   export default{
     data () {
       return {
         showPop: false,
-        ethereum: AccountType.ethereum
+        ethereum: AccountType.ethereum,
+        stellar: AccountType.stellar
       };
     },
     components: {
@@ -36,7 +40,8 @@
       [AccountType.ethereum]: ethereum,
       [AccountType.stellar]: stellar,
       [AccountType.ripple]: ripple,
-      tokenAdd
+      tokenAdd,
+      tokenAddStellar
     },
     computed: {
       type () {
@@ -53,8 +58,20 @@
           this.$refs['component'].init();
         });
       },
+      showAddBtn(){
+        return this.type() === this.ethereum || this.type() === this.stellar;
+      },
       addToken () {
-        this.$refs.tokenAdd.show();
+        switch (this.type){
+          case AccountType.ethereum:
+            this.$refs.tokenAdd.show();
+            break;
+          case AccountType.stellar:
+            this.$refs.tokenAddStellar.show();
+            break;
+          default:
+            break;
+        }
       },
       close () {
         this.showPop = false;
