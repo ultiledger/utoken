@@ -112,7 +112,7 @@
         let assetConfig = {
           address: this.form.issuer,
           symbol: this.form.symbol,
-          name: this.symbol,
+          name: '',
           decimals: Number(this.form.decimals),
           type: AccountType.stellar,
         };
@@ -121,7 +121,7 @@
       setTokens () { // 追加合约到内存
         let config = tokens.get(AccountType.stellar);
         config[this.form.symbol] = {
-          name:this.form.symbol,
+          name:'',
           logo:'',
           assets:[{code:this.form.symbol, issuer:this.form.issuer, list:true}]
           //

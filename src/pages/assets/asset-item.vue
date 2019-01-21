@@ -167,7 +167,7 @@
               let assetMap = assetsMap[item.code + (item.issuer || '')];
               if (assetMap) {
                 asset.logo = assetMap.logo || '';
-                asset.name = assetMap.name;
+                asset.name = assetMap.name || 'unknown';
                 asset.issuer = assetMap.issuer;
                 assets.push(asset);
               } else if (index === 0) {
