@@ -6,6 +6,7 @@
           :placeholder="$t('common.searchPlaceholder')">
         </van-search>
         <pl-content-block :offsetTop="112">
+          <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
           <div v-for="(asset, index) in filterBy(assets, searchValue, 'code') " :key="index" class="item-block assset-add-block">
             <table style="width: 100%;table-layout: fixed;">
               <tr>
@@ -42,12 +43,14 @@
               </tr>
             </table>
           </div>
+          </van-pull-refresh>
         </pl-content-block>
       </div>
       <password-dialog ref="pwdDialog" @done="changeTrust"></password-dialog>
   </div>
 </template>
 <script>
+  import tokens from 'src/wallet/tokens';
   import coins from 'src/wallet/coins';
   import asset from '../mixns/asset';
   import passwordDialog from '../../ui/password-dialog';
@@ -61,7 +64,8 @@
         searchValue: '',
         assets: {},
         curreAcctountAddress: '',
-        disabled: false
+        disabled: false,
+        isLoading: false
       };
     },
     computed: {
@@ -160,6 +164,24 @@
           asset.loading = false;
           this.disabled = false;
           window.canBack = true;
+        });
+      },
+      onRefresh () {
+        this.$api.getTokenCofing().then(ret => {
+          if (ret) {
+            let tokenCofing = {
+              version: this.$store.state.setting.tokenConfig.version,
+              config: ret
+            };
+            this.$store.dispatch('setTokenConfig', tokenCofing);
+            tokens.set(ret);
+            this.init();
+            this.isLoading = false;
+          } else {
+            this.isLoading = false;
+          }
+        }).catch(() => {
+          this.isLoading = false;
         });
       }
     }

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
+import configJS from '../../config';
 Vue.api = {
   checkUpdate (updateUrl) {
     return new window.Promise((resolve, reject) => {
@@ -54,6 +55,15 @@ Vue.api = {
     let url = `https://news.ultiledger.io/index.php/wp-json/wp/v2/media/${featuredMedia}`;
     let ret = await axios.get(url);
     return ret.data.source_url;
+  },
+  async getTokenCofing () {
+    try {
+      let config = await axios.get(configJS.configUrl+'?timestamp='+(new Date().getTime()));
+      return config.data;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
   }
 };
 
