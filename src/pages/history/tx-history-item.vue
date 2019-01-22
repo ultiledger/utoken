@@ -30,7 +30,7 @@
         <table style="height: 100%;width: 100%;">
           <tr>
             <td>
-              {{type.symbol}}&nbsp;{{item.amount | currency('', '8') | cutTail}}
+              {{type.symbol}}&nbsp;{{item.amount | currency('', '7') | cutTail}}
             </td>
           </tr>
         </table>

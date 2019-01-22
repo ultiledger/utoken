@@ -195,6 +195,16 @@
         if (this.$refs.myOffers) {
           this.$refs.myOffers.clearTimer();
         }
+      },
+      'form.price' () {
+        if (this.form.price) {
+          this.form.price = (this.form.price.toString().match(/^\d*(\.?\d{0,7})/g)[0]) || null;
+        }
+      },
+      'form.amount' () {
+        if (this.form.amount) {
+          this.form.amount = (this.form.amount.toString().match(/^\d*(\.?\d{0,7})/g)[0]) || null;
+        }
       }
     },
     methods: {

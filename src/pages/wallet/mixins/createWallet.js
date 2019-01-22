@@ -155,7 +155,6 @@ export default {
       }
     },
     saveDefaultToken(token,address){
-      debugger;
       let t = this.$collecitons.asset.getInstance().find({address:address,code:token.symbol});
       if(t && t.length >0){
         this.$collecitons.asset.findAndUpdateAsset({address:address,code:token.symbol},(asset) => {

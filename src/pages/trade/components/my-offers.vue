@@ -21,10 +21,10 @@
           </tr>
           <tr>
             <td colspan="1" rowspan="1" class="small-font">
-              {{item.price | currency('', '8') | cutTail}}
+              {{item.price | currency('', '7') | cutTail}}
             </td>
             <td colspan="1" rowspan="1" class="text-right small-font text-muted">
-              {{item.amount | currency('', '8') | cutTail}}
+              {{item.amount | currency('', '7') | cutTail}}
             </td>
             <td colspan="1" rowspan="1" class="text-right small-font text-muted">
               0

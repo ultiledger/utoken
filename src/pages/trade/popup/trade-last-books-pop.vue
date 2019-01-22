@@ -28,7 +28,7 @@
                 {{item.baseAmount}}
               </td>
               <td colspan="1" rowspan="1" class="text-right small-font" :class="item.baseIsSeller? 'text-success': 'text-danger'">
-                {{item.price | currency('', '8') | cutTail}}
+                {{item.price | currency('', '7') | cutTail}}
               </td>
               <td colspan="1" rowspan="1" class="text-right small-font" :class="item.baseIsSeller? 'text-success': 'text-danger'">
                 <span v-if="item.baseIsSeller" v-text="$t('trade.buying')"></span>
