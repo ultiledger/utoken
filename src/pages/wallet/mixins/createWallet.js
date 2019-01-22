@@ -149,18 +149,25 @@ export default {
       if (accountType === AccountType.ethereum) {
         let tokens = coin[accountType].tokens();
         if (tokens) {
-          let ULT = tokens['ULT'];
-          this.$collecitons.asset.insertAsset({
-            address: account.address,
-            code: ULT.symbol,
-            name: ULT.name});
-          let DBT = tokens['DBT'];
-          this.$collecitons.asset.insertAsset({
-            address: account.address,
-            code: DBT.symbol,
-            name: DBT.name});
+          this.saveDefaultToken(tokens['ULT'],account.address);
+          this.saveDefaultToken(tokens['DBT'],account.address);
         }
       }
+    },
+    saveDefaultToken(token,address){
+      debugger;
+      let t = this.$collecitons.asset.getInstance().find({address:address,code:token.symbol});
+      if(t && t.length >0){
+        this.$collecitons.asset.findAndUpdateAsset({address:address,code:token.symbol},(asset) => {
+          return asset.selected = true;
+        });
+        return;
+      }
+      this.$collecitons.asset.insertAsset({
+        address: address,
+        code: token.symbol,
+        name: token.name,
+        selected: true });
     },
     /**
      * 筛选出没有选中的账户类型,并创建
