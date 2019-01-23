@@ -1,5 +1,5 @@
 <template>
-  <div class="trade">
+  <div class="trade" @click.stop="bindClick">
     <van-popup
       v-model="showPop"
       position="bottom"
@@ -13,23 +13,27 @@
           <span>{{tradepair.counterCode}}</span>
         </div>
         <span slot="left"><i class="ultfont ult-left"></i></span>
-        <i slot="right" @click="toAddTradepair" class="ultfont ult-plus"></i>
+        <i slot="right" @click.stop="toAddTradepair" class="ultfont ult-plus"></i>
       </van-nav-bar>
       <pl-content-block :offsetTop="46">
         <div style="padding-top: 10px;padding-left: 20px;text-align: center;">
-          <span class="bs-btn buy-btn" :class="bsFlag" @click="toBs('buy')" v-text="$t('trade.buying')"></span>
-          <span class="bs-btn sell-btn" :class="bsFlag" @click="toBs('sell')" v-text="$t('trade.selling')"></span>
+          <span class="bs-btn buy-btn" :class="bsFlag" @click.stop="toBs('buy')" v-text="$t('trade.buying')"></span>
+          <span class="bs-btn sell-btn" :class="bsFlag" @click.stop="toBs('sell')" v-text="$t('trade.selling')"></span>
         </div>
+        <div @touchstart.stop="onTouchStart"
+             @touchmove.stop="onTouchMove"
+             @touchend.stop="onTouchEnd"
+             @touchcancel.stop="onTouchEnd">
         <div class="bs-block item-block">
           <div class="text-muted b-white item">
             <span>{{$t('trade.youAsset')}}&nbsp;&nbsp;&nbsp;{{balances[bsCode+bsIssuer] | cutTail}}&nbsp;{{bsCode}}</span>
           </div>
           <div class="item">
             <van-row>
-              <van-col span="11">
+              <van-col span="11" class="small-font">
                 <span v-if="bsFlag === 'buy'" v-text="$t('trade.buyPrice')"></span><span v-else-if="bsFlag === 'sell'" v-text="$t('trade.sellPrice')"></span>({{tradepair.counterCode}})
               </van-col>
-              <van-col span="11" offset="2">
+              <van-col span="11" offset="2" class="small-font">
                 {{$t('trade.amount')}}({{tradepair.baseCode}})
               </van-col>
             </van-row>
@@ -39,7 +43,7 @@
                   v-if="bsFlag === 'buy'"
                   v-model="form.price"
                   type="number"
-                  class="large-font text-primary"
+                  class="small-font text-primary"
                   style="background: #f1f8fb"
                   :placeholder="`${$t('trade.buyPrice')}(${tradepair.counterCode})`">
                 </van-field>
@@ -47,14 +51,14 @@
                   v-if="bsFlag === 'sell'"
                   type="number"
                   v-model="form.price"
-                  class="large-font text-primary"
+                  class="small-font text-primary"
                   style="background: #f1f8fb"
                   :placeholder="`${$t('trade.sellPrice')}(${tradepair.counterCode})`">
                 </van-field>
               </van-col>
               <van-col span="11" offset="2">
                 <van-field
-                  class="large-font text-primary"
+                  class="small-font text-primary"
                   v-model.number="form.amount"
                   type="number"
                   style="background: #f1f8fb"
@@ -65,7 +69,7 @@
           </div>
           <div class="item">
             <van-row>
-              <van-col span="11" class="text-muted" v-text="$t('trade.estVal')"></van-col>
+              <van-col span="11" class="small-font text-muted" v-text="$t('trade.estVal')"></van-col>
             </van-row>
             <van-row>
               <van-col span="11" class="text-muted">
@@ -101,6 +105,7 @@
               @savePasswordInMemory="savePasswordInMemory"></my-offers>
           </van-tab>
         </van-tabs>
+        </div>
       </pl-content-block>
     </van-popup>
     <tradepair-add-pop ref="tradepairAddPop" @done="pairAddDone"></tradepair-add-pop>
@@ -130,7 +135,13 @@
         form: {
           price: '',
           amount: ''
-        }
+        },
+        startX: 0, // 滑动开始
+        startY: 0,
+        deltaX: 0, // 滑动过渡
+        deltaY: 0,
+        offsetX: 0, // 滑动偏移
+        offsetY: 0
       };
     },
     computed: {
@@ -212,6 +223,9 @@
         this.showPop = true;
         this.init();
       },
+      bindClick () {
+        this.$refs.marketDept.initSelectPage();
+      },
       init () {
         this.toBs('buy');
         this.form.price = '';
@@ -226,8 +240,34 @@
           this.bsCode = this.tradepair.counterCode;
           this.bsIssuer = this.tradepair.counterIssuer ? this.tradepair.counterIssuer:'';
           this.$nextTick(() => {
+            this.$refs.marketDept.initMarketDept();
             this.$refs.marketDept.getBooks();
           });
+        }
+      },
+      onTouchStart (event) {
+        this.startX = event.touches[0].clientX;
+        this.startY = event.touches[0].clientY;
+        this.deltaX = 0;
+        this.deltaY = 0;
+        this.offsetX = 0;
+        this.offsetY = 0;
+      },
+      onTouchMove(event) {
+        const touch = event.touches[0];
+        this.deltaX = touch.clientX - this.startX;
+        this.deltaY = touch.clientY - this.startY;
+        this.offsetX = Math.abs(this.deltaX);
+        this.offsetY = Math.abs(this.deltaY);
+      },
+      onTouchEnd () {
+        const minSwipeDistance = 50;
+        if (this.offsetX > this.offsetY && this.offsetX > 10 && this.offsetX >= minSwipeDistance) {
+          if (this.deltaX > 0 && this.bsFlag !== 'buy') {
+            this.toBs('buy');
+          } else if (this.deltaX < 0 && this.bsFlag !== 'sell') {
+            this.toBs('sell');
+          }
         }
       },
       saveDefaultTradepair (account) {
@@ -367,7 +407,7 @@
           if (errMsg) {
             this.$toast(errMsg);
           } else {
-            this.$toast(this.$t('trade.offerFail'));
+            this.$toast(this.$t('trade.offerFail') + ':' + err);
           }
           setTimeout(() => {
             toast.clear();

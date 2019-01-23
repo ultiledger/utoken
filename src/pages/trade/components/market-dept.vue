@@ -12,7 +12,7 @@
                  v-for="(item, index) in bids"
                  :style="`background: linear-gradient(to left, #dcf6de ${item.pct}%, #fff ${item.pct}%)`"
                  :key="index"
-                 @click="selectOnePrice(item)">
+                 @click.stop="selectOnePrice(item)">
               <div class="text-left text-muted"> {{item.depth | currency('', '2')}}</div>
               <div class="text-right small-font"> {{item.price | currency('', '7')}}</div>
             </div>
@@ -28,7 +28,7 @@
                  v-for="(item, index) in asks"
                  :style="`background: linear-gradient(to right, #fed6d8 ${item.pct}%, #fff ${item.pct}%)`"
                  :key="index"
-                 @click="selectOnePrice(item)">
+                 @click.stop="selectOnePrice(item)">
               <div class="text-left">{{item.price | currency('', '7')}}</div>
               <div class="text-muted text-right small-font"> {{item.depth | currency('', '2')}}</div>
             </div>
@@ -37,10 +37,18 @@
       </van-row>
       <van-row>
         <van-col span="12" class="text-left">
-          <div class="text-primary x-small-font" style="margin-top: 10px;" @click="viewLastBooks">{{$t('trade.lastExec')}}<i class="ultfont ult-right x-small-font"></i></div>
+          <div class="text-primary x-small-font" style="margin-top: 10px;" @click.stop="viewLastBooks">{{$t('trade.lastExec')}}<i class="ultfont ult-right x-small-font"></i></div>
         </van-col>
         <van-col span="12" class="text-right">
-          <div class="text-primary x-small-font" style="margin-top: 10px;" @click="viewMyBooks">{{$t('trade.myExec')}}<i class="ultfont ult-right x-small-font"></i></div>
+          <div class="x-small-font dept-dw">
+            <div @click.stop="selectPage = !selectPage">
+              {{pageNo}}&nbsp;<i class="ultfont ult-down small-font"></i>
+            </div>
+            <div class="selectUl x-small-font" v-if="selectPage">
+              <div class="selectLi" v-for="item in pageNos" :key="item" @click.stop="toSelectPageNo(item)" :class="{'select': pageNo==item}">{{item}}</div>
+            </div>
+          </div>
+          <div class="text-primary x-small-font" style="margin-top: 10px;display: inline-block;" @click.stop="viewMyBooks">{{$t('trade.myExec')}}<i class="ultfont ult-right x-small-font"></i></div>
         </van-col>
       </van-row>
     </div>
@@ -62,6 +70,9 @@
     },
     data () {
       return {
+        pageNos: [100, 50, 30, 10],
+        pageNo: 10,
+        selectPage: false,
         marketTimer: null, // 市场深度定时器
         books: [], /*买单+卖单*/
         asks: [], /*卖单*/
@@ -69,6 +80,18 @@
       };
     },
     methods: {
+      toSelectPageNo (item) {
+        this.pageNo=item;
+        this.selectPage=false;
+        this.getBooks();
+      },
+      initSelectPage () {
+        this.selectPage = false;
+      },
+      initMarketDept () {
+        this.selectPage = false;
+        this.pageNo = 10;
+      },
       clearTimer () {
         if (this.marketTimer) {
           window.clearInterval(this.marketTimer);
@@ -100,7 +123,8 @@
       },
       processBooks () {
         // 最多显示15条记录
-        let displayNo = 15;
+        // let displayNo = 15;
+        let displayNo = this.pageNo;
         if (this.asks.length > displayNo) {
           this.asks = this.asks.slice(0, displayNo);
         }
@@ -135,9 +159,11 @@
         }
       },
       viewLastBooks () {
+        this.initSelectPage();
         this.$refs.tradeLastBookPop.show(this.tradePair);
       },
       viewMyBooks () {
+        this.initSelectPage();
         this.$refs.tradeLastBookPop.show(this.tradePair, this.$store.state.account.address);
       },
       selectOnePrice (item) {
@@ -149,4 +175,35 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../scss/trade";
+  @import "~assets/scss/variables";
+  .dept-dw {
+    display: inline-block;
+    margin-top: 10px;
+    padding-right: 8px;
+    margin-right: 10px;
+    border-right: 1px solid $border-color;
+    position: relative;
+    .selectUl {
+      margin-left:0.75rem;
+      position:absolute;
+      z-index:99999;
+      width:5rem;
+      left: -2rem;
+      top: -7rem;
+      height:6.6rem;
+      border-radius:0.5rem;
+      text-align:center;
+      font-size:0.9rem;
+      box-shadow: 0px -2px 20px rgba(0,0,0,0.05);
+      background: #fff;
+      .selectLi {
+        height:1.6rem;
+        line-height:1.6rem;
+        &.select {
+          color: #fff;
+          background-color:$primary-color;
+        }
+      }
+    }
+  }
 </style>
