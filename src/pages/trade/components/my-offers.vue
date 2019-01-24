@@ -43,6 +43,7 @@
   import moment from 'moment';
   import passwordDialog from '../../ui/password-dialog';
   import offerHistory from '../popup/offer-history-pop';
+  import Big from 'big.js';
   export default {
     components: {passwordDialog, offerHistory},
     props: {
@@ -89,12 +90,13 @@
           let buyIssuer = item.buying.asset_type == 'native' ? '' : item.buying.asset_issuer;
           let sellCode = item.selling.asset_type === 'native' ? 'XLM' : item.selling.asset_code;
           let sellIssuer = item.selling.asset_type == 'native' ? '' : item.selling.asset_issuer;
-          let amount = parseFloat(item.amount);
+          let amount = Number(item.amount);
           let price = parseFloat(item.price);
-          let volume = item.amount * item.price;
+          let volume = Number(new Big(item.amount).times(item.price).toString());
           let isSelling = false; /*买入还是卖出，true-卖出*/
           if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer)) {
             isSelling = true;
+            price = parseFloat(item.price).toFixed(7);
             result.push(
               {
                 id : item.id,
@@ -110,9 +112,8 @@
               }
             );
           } else if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer)) {
-            amount = item.amount * item.price;
-            price = 1 / item.price;
-            volume = parseFloat(item.amount);
+            amount = parseFloat(item.amount);
+            price = Number(new Big(1).div(item.price).toString());
             result.push(
               {
                 id : item.id,
