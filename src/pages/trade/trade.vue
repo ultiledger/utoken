@@ -312,7 +312,7 @@
         this.tradepair = tradePair;
         this.bsCode = this.tradepair.counterCode;
         this.bsIssuer = this.tradepair.counterIssuer ? this.tradepair.counterIssuer:'';
-        this.tabActive == 0;
+        this.tabActive = 0;
         this.toBs('buy');
         this.$nextTick(() => {
           this.$refs.marketDept.getBooks();
@@ -398,6 +398,7 @@
             setTimeout(() => {
               toast.clear();
               this.tabActive = 1;
+              this.tabChange();
             }, 1000);
           }
           this.loading = false;
