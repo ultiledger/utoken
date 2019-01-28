@@ -13,7 +13,7 @@
                  :style="`background: linear-gradient(to left, #dcf6de ${item.pct}%, #fff ${item.pct}%)`"
                  :key="index"
                  @click.stop="selectOnePrice(item)">
-              <div class="text-left text-muted"> {{item.depth | currency('', '2')}}</div>
+              <div class="text-left text-muted"> {{item.volumn | currency('', '2')}}</div>
               <div class="text-right small-font"> {{item.price | currency('', '7')}}</div>
             </div>
           </div>
@@ -30,7 +30,7 @@
                  :key="index"
                  @click.stop="selectOnePrice(item)">
               <div class="text-left">{{item.price | currency('', '7')}}</div>
-              <div class="text-muted text-right small-font"> {{item.depth | currency('', '2')}}</div>
+              <div class="text-muted text-right small-font"> {{item.amount | currency('', '2')}}</div>
             </div>
           </div>
         </van-col>
