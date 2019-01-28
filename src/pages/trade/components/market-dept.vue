@@ -52,14 +52,11 @@
         </van-col>
       </van-row>
     </div>
-    <trade-last-book-pop ref="tradeLastBookPop"></trade-last-book-pop>
   </div>
 </template>
 <script>
-  import tradeLastBookPop from '../popup/trade-last-books-pop';
   import mathUtils from 'core/utils/mathUtils';
   export default {
-    components: {tradeLastBookPop},
     props: {
       tradePair: {
         type: Object,
@@ -160,11 +157,11 @@
       },
       viewLastBooks () {
         this.initSelectPage();
-        this.$refs.tradeLastBookPop.show(this.tradePair);
+        this.$emit('viewLastBooks');
       },
       viewMyBooks () {
         this.initSelectPage();
-        this.$refs.tradeLastBookPop.show(this.tradePair, this.$store.state.account.address);
+        this.$emit('viewMyBooks');
       },
       selectOnePrice (item) {
         this.$emit('input', item.price);

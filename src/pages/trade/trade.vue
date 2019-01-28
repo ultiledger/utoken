@@ -94,7 +94,12 @@
         </div>
         <van-tabs v-model="tabActive" sticky @change="tabChange">
           <van-tab  :title="$t('trade.marketDepth')">
-            <market-dept ref="marketDept" v-model="form.price" :tradePair.sync="tradepair"></market-dept>
+            <market-dept
+              ref="marketDept"
+              v-model="form.price"
+              @viewLastBooks="viewLastBooks"
+              @viewMyBooks="viewMyBooks"
+              :tradePair.sync="tradepair"></market-dept>
           </van-tab>
           <van-tab  :title="$t('trade.myOffer')">
             <my-offers
@@ -108,12 +113,14 @@
         </div>
       </pl-content-block>
     </van-popup>
+    <trade-last-book-pop ref="tradeLastBookPop"></trade-last-book-pop>
     <tradepair-add-pop ref="tradepairAddPop" @done="pairAddDone"></tradepair-add-pop>
     <password-dialog ref="pwdDialog" @done="tradeTx"></password-dialog>
   </div>
 </template>
 <script>
   // todo: 加入撤单，成交历史记录
+  import tradeLastBookPop from './popup/trade-last-books-pop';
   import tradepairAddPop from './popup/tradepair-add-pop';
   import marketDept from './components/market-dept';
   import myOffers from './components/my-offers';
@@ -122,7 +129,7 @@
   import cryptor from 'core/utils/cryptor';
   import vueSlider from 'vue-slider-component';
   export default {
-    components: {tradepairAddPop, passwordDialog, vueSlider, marketDept, myOffers},
+    components: {tradepairAddPop, passwordDialog, vueSlider, marketDept, myOffers, tradeLastBookPop},
     data () {
       return {
         showPop: false,
@@ -428,6 +435,12 @@
             this.$refs.myOffers.getOffers();
           });
         }
+      },
+      viewLastBooks () {
+        this.$refs.tradeLastBookPop.show(this.tradepair);
+      },
+      viewMyBooks () {
+        this.$refs.tradeLastBookPop.show(this.tradepair, this.$store.state.account.address);
       },
       close () {
         this.showPop = false;
