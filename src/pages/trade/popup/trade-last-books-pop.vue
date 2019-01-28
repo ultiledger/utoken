@@ -6,7 +6,7 @@
       class="popup-wapper"
       style="width:100%;height: 100%;">
       <van-nav-bar
-        :title="$t('trade.lastExec')"
+        :title="title"
         @click-left="close()">
         <span slot="left"><i class="ultfont ult-left"></i></span>
       </van-nav-bar>
@@ -50,6 +50,7 @@
   export default {
     data () {
       return {
+        title:'',
         showPop: false,
         lastBooks: [],
         tradepair: {}
@@ -68,6 +69,10 @@
         let option = {limit: 50};
         if (addr){
           option.forAccount = addr;
+          this.title = this.$t('trade.myExec');
+        }else {
+          option.forAccount = null;
+          this.title = this.$t('trade.lastExec');
         }
         this.$wallet.queryLastBook(base, counter, option).then((data) => {
           data.forEach((item) => {
