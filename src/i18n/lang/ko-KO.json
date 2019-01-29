@@ -361,6 +361,7 @@
     "name": "거래",
     "buying": "구매",
     "selling": "판매하다",
+    "buyingCode": "구매{code}",
     "available": "사용 가능한 자산",
     "youAsset": "너 자신이야.",
     "buyPrice": "입찰 가격",

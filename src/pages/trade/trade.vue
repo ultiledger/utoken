@@ -89,7 +89,7 @@
           </div>
         </div>
         <div class="single-btn margin-top margin-bottom">
-          <van-button size="large" round type="primary" @click="toInputPassword" v-if="bsFlag === 'buy'">{{$t('trade.buying')}}{{tradepair.baseCode}}</van-button>
+          <van-button size="large" round type="primary" @click="toInputPassword" v-if="bsFlag === 'buy'">{{$t('trade.buyingCode', {code: tradepair.baseCode})}}</van-button>
           <van-button size="large" round type="danger" @click="toInputPassword" v-else-if="bsFlag === 'sell'">{{$t('trade.selling')}}{{tradepair.baseCode}}</van-button>
         </div>
         <van-tabs v-model="tabActive" sticky @change="tabChange">

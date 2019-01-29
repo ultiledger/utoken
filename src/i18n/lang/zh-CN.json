@@ -366,6 +366,7 @@
   "trade": {
     "name": "交易",
     "buying": "买入",
+    "buyingCode": "买入{code}",
     "selling": "卖出",
     "available": "可用资产",
     "youAsset": "你拥有",

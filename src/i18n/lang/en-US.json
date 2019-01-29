@@ -360,6 +360,7 @@
   "trade": {
     "name": "Trade",
     "buying": "Buying",
+    "buyingCode": "Buying{code}",
     "selling": "Selling",
     "available": "Available",
     "youAsset": "You own",
