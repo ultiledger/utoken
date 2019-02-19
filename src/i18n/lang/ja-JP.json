@@ -49,7 +49,7 @@
     "middle": "中",
     "strong": "強い",
     "best": "ベスト",
-    "exchange": "償還"
+    "exchange": "両替"
   },
   "wallet": {
     "selectLanguage": "言語を選択",
@@ -147,7 +147,7 @@
     "contractAddressExist": "契約アドレスは既に存在します",
     "contractERC-20Valid": "無効ですERC-20 Token",
     "contractAddressFail": "資産契約取得に失敗しました",
-    "frozenNative":"冷凍"
+    "frozenNative":"凍結"
   },
   "find": {
     "discovery": "発見",
@@ -259,7 +259,7 @@
     "balanceTooLowTip": "不十分な残高、金額を変更してください",
     "walletPwdError": "ウォレットのパスワードが間違っています",
     "inTransactionMessage": "トランザクションの送信...",
-    "transactionBroadcastSuccess": "トランザクションブロードキャスト成功",
+    "transactionBroadcastSuccess": "ブロードキャスト成功",
     "xrpUnActivationAddressMsg": "当アカウントはアクティベート（有効化）されていません。アクティベート（有効化）するには最低20XRPが必要です。",
     "xrpUnActivationAddressTip": "送金先のアカウントはアクティベート（有効化）されていません。アクティベート（有効化）するには最低20XRPが必要です。送金金額を修正してください。",
     "stellarUnActivationAddressMsg": "当アカウントはアクティベート（有効化）されていません。アクティベート（有効化）するには最低1XLMが必要です。",
@@ -349,33 +349,34 @@
     "unlock": "ロックを解除してください"
   },
   "exchange": {
-    "inputTitle": "ある通貨を別の通貨に変換する",
-    "inputPlaceholder": "交換金額を入力してください",
-    "amountErrorTip": "有効な償還額を入力してください",
+    "inputTitle": "他通貨へ両替",
+    "inputPlaceholder": "両替金額を入力してください",
+    "amountErrorTip": "有効な両替額を入力してください",
     "notFoundError": "アカウントが見つかりませんでした。このアカウントを最初に有効にしてください。",
-    "pathEmpty": "適切な償還パスはありません。 アカウントの残高が不足している可能性があります",
-    "converting": "償還...",
-    "exchangeFail": "償還失敗",
-    "receive": "受け取る"
+    "pathEmpty": "適切な両替パスはありません。 アカウントの残高が不足している可能性があります",
+    "converting": "両替...",
+    "exchangeFail": "両替失敗",
+    "receive": "目的通貨"
   },
   "trade": {
     "name": "取引",
-    "buying": "購入する",
-    "selling": "売る",
+    "buying": "買い",
+    "buyingCode": "{code}を買う",
+    "selling": "売り",
     "available": "利用可能な資産",
-    "youAsset": "あなたが所有している",
+    "youAsset": "所有資産",
     "buyPrice": "入札価格",
     "sellPrice": "販売価格",
     "amount": "数量",
-    "estVal": "見積もり取引額",
+    "estVal": "予想金額",
     "marketDepth": "市場の深さ",
-    "buyAmount": "購入数",
-    "buyPrice": "支払注文価格",
+    "buyAmount": "買う注文量",
+    "buyPrice": "売る価格",
     "sellPrice": "売り注文価格",
-    "sellAmount": "売り注文の数",
+    "sellAmount": "売る注文量",
     "lastExec": "最近の取引",
     "myExec": "私の契約",
-    "myOffer": "私の手数料",
+    "myOffer": "注文一覧",
     "cancel": "キャンセル",
     "price": "価格",
     "unexecuted": "実際の取引",
@@ -391,7 +392,7 @@
     "networkError": "ネットワーク要求に失敗しました",
     "addTradePair": "取引のペアを追加する",
     "baseCoin": "基本通貨",
-    "counterCoin": "相手方の通貨",
+    "counterCoin": "相手通貨",
     "tradeTip": "あなたは資産を貸方に入れておらず、取引を完了することができないかもしれません。",
     "manageOfferNoTrust": "指定資産を承認していません",
     "manageOfferMalformed": "例外を委任する"
