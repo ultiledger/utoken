@@ -47,7 +47,11 @@
 <script>
   import mathUtils from 'core/utils/mathUtils';
   import moment from 'moment';
+  import {AccountType} from "src/wallet/constants";
   export default {
+    props: {
+      accountType: String
+    },
     data () {
       return {
         title:'',
@@ -74,15 +78,30 @@
           option.forAccount = null;
           this.title = this.$t('trade.lastExec');
         }
-        this.$wallet.queryLastBook(base, counter, option).then((data) => {
-          data.forEach((item) => {
-            this.lastBooks.push(this.processLastBooks(item));
+        if (this.accountType === AccountType.stellar) {
+          this.$wallet.queryLastBook(base, counter, option).then((data) => {
+            data.forEach((item) => {
+              this.lastBooks.push(this.processLastBooks(item));
+            });
+          }).catch((err) => {
+            console.info(err);
+            this.$toast(this.$t('trade.networkError'));
+            this.lastBooks = [];
           });
-        }).catch((err) => {
-          console.info(err);
-          this.$toast(this.$t('trade.networkError'));
-          this.lastBooks = [];
-        });
+        } else if (this.accountType === AccountType.ripple) {
+          this.$api.queryLastBook(base, counter, option).then((data) => {
+            if (data.count > 0) {
+              data.exchanges.forEach((item) => {
+                this.lastBooks.push(this.processLastBooks(item));
+              });
+            }
+          }).catch((err) => {
+            console.info(err);
+            this.$toast(this.$t('trade.networkError'));
+            this.lastBooks = [];
+          });
+        }
+
       },
       processLastBooks (item) {
         let price = mathUtils.round(item.counter_amount / item.base_amount, 2);

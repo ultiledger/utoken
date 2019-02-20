@@ -104,6 +104,7 @@
           <van-tab  :title="$t('trade.myOffer')">
             <my-offers
               ref="myOffers"
+              :accountType="currentAccount.type"
               :tradePair.sync="tradepair"
               :address.sync="currentAccount.address"
               :secret.sync="currentAccount.secret"
@@ -113,7 +114,7 @@
         </div>
       </pl-content-block>
     </van-popup>
-    <trade-last-book-pop ref="tradeLastBookPop"></trade-last-book-pop>
+    <trade-last-book-pop ref="tradeLastBookPop" :accountType="currentAccount.type"></trade-last-book-pop>
     <tradepair-add-pop ref="tradepairAddPop" @done="pairAddDone"></tradepair-add-pop>
     <password-dialog ref="pwdDialog" @done="tradeTx"></password-dialog>
   </div>
@@ -128,6 +129,7 @@
   import Big from 'big.js';
   import cryptor from 'core/utils/cryptor';
   import vueSlider from 'vue-slider-component';
+  import coins from 'src/wallet/coins';
   export default {
     components: {tradepairAddPop, passwordDialog, vueSlider, marketDept, myOffers, tradeLastBookPop},
     data () {
@@ -233,6 +235,10 @@
       bindClick () {
         this.$refs.marketDept.initSelectPage();
       },
+      shortType () {
+        let type = this.$store.state.account.type;
+        return coins[type].symbol || type;
+      },
       init () {
         this.toBs('buy');
         this.form.price = '';
@@ -284,7 +290,7 @@
           this.tradepair = {
             acctType: account.type,
             acctAddress: account.address,
-            baseCode: 'XLM',
+            baseCode: this.shortType(),
             baseIssuer: '',
             counterCode: oneBs.code,
             counterIssuer: oneBs.issuer ? oneBs.issuer: ''
@@ -294,10 +300,10 @@
           this.tradepair = {
             acctType: account.type,
             acctAddress: account.address,
-            baseCode: 'XLM',
+            baseCode: this.shortType(),
             baseIssuer: '',
             counterCode: 'CNY',
-            counterIssuer: 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'
+            counterIssuer: 'rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y'
           };
         }
       },
@@ -399,7 +405,7 @@
           amount = this.form.amount;
           price = this.form.price;
         }
-        this.$wallet.sendOffer(selling, buying, amount, price, this.currentAccount.address, cryptor.decryptAES(this.currentAccount.secret, password)).then(ret => {
+        this.$wallet.sendOffer(selling, buying, amount, price, this.currentAccount.address, cryptor.decryptAES(this.currentAccount.secret, password), this.bsFlag).then(ret => {
           if (ret) {
             toast.message = this.$t('trade.offerSuccess');
             setTimeout(() => {
