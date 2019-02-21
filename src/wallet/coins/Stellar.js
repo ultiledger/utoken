@@ -406,7 +406,9 @@ class StellarWallet {
       //my last book
       if (optional.forAccount) {
         try {
-          let action = this.server.trades().forAccount(optional.forAccount).order(optional.order || 'desc');
+          let action = this.server.trades().forAssetPair(this.getAsset(baseBuy), this.getAsset(counterSelling))
+            .forAccount(optional.forAccount)
+            .order(optional.order || 'desc');
           if (optional.limit) {
             action = action.limit(optional.limit);
           }
@@ -417,17 +419,13 @@ class StellarWallet {
           let records=[];
           if (page.records) {
             page.records.forEach((item) => {
-              let baseAsset;
-              let counterAsset;
-              if (item.base_is_seller) {
-                baseAsset = this.getAsset(item.base_asset_code,item.base_asset_issuer);
-                counterAsset = this.getAsset(item.counter_asset_code,item.counter_asset_issuer);
-              }else {
-                counterAsset = this.getAsset(item.base_asset_code,item.base_asset_issuer);
-                baseAsset = this.getAsset(item.counter_asset_code,item.counter_asset_issuer);
-              }
+              let baseAsset = this.getAsset(item.base_asset_code,item.base_asset_issuer);
+              let counterAsset = this.getAsset(item.counter_asset_code,item.counter_asset_issuer);
               if (this.compareAsset(baseAsset,this.getAsset(baseBuy))
                 && this.compareAsset(counterAsset,this.getAsset(counterSelling))){
+                records.push(item);
+              }else if(this.compareAsset(counterAsset,this.getAsset(baseBuy))
+                && this.compareAsset(baseAsset,this.getAsset(counterSelling))){
                 records.push(item);
               }
             });

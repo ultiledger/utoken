@@ -409,6 +409,7 @@
             }, 1000);
           }
           this.loading = false;
+          this.onRefreshBalances();
         }).catch(err => {
           console.info(err);
           let errMsg = this.getErrMsg(err);
@@ -441,6 +442,12 @@
       },
       viewMyBooks () {
         this.$refs.tradeLastBookPop.show(this.tradepair, this.$store.state.account.address);
+      },
+      onRefreshBalances () {
+        this.$store.dispatch('setBalances', this.$store.state.account.address).then(() => {
+        }).catch(err => {
+          console.info(err);
+        });
       },
       close () {
         this.showPop = false;
