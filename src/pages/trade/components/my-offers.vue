@@ -24,7 +24,7 @@
               {{item.price | currency('', '7') | cutTail}}
             </td>
             <td colspan="1" rowspan="1" class="text-right small-font text-muted">
-              {{item.volume | currency('', '7') | cutTail}}
+              {{item.amount | currency('', '7') | cutTail}}
             </td>
             <td colspan="1" rowspan="1" class="text-right small-font text-muted">
               0
@@ -121,9 +121,9 @@
               }
             );
           } else if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer)) {
-            amount = Number(item.amount);
+            amount = Number(new Big(item.amount).times(item.price).toString());
             price = Number(new Big(1).div(item.price).toString());
-            volume = parseFloat(item.amount * item.price);
+            volume = Number(item.amount);
             result.unshift(
               {
                 id : item.id,
