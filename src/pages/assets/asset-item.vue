@@ -144,7 +144,7 @@
         }
       },
       showTradeBtn () {
-        if (this.data && this.data.type === AccountType.stellar) {
+        if (this.data && (this.data.type === AccountType.stellar || this.data.type === AccountType.ripple)) {
           return true;
         } else {
           return false;
