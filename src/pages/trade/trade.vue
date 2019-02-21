@@ -99,6 +99,7 @@
               v-model="form.price"
               @viewLastBooks="viewLastBooks"
               @viewMyBooks="viewMyBooks"
+              :accountType="currentAccount.type"
               :tradePair.sync="tradepair"></market-dept>
           </van-tab>
           <van-tab  :title="$t('trade.myOffer')">

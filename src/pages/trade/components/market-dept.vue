@@ -56,6 +56,7 @@
 </template>
 <script>
   import mathUtils from 'core/utils/mathUtils';
+  import {AccountType} from 'src/wallet/constants';
   export default {
     props: {
       tradePair: {
@@ -63,7 +64,8 @@
         default: () => {
           return {};
         }
-      }
+      },
+      accountType: String
     },
     data () {
       return {
@@ -105,11 +107,16 @@
       getBooks () {
         let base = {code: this.tradePair.baseCode, issuer: this.tradePair.baseIssuer};
         let counter = {code: this.tradePair.counterCode, issuer: this.tradePair.counterIssuer};
+        let type = this.accountType;
         this.$wallet.queryBook(base, counter).then((data) => {
           this.books = data;
           this.asks = data.asks;
           this.bids = data.bids;
-          this.processBooks();
+          if (type === AccountType.stellar){
+            this.processBooks();
+          } else if(type === AccountType.ripple){
+            this.processRippleBooks();
+          }
           this.startTimer();
         }).catch(() => {
           this.books = [];
@@ -137,6 +144,42 @@
         depth = 0;
         for (let i=0; i<this.bids.length; i++) {
           this.bids[i].volumn = this.bids[i].amount / this.bids[i].price;
+          depth = depth + parseFloat(this.bids[i].volumn);
+          this.bids[i].depth = depth;
+        }
+        let max_depth = 0;
+        if (this.asks.length>0) {
+          max_depth = this.asks[this.asks.length-1].depth;
+        }
+        if (this.bids.length>0 && this.bids[this.bids.length-1].depth > max_depth) {
+          max_depth = this.bids[this.bids.length-1].depth;
+        }
+        for (let i=0; i<this.asks.length; i++) {
+          this.asks[i].pct = mathUtils.round(this.asks[i].depth / max_depth * 100, 2);
+        }
+        for (let i=0; i<this.bids.length; i++) {
+          this.bids[i].pct = mathUtils.round(this.bids[i].depth / max_depth * 100, 2);
+        }
+      },
+      processRippleBooks () {
+        // 最多显示15条记录
+        // let displayNo = 15;
+        let displayNo = this.pageNo;
+        if (this.asks.length > displayNo) {
+          this.asks = this.asks.slice(0, displayNo);
+        }
+        if (this.bids.length > displayNo) {
+          this.bids = this.bids.slice(0, displayNo);
+        }
+        let depth = 0;
+        for (let i=0; i<this.asks.length; i++) {
+          this.asks[i].volumn = this.asks[i].amount;
+          depth = depth + parseFloat(this.asks[i].volumn);
+          this.asks[i].depth = depth;
+        }
+        depth = 0;
+        for (let i=0; i<this.bids.length; i++) {
+          this.bids[i].volumn = this.bids[i].amount;
           depth = depth + parseFloat(this.bids[i].volumn);
           this.bids[i].depth = depth;
         }

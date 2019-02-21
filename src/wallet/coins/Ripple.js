@@ -297,18 +297,20 @@ class RippleWallet{
             bids: []
           };
           data.asks.map(ret => {
+            let amount = ret.specification.quantity.value;
+            let price = ret.specification.totalPrice.value / ret.specification.quantity.value;
             let r = {
-              amount: ret.specification.quantity.value,
-              price: ret.specification.totalPrice.value / ret.specification.quantity.value
+              amount: amount,
+              price: price
             };
             result.asks.push(r);
           });
           data.bids.map(ret => {
+            let amount = ret.specification.quantity.value;
             let price = ret.specification.totalPrice.value / ret.specification.quantity.value;
-            let amount = ret.specification.quantity.value / price;
             let r = {
-              amount: price,
-              price: amount
+              amount: amount,
+              price: price
             };
             result.bids.push(r);
           });
