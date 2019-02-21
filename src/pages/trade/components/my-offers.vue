@@ -24,7 +24,7 @@
               {{item.price | currency('', '7') | cutTail}}
             </td>
             <td colspan="1" rowspan="1" class="text-right small-font text-muted">
-              {{item.amount | currency('', '7') | cutTail}}
+              {{item.volume | currency('', '7') | cutTail}}
             </td>
             <td colspan="1" rowspan="1" class="text-right small-font text-muted">
               0
@@ -97,14 +97,16 @@
           let buyIssuer = item.buying.asset_type == 'native' ? '' : item.buying.asset_issuer;
           let sellCode = item.selling.asset_type === 'native' ? 'XLM' : item.selling.asset_code;
           let sellIssuer = item.selling.asset_type == 'native' ? '' : item.selling.asset_issuer;
-          let amount = Number(item.amount);
-          let price = parseFloat(item.price);
-          let volume = Number(new Big(item.amount).times(item.price).toString());
+          let amount = 0;
+          let price = 0;
+          let volume = 0;
           let isSelling = false; /*买入还是卖出，true-卖出*/
           if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer)) {
             isSelling = true;
+            amount = Number(item.amount);
             price = parseFloat(item.price).toFixed(7);
-            result.push(
+            volume = Number(new Big(item.amount).times(item.price).toString());
+            result.unshift(
               {
                 id : item.id,
                 isSelling,
@@ -119,9 +121,10 @@
               }
             );
           } else if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer)) {
-            amount = parseFloat(item.amount);
+            amount = Number(item.amount);
             price = Number(new Big(1).div(item.price).toString());
-            result.push(
+            volume = parseFloat(item.amount * item.price);
+            result.unshift(
               {
                 id : item.id,
                 isSelling,

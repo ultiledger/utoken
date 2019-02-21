@@ -395,7 +395,7 @@
           selling.issuer = this.tradepair.counterIssuer;
           buying.code = this.tradepair.baseCode;
           buying.issuer = this.tradepair.baseIssuer;
-          amount = this.form.amount;
+          amount = this.expectedTradePrice;
           price = 1 / this.form.price;
         } else if (this.bsFlag === 'sell') {
           selling.code = this.tradepair.baseCode;

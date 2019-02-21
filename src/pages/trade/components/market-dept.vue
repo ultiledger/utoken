@@ -130,13 +130,13 @@
         }
         let depth = 0;
         for (let i=0; i<this.asks.length; i++) {
-          this.asks[i].volumn = this.asks[i].amount * this.asks[i].price;
+          this.asks[i].volumn = this.asks[i].amount;
           depth = depth + parseFloat(this.asks[i].volumn);
           this.asks[i].depth = depth;
         }
         depth = 0;
         for (let i=0; i<this.bids.length; i++) {
-          this.bids[i].volumn = this.bids[i].amount * this.bids[i].price;
+          this.bids[i].volumn = this.bids[i].amount / this.bids[i].price;
           depth = depth + parseFloat(this.bids[i].volumn);
           this.bids[i].depth = depth;
         }
