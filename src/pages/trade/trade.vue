@@ -20,10 +20,7 @@
           <span class="bs-btn buy-btn" :class="bsFlag" @click.stop="toBs('buy')" v-text="$t('trade.buying')"></span>
           <span class="bs-btn sell-btn" :class="bsFlag" @click.stop="toBs('sell')" v-text="$t('trade.selling')"></span>
         </div>
-        <div @touchstart.stop="onTouchStart"
-             @touchmove.stop="onTouchMove"
-             @touchend.stop="onTouchEnd"
-             @touchcancel.stop="onTouchEnd">
+
         <div class="bs-block item-block">
           <div class="text-muted b-white item">
             <span>{{$t('trade.youAsset')}}&nbsp;&nbsp;&nbsp;{{balances[bsCode+bsIssuer] | cutTail}}&nbsp;{{bsCode}}</span>
@@ -88,6 +85,10 @@
             </van-row>
           </div>
         </div>
+        <div @touchstart.stop="onTouchStart"
+             @touchmove.stop="onTouchMove"
+             @touchend.stop="onTouchEnd"
+             @touchcancel.stop="onTouchEnd">
         <div class="single-btn margin-top margin-bottom">
           <van-button size="large" round type="primary" @click="toInputPassword" v-if="bsFlag === 'buy'">{{$t('trade.buyingCode', {code: tradepair.baseCode})}}</van-button>
           <van-button size="large" round type="danger" @click="toInputPassword" v-else-if="bsFlag === 'sell'">{{$t('trade.selling')}}{{tradepair.baseCode}}</van-button>
