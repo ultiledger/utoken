@@ -364,25 +364,25 @@ class RippleWallet{
   async sendOffer(selling, buying, amount, price , address, fromSecret, direction) {
     return new Promise(async (resolve, reject) => {
       try {
-        let totalPrice = new Big(amount).times(price).toString();
+        let totalPrice = Number(new Big(amount).times(price).toString()).toFixed(8).toString();
         const order = {
           'direction': direction,
           'quantity': {
-            'currency': selling.code,
+            'currency': buying.code,
             'value': amount
           },
           'totalPrice': {
-            'currency': buying.code,
+            'currency': selling.code,
             'value': totalPrice
           },
           "passive": false,
           "fillOrKill": false
         };
         if (selling.issuer) {
-          order.quantity.counterparty = selling.issuer;
+          order.totalPrice.counterparty = selling.issuer;
         }
         if (buying.issuer) {
-          order.totalPrice.counterparty = buying.issuer;
+          order.quantity.counterparty = buying.issuer;
         }
         let prepared = await this.server.prepareOrder(address, order);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);

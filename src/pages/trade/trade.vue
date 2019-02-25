@@ -131,6 +131,7 @@
   import cryptor from 'core/utils/cryptor';
   import vueSlider from 'vue-slider-component';
   import coins from 'src/wallet/coins';
+  import {AccountType} from 'src/wallet/constants';
   export default {
     components: {tradepairAddPop, passwordDialog, vueSlider, marketDept, myOffers, tradeLastBookPop},
     data () {
@@ -166,7 +167,7 @@
             let result = {};
             bs.forEach((item) => {
               let issuer = item.issuer?item.issuer:'';
-              result[item.code+issuer] = item.value;
+              result[item.code+issuer] = (new Big(item.value).toFixed(6)).toString();
             });
             return result;
           }
@@ -391,21 +392,41 @@
         let buying = {};
         let amount = '';
         let price = '';
-        if (this.bsFlag === 'buy') {
-          selling.code = this.tradepair.counterCode;
-          selling.issuer = this.tradepair.counterIssuer;
-          buying.code = this.tradepair.baseCode;
-          buying.issuer = this.tradepair.baseIssuer;
-          amount = this.expectedTradePrice;
-          price = 1 / this.form.price;
-        } else if (this.bsFlag === 'sell') {
-          selling.code = this.tradepair.baseCode;
-          selling.issuer = this.tradepair.baseIssuer;
-          buying.code = this.tradepair.counterCode;
-          buying.issuer = this.tradepair.counterIssuer;
-          amount = this.form.amount;
-          price = this.form.price;
+        if(this.currentAccount.type === AccountType.stellar){
+          if (this.bsFlag === 'buy') {
+            selling.code = this.tradepair.counterCode;
+            selling.issuer = this.tradepair.counterIssuer;
+            buying.code = this.tradepair.baseCode;
+            buying.issuer = this.tradepair.baseIssuer;
+            amount = this.expectedTradePrice;
+            price = 1 / this.form.price;
+          } else if (this.bsFlag === 'sell') {
+            selling.code = this.tradepair.baseCode;
+            selling.issuer = this.tradepair.baseIssuer;
+            buying.code = this.tradepair.counterCode;
+            buying.issuer = this.tradepair.counterIssuer;
+            amount = this.form.amount;
+            price = this.form.price;
+          }
         }
+        if(this.currentAccount.type === AccountType.ripple){
+          if (this.bsFlag === 'buy') {
+            selling.code = this.tradepair.counterCode;
+            selling.issuer = this.tradepair.counterIssuer;
+            buying.code = this.tradepair.baseCode;
+            buying.issuer = this.tradepair.baseIssuer;
+            amount = this.form.amount;
+            price = this.form.price;
+          } else if (this.bsFlag === 'sell') {
+            selling.code = this.tradepair.baseCode;
+            selling.issuer = this.tradepair.baseIssuer;
+            buying.code = this.tradepair.counterCode;
+            buying.issuer = this.tradepair.counterIssuer;
+            amount = this.form.amount;
+            price = this.form.price;
+          }
+        }
+
         this.$wallet.sendOffer(selling, buying, amount, price, this.currentAccount.address, cryptor.decryptAES(this.currentAccount.secret, password), this.bsFlag).then(ret => {
           if (ret) {
             toast.message = this.$t('trade.offerSuccess');

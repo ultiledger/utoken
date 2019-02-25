@@ -81,7 +81,7 @@
         if (this.accountType === AccountType.stellar) {
           this.$wallet.queryLastBook(base, counter, option).then((data) => {
             data.forEach((item) => {
-              this.lastBooks.push(this.processLastBooks(item));
+              this.lastBooks.push(this.processStellarLastBooks(item));
             });
           }).catch((err) => {
             console.info(err);
@@ -92,7 +92,7 @@
           this.$api.queryLastBook(base, counter, option).then((data) => {
             if (data.count > 0) {
               data.exchanges.forEach((item) => {
-                this.lastBooks.push(this.processLastBooks(item));
+                this.lastBooks.push(this.processRippleLastBooks(item));
               });
             }
           }).catch((err) => {
@@ -103,8 +103,8 @@
         }
 
       },
-      processLastBooks (item) {
-        let price = mathUtils.round(item.counter_amount / item.base_amount, 2);
+      processStellarLastBooks (item) {
+        let price = mathUtils.round(item.counter_amount / item.base_amount, 6);
         let now = moment().format('YYYY-MM-DD');
         let ledgerCloseDate = moment(item.ledger_close_time).format('YYYY-MM-DD');
         let ledgerCloseTime = moment(item.ledger_close_time).format('HH:mm:SS');
@@ -117,6 +117,31 @@
           baseIsSeller: item.base_is_seller, /*买入还是卖出，true-买入，false-卖出*/
           counterAmount: item.counter_amount,
           counterCode: item.counter_asset_type === 'native' ? 'XLM' : item.counter_asset_code,
+          ledgerCloseTime: ledgerCloseTime,
+          price: price
+        };
+        return result;
+      },
+      processRippleLastBooks (item) {
+        let price = mathUtils.round(item.counter_amount / item.base_amount, 6);
+        let now = moment().format('YYYY-MM-DD');
+        let ledgerCloseDate = moment(item.executed_time).format('YYYY-MM-DD');
+        let ledgerCloseTime = moment(item.executed_time).format('HH:mm:SS');
+        if (!moment(ledgerCloseDate).isSame(now)) {
+          ledgerCloseTime = moment(item.executed_time).format('MM-DD HH:mm:SS');
+        }
+        let baseIsSeller ;
+        if (item.taker === item.buyer){
+          baseIsSeller = true;
+        }else if(item.taker === item.seller){
+          baseIsSeller = false;
+        }
+        let result = {
+          baseCode: item.base_currency,
+          baseAmount:  Number(item.base_amount).toFixed(6).toString(),
+          baseIsSeller: baseIsSeller, /*买入还是卖出，true-买入，false-卖出*/
+          counterAmount: Number(item.counter_amount).toFixed(6).toString(),
+          counterCode: item.counter_currency,
           ledgerCloseTime: ledgerCloseTime,
           price: price
         };

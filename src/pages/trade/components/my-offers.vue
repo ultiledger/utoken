@@ -171,6 +171,7 @@
           }
           if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer)) {
             isSelling = true;
+            let price = Number(new Big(item.specification.quantity.value).div(item.specification.totalPrice.value).toString());
             result.push(
               {
                 id : item.properties.sequence,
@@ -179,13 +180,14 @@
                 sellCode,
                 buyIssuer,
                 sellIssuer,
-                amount: item.specification.quantity.value,
-                price: Number(new Big(item.specification.totalPrice.value).div(item.specification.quantity.value).toString()),
+                amount: item.specification.totalPrice.value,
+                price,
                 tradeTime: ''
               }
             );
           } else if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer)) {
-            let amount = Number(new Big(item.specification.totalPrice.value).div(item.specification.quantity.value).toString());
+            isSelling = false;
+            let price = Number(new Big(item.specification.totalPrice.value).div(item.specification.quantity.value).toString());
             result.push(
               {
                 id : item.properties.sequence,
@@ -194,8 +196,8 @@
                 sellCode,
                 buyIssuer,
                 sellIssuer,
-                amount,
-                price: Number(new Big(item.specification.quantity.value).div(amount).toString()),
+                amount:item.specification.quantity.value,
+                price,
                 tradeTime: ''
               }
             );
