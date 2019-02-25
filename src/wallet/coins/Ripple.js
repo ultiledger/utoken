@@ -299,6 +299,10 @@ class RippleWallet{
           data.asks.map(ret => {
             let amount = ret.specification.quantity.value;
             let price = ret.specification.totalPrice.value / ret.specification.quantity.value;
+            if(ret.state){
+              amount = ret.state.fundedAmount.value;
+              price = ret.state.priceOfFundedAmount.value / ret.state.fundedAmount.value;
+            }
             let r = {
               amount: amount,
               price: price
@@ -308,6 +312,10 @@ class RippleWallet{
           data.bids.map(ret => {
             let amount = ret.specification.quantity.value;
             let price = ret.specification.totalPrice.value / ret.specification.quantity.value;
+            if(ret.state){
+              amount = ret.state.fundedAmount.value;
+              price = ret.state.priceOfFundedAmount.value / ret.state.fundedAmount.value;
+            }
             let r = {
               amount: amount,
               price: price
