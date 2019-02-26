@@ -291,36 +291,62 @@ class RippleWallet{
           }
           orderbook.counter.counterparty = counterSelling.issuer;
         }
-        await this.server.getOrderbook(address, orderbook, {limit: 100}).then((data) => {
+        await this.server.getOrderbook(address, orderbook, {limit: 150}).then((data) => {
           let result = {
             asks: [],
             bids: []
           };
           data.asks.map(ret => {
             let amount = ret.specification.quantity.value;
-            let price = ret.specification.totalPrice.value / ret.specification.quantity.value;
+            let price = Number(new Big(ret.specification.totalPrice.value).div(ret.specification.quantity.value).toFixed(7).toString()).toString();
             if(ret.state){
               amount = ret.state.fundedAmount.value;
-              price = ret.state.priceOfFundedAmount.value / ret.state.fundedAmount.value;
+            }
+            if (Number(amount)===Number(0)){
+              return;
             }
             let r = {
               amount: amount,
               price: price
             };
-            result.asks.push(r);
+            let pop = result.asks.pop();
+            if(!pop){
+              result.asks.push(r);
+            }else {
+              if (pop.price === r.price){
+                pop.amount = Number(new Big(pop.amount).add(r.amount).toFixed(7).toString()).toString();
+                result.asks.push(pop);
+              }else {
+                result.asks.push(pop);
+                result.asks.push(r);
+              }
+            }
           });
           data.bids.map(ret => {
             let amount = ret.specification.quantity.value;
-            let price = ret.specification.totalPrice.value / ret.specification.quantity.value;
+            let price =  Number(new Big(ret.specification.totalPrice.value).div(ret.specification.quantity.value).toFixed(7).toString()).toString();
             if(ret.state){
               amount = ret.state.fundedAmount.value;
-              price = ret.state.priceOfFundedAmount.value / ret.state.fundedAmount.value;
+            }
+            if (Number(amount)===Number(0)){
+              return;
             }
             let r = {
               amount: amount,
               price: price
             };
-            result.bids.push(r);
+            let pop = result.bids.pop();
+            if(!pop){
+              result.bids.push(r);
+            }else {
+              if (pop.price === r.price){
+                pop.amount = Number(new Big(pop.amount).add(r.amount).toFixed(7).toString()).toString();
+                result.bids.push(pop);
+              }else {
+                result.bids.push(pop);
+                result.bids.push(r);
+              }
+            }
           });
           resolve(result);
         }).catch((err) => {
