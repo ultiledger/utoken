@@ -150,28 +150,20 @@
           let buyIssuer = '';
           let sellCode = '';
           let sellIssuer = '';
-          if (item.specification.direction === 'sell') {
-            buyCode = item.specification.totalPrice.currency;
-            sellCode = item.specification.quantity.currency;
-            if (item.specification.totalPrice.counterparty) {
-              buyIssuer = item.specification.totalPrice.counterparty;
-            }
-            if (item.specification.quantity.counterparty) {
-              sellIssuer = item.specification.quantity.counterparty;
-            }
-          } else if (item.specification.direction === 'buy') {
-            buyCode = item.specification.quantity.currency;
-            sellCode = item.specification.totalPrice.currency;
-            if (item.specification.quantity.counterparty) {
-              buyIssuer = item.specification.quantity.counterparty;
-            }
-            if (item.specification.totalPrice.counterparty) {
-              sellIssuer = item.specification.totalPrice.counterparty;
-            }
+          buyCode = item.specification.quantity.currency;
+          sellCode = item.specification.totalPrice.currency;
+          if (item.specification.quantity.counterparty) {
+            buyIssuer = item.specification.quantity.counterparty;
+          }
+          if (item.specification.totalPrice.counterparty) {
+            sellIssuer = item.specification.totalPrice.counterparty;
           }
           if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer)) {
             isSelling = true;
-            let price = Number(new Big(item.specification.totalPrice.value).div(item.specification.quantity.value).toString());
+            if (item.specification.direction === 'sell'){
+              isSelling = false;
+            }
+            let price = Number(new Big(item.specification.quantity.value).div(item.specification.totalPrice.value).toString()).toString();
             result.push(
               {
                 id : item.properties.sequence,
@@ -180,14 +172,17 @@
                 sellCode,
                 buyIssuer,
                 sellIssuer,
-                amount: item.specification.quantity.value,
+                amount: item.specification.totalPrice.value,
                 price,
                 tradeTime: ''
               }
             );
           } else if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer)) {
             isSelling = false;
-            let price = Number(new Big(item.specification.quantity.value).div(item.specification.totalPrice.value).toString());
+            if (item.specification.direction === 'sell'){
+              isSelling = true;
+            }
+            let price = Number(new Big(item.specification.totalPrice.value).div(item.specification.quantity.value).toString()).toString();
             result.push(
               {
                 id : item.properties.sequence,
@@ -196,7 +191,7 @@
                 sellCode,
                 buyIssuer,
                 sellIssuer,
-                amount:item.specification.totalPrice.value,
+                amount:item.specification.quantity.value,
                 price,
                 tradeTime: ''
               }

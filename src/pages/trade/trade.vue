@@ -411,21 +411,12 @@
           }
         }
         if(this.currentAccount.type === AccountType.ripple){
-          if (this.bsFlag === 'buy') {
-            selling.code = this.tradepair.counterCode;
-            selling.issuer = this.tradepair.counterIssuer;
-            buying.code = this.tradepair.baseCode;
-            buying.issuer = this.tradepair.baseIssuer;
-            amount = this.form.amount;
-            price = this.form.price;
-          } else if (this.bsFlag === 'sell') {
-            selling.code = this.tradepair.baseCode;
-            selling.issuer = this.tradepair.baseIssuer;
-            buying.code = this.tradepair.counterCode;
-            buying.issuer = this.tradepair.counterIssuer;
-            amount = this.form.amount;
-            price = this.form.price;
-          }
+          selling.code = this.tradepair.counterCode;
+          selling.issuer = this.tradepair.counterIssuer;
+          buying.code = this.tradepair.baseCode;
+          buying.issuer = this.tradepair.baseIssuer;
+          amount = this.form.amount;
+          price = this.form.price;
         }
 
         this.$wallet.sendOffer(selling, buying, amount, price, this.currentAccount.address, cryptor.decryptAES(this.currentAccount.secret, password), this.bsFlag).then(ret => {
