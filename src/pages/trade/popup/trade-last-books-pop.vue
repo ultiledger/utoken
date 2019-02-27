@@ -91,9 +91,16 @@
         } else if (this.accountType === AccountType.ripple) {
           this.$api.queryLastBook(base, counter, option).then((data) => {
             if (data.count > 0) {
-              data.exchanges.forEach((item) => {
-                this.lastBooks.push(this.processRippleLastBooks(item));
+              let exs = this.preProcessRippleLastBooks(data.exchanges);
+              exs.forEach((item) => {
+                if (item.tx_type ==="OfferCreate"){
+                  let i = this.processRippleLastBooks(item);
+                  if (i){
+                    this.lastBooks.push(i);
+                  }
+                }
               });
+
             }
           }).catch((err) => {
             console.info(err);
@@ -122,6 +129,56 @@
         };
         return result;
       },
+      preProcessRippleLastBooks(exchanges){
+        let preMap = new Map();
+        exchanges.forEach((item) => {
+          if (item.tx_type ==="OfferCreate"){
+            if (preMap.get(item.tx_hash)){
+              let low,hight;
+              let temp = preMap.get(item.tx_hash);
+              if (temp.node_index>item.node_index){
+                hight = temp;
+                low = item;
+              }else {
+                hight = item;
+                low = temp;
+              }
+              let merge={
+                "base_amount": hight.base_amount,
+                "counter_amount": low.base_amount,
+                "node_index": hight.node_index,
+                "rate": low.base_amount / hight.base_amount,
+                "tx_index": hight.tx_index,
+                "base_currency": hight.base_currency,
+                "base_issuer": hight.base_issuer,
+                "buyer": hight.buyer,
+                "counter_currency": low.base_currency,
+                "counter_issuer": low.base_issuer,
+                "executed_time": hight.executed_time,
+                "ledger_index": 45436038,
+                "offer_sequence": hight.offer_sequence,
+                "provider": hight.provider,
+                "seller": hight.taker,
+                "taker": hight.taker,
+                "tx_hash": hight.tx_hash,
+                "tx_type": hight.tx_type
+              };
+
+              preMap.set(item.tx_hash,merge);
+            }else {
+              preMap.set(item.tx_hash,item);
+            }
+          }
+        });
+        // preMap.sort(function(a, b) {
+        //   return b.executed_time > a.executed_time;
+        // });
+        let exs = [];
+        preMap.forEach(ret=>{
+          exs.push(ret);
+        });
+        return exs;
+      },
       processRippleLastBooks (item) {
         let price = mathUtils.round(item.counter_amount / item.base_amount, 6);
         let now = moment().format('YYYY-MM-DD');
@@ -138,14 +195,39 @@
         }
         let result = {
           baseCode: item.base_currency,
+          baseIssuer:item.base_issuer,
           baseAmount:  Number(item.base_amount).toFixed(6).toString(),
           baseIsSeller: baseIsSeller, /*买入还是卖出，true-买入，false-卖出*/
           counterAmount: Number(item.counter_amount).toFixed(6).toString(),
           counterCode: item.counter_currency,
+          counterIssuer:item.counter_issuer,
           ledgerCloseTime: ledgerCloseTime,
           price: price
         };
-        return result;
+        //交易对相同
+        if(this.isSameAsset(this.tradepair.baseCode,this.tradepair.baseIssuer,result.baseCode,result.baseIssuer)
+        && this.isSameAsset(this.tradepair.counterCode,this.tradepair.counterIssuer,result.counterCode,result.counterIssuer)){
+          return result;
+          //交易对相反
+        }else if (this.isSameAsset(this.tradepair.baseCode,this.tradepair.baseIssuer,result.counterCode,result.counterIssuer)
+          && this.isSameAsset(this.tradepair.counterCode,this.tradepair.counterIssuer,result.baseCode,result.baseIssuer)) {
+          return {
+            baseCode: result.counterCode,
+            baseIssuer:result.counterIssuer,
+            baseAmount:  result.counterAmount,
+            baseIsSeller: !result.baseIsSeller, /*买入还是卖出，true-买入，false-卖出*/
+            counterAmount: result.baseAmount,
+            counterCode: result.baseCode,
+            counterIssuer:result.baseIssuer,
+            ledgerCloseTime: result.ledgerCloseTime,
+            price: 1 / price
+          };
+        }
+      },
+      isSameAsset (code, issuer, code2, issuer2) { /*是否是当前交易对*/
+        if (!issuer) issuer="";
+        if (!issuer2) issuer2="";
+        return code == code2 && issuer == issuer2;
       },
       close () {
         this.showPop = false;
