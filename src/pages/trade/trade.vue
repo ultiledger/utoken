@@ -89,9 +89,9 @@
              @touchmove.stop="onTouchMove"
              @touchend.stop="onTouchEnd"
              @touchcancel.stop="onTouchEnd">
-        <div class="single-btn margin-top margin-bottom">
-          <van-button size="large" round type="primary" @click="toInputPassword" v-if="bsFlag === 'buy'">{{$t('trade.buyingCode', {code: tradepair.baseCode})}}</van-button>
-          <van-button size="large" round type="danger" @click="toInputPassword" v-else-if="bsFlag === 'sell'">{{$t('trade.selling')}}{{tradepair.baseCode}}</van-button>
+        <div class="single-btn margin-top margin-bottom" style="margin-right: 50px;margin-left: 50px;">
+          <van-button size="large" round type="primary" class="buy-bg-image" style="border:none;" @click="toInputPassword" v-if="bsFlag === 'buy'">{{$t('trade.buyingCode', {code: tradepair.baseCode})}}</van-button>
+          <van-button size="large" round type="danger" class="sell-bg-image" style="border:none" @click="toInputPassword" v-else-if="bsFlag === 'sell'">{{$t('trade.selling')}}{{tradepair.baseCode}}</van-button>
         </div>
         <van-tabs v-model="tabActive" sticky @change="tabChange">
           <van-tab  :title="$t('trade.marketDepth')">
@@ -485,6 +485,9 @@
       padding: 5px 10px;
     }
     .bs-block {
+      margin-left: 0px;
+      margin-right: 0px;
+      border-radius: 0px;
       .item {
         padding-top:5px;
         padding-bottom: 5px;
@@ -492,20 +495,28 @@
     }
     .buy-btn {
       margin-right: 10px;
-      border: 1px solid $primary-color;
-      color: $primary-color;
+      border: 1px solid #25e5ca;
+      color: #25e5ca;
       &.buy {
-        background-color: $primary-color;
+       /* background-color: #25e5ca;*/
+        background-image: radial-gradient(circle at left top, #25e5ca, #20c9e4);
         color: #ffffff;
       }
     }
+    .buy-bg-image {
+      background-image: radial-gradient(circle at left top, #25e5ca, #20c9e4);
+    }
     .sell-btn {
-      border: 1px solid $danger-color;
-      color: $danger-color;
+      border: 1px solid #f3bc9d;
+      color: #f3bc9d;
       &.sell {
-        background-color: $danger-color;
+        /*background-color: #f78994;*/
+        background-image: radial-gradient(circle at left top, #f3bc9d, #f78994);
         color: #ffffff;
       }
+    }
+    .sell-bg-image {
+      background-image: radial-gradient(circle at left top, #f3bc9d, #f78994);
     }
   }
 </style>

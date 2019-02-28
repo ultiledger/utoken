@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
 import configJS from '../../config';
-import ripple from './ripple';
 Vue.api = {
   checkUpdate (updateUrl) {
     return new window.Promise((resolve, reject) => {
@@ -65,8 +64,7 @@ Vue.api = {
       console.error(e);
       return null;
     }
-  },
-  ...ripple
+  }
 };
 
 const install = (Vue) => {

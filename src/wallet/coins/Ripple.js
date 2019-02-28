@@ -469,5 +469,34 @@ class RippleWallet{
     });
   }
 
+  async queryLastBook (baseBuy, counterSelling, optional = {}) {
+    return new Promise((resolve, reject) => {
+      try{
+        let options = {limit: 1, descending: true};
+        optional.descending = options.descending;
+        if (optional.limit) {
+          options.limit = optional.limit;
+        }
+        let url = `https://data.ripple.com/v2/exchanges/${baseBuy.code}+${baseBuy.issuer}/${counterSelling.code}+${counterSelling.issuer}?limit=${optional.limit}&descending=${optional.descending}`;
+        if (optional.forAccount) {
+          url = `https://data.ripple.com/v2/accounts/${optional.forAccount}/exchanges?descending=true&limit=200`;
+          //url = `https://data.ripple.com/v2/accounts/${optional.forAccount}/exchanges?/${baseBuy.code}+${baseBuy.issuer}/${counterSelling.code}+${counterSelling.issuer}?limit=${optional.limit}&descending=${optional.descending}`;
+        }
+        let xmlhttp = new XMLHttpRequest();  // 创建异步请求
+        xmlhttp.onreadystatechange = () => {
+          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            resolve(JSON.parse(xmlhttp.responseText));
+          } else if (xmlhttp.status === 400) {
+            resolve({data: []});
+          }
+        };
+        xmlhttp.open('GET', url);
+        xmlhttp.send();
+      }catch (err) {
+        reject(err);
+      }
+    });
+  }
+
 }
 export default RippleWallet;

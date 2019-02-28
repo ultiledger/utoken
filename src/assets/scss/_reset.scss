@@ -27,6 +27,14 @@
   color: #fff !important;
   background-image: radial-gradient(circle at left top, #7d8286, #555);
 }
+.van-button--export {
+  color: #fff !important;
+  background-image: radial-gradient(circle at left top, #8aed98, #3bc14e);
+}
+.van-button--import {
+  color: #fff !important;
+  background-image: radial-gradient(circle at left top, #9486f9, #6e5aff);
+}
 
 .van-button {
  font-size: $normal-font;

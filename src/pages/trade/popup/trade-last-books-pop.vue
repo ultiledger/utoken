@@ -14,28 +14,28 @@
         <div class="b-white padding trade-offers">
           <table style="height: 100%;width: 100%;border-collapse:collapse;">
             <tr>
-              <th colspan="1" rowspan="1" class="small-font text-muted text-left">
+              <th colspan="1" rowspan="1" class="small-font text-muted  text-left" v-text="$t('trade.time')"></th>
+              <th colspan="1" rowspan="1" class="small-font text-muted text-left" v-text="$t('trade.direction')"></th>
+              <th colspan="1" rowspan="1" class="small-font text-muted text-right">
                 {{$t('trade.amount')}}({{tradepair.baseCode}})
               </th>
               <th colspan="1" rowspan="1" class="small-font text-muted text-right ">
                 {{$t('trade.price')}}({{tradepair.counterCode}})
               </th>
-              <th colspan="1" rowspan="1" class="small-font text-muted text-right " v-text="$t('trade.direction')"></th>
-              <th colspan="1" rowspan="1" class="small-font text-muted text-right " v-text="$t('trade.time')"></th>
             </tr>
             <tr v-for="(item,index) in lastBooks" :key="index">
-              <td colspan="1" rowspan="1" class="small-font">
+              <td colspan="1" rowspan="1" class="text-left small-font text-muted">
+                {{item.ledgerCloseTime}}
+              </td>
+              <td colspan="1" rowspan="1" class="text-left small-font" :class="item.baseIsSeller? 'text-success': 'text-danger'">
+                <span v-if="item.baseIsSeller" v-text="$t('trade.buying')"></span>
+                <span v-else v-text="$t('trade.selling')"></span>
+              </td>
+              <td colspan="1" rowspan="1" class="small-font text-right">
                 {{item.baseAmount}}
               </td>
               <td colspan="1" rowspan="1" class="text-right small-font" :class="item.baseIsSeller? 'text-success': 'text-danger'">
                 {{item.price | currency('', '7') | cutTail}}
-              </td>
-              <td colspan="1" rowspan="1" class="text-right small-font" :class="item.baseIsSeller? 'text-success': 'text-danger'">
-                <span v-if="item.baseIsSeller" v-text="$t('trade.buying')"></span>
-                <span v-else v-text="$t('trade.selling')"></span>
-              </td>
-              <td colspan="1" rowspan="1" class="text-right small-font text-muted">
-                {{item.ledgerCloseTime}}
               </td>
             </tr>
           </table>
@@ -78,18 +78,12 @@
           option.forAccount = null;
           this.title = this.$t('trade.lastExec');
         }
-        if (this.accountType === AccountType.stellar) {
-          this.$wallet.queryLastBook(base, counter, option).then((data) => {
+        this.$wallet.queryLastBook(base, counter, option).then((data) => {
+          if (this.accountType === AccountType.stellar) {
             data.forEach((item) => {
               this.lastBooks.push(this.processStellarLastBooks(item));
             });
-          }).catch((err) => {
-            console.info(err);
-            this.$toast(this.$t('trade.networkError'));
-            this.lastBooks = [];
-          });
-        } else if (this.accountType === AccountType.ripple) {
-          this.$api.queryLastBook(base, counter, option).then((data) => {
+          } else if (this.accountType === AccountType.ripple) {
             if (data.count > 0) {
               let exs = this.preProcessRippleLastBooks(data.exchanges);
               exs.forEach((item) => {
@@ -100,15 +94,14 @@
                   }
                 }
               });
-
             }
-          }).catch((err) => {
-            console.info(err);
-            this.$toast(this.$t('trade.networkError'));
-            this.lastBooks = [];
-          });
-        }
+          }
 
+        }).catch((err) => {
+          console.info(err);
+          this.$toast(this.$t('trade.networkError'));
+          this.lastBooks = [];
+        });
       },
       processStellarLastBooks (item) {
         let price = mathUtils.round(item.counter_amount / item.base_amount, 6);
