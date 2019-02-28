@@ -132,6 +132,7 @@
     "assetIssuer": "발행자 계정",
     "assetCodeTip":"애셋 코드는 비워 둘 수 없습니다.",
     "assetCodeValid":"자산 코드는 문자 / 숫자 / 밑줄로 구성되어야합니다.",
+    "assetCodeRippleValid":"통화는 3 자리 통화 코드",
     "addressValid":"발급자 계정이 유효하지 않습니다.",
     "assetExit":"저작물이 이미 있습니다.",
     "contractName": "애셋 이름",

@@ -55,6 +55,16 @@ export default {
               tokens.set(tokenConfigs);
             }
             break;
+          case AccountType.ripple:
+            if (tokenConfigs) {
+              tokenConfigs[item.symbol] = {
+                name: item.name,
+                assets: [{code:item.symbol,issuer:item.address,list:true}],
+                logo:''
+              };
+              tokens.set(tokenConfigs);
+            }
+            break;
         }
 
       });

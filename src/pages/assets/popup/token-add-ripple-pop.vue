@@ -24,7 +24,7 @@
         name="symbol"
         v-model="form.issuer"
       />
-      <small class="text-danger padding-left" v-show="!symbolValid">{{$t('assets.assetCodeValid')}}</small>
+      <small class="text-danger padding-left" v-show="!symbolValid">{{$t('assets.assetCodeRippleValid')}}</small>
       <small class="text-danger padding-left" v-show="assetExist">{{$t('assets.assetExit')}}</small>
       <small class="text-danger padding-left" v-show="!addressValid">{{$t('assets.addressValid')}}</small>
     </van-cell-group>
@@ -55,7 +55,7 @@
     watch: {
       'form.issuer' () {
         if (this.form.issuer) {
-          this.addressValid = coins[AccountType.stellar ].wallet.isValidAddress(this.form.issuer);
+          this.addressValid = coins[AccountType.ripple ].wallet.isValidAddress(this.form.issuer);
           this.isAssetExist();
         } else {
           this.addressValid = true;
@@ -63,7 +63,7 @@
       },
       'form.symbol' () {
         if (this.form.symbol) {
-          let re = /^[0-9a-zA-Z_]{1,}$/;
+          let re = /^([a-zA-Z0-9<>(){}[\]|?!@#$%^&*]{3}|[A-F0-9]{40}|drops)$/;
           this.symbolValid = re.test(this.form.symbol);
           this.isAssetExist();
         } else {
@@ -94,7 +94,7 @@
         if (!this.addressValid || !this.symbolValid) {
           return;
         }
-        let tokens = coins[AccountType.stellar].tokens();
+        let tokens = coins[AccountType.ripple].tokens();
         let _form = this.form;
         let exist = false;
         Object.keys(tokens).forEach(key => {
@@ -114,12 +114,12 @@
           symbol: this.form.symbol,
           name: '',
           decimals: Number(this.form.decimals),
-          type: AccountType.stellar,
+          type: AccountType.ripple,
         };
         this.$collecitons.assetConfig.insertAssetConfig(assetConfig);
       },
       setTokens () { // 追加合约到内存
-        let config = tokens.get(AccountType.stellar);
+        let config = tokens.get(AccountType.ripple);
         config[this.form.symbol] = {
           name:'',
           logo:'',

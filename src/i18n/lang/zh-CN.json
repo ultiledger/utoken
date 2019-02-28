@@ -132,6 +132,7 @@
     "assetIssuer": "发行方账号",
     "assetCodeTip":"资产代码不能为空",
     "assetCodeValid":"资产代码必须由字母/数字/下划线组成",
+    "assetCodeRippleValid":"资产代码3位字母组成",
     "addressValid":"发行方账号无效",
     "assetExit":"该资产已经存在",
     "contractName": "资产名称",

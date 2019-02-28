@@ -132,6 +132,7 @@
     "assetIssuer": "発行者アカウント",
     "assetCodeTip":"資産コードは空にできません",
     "assetCodeValid":"資産コードは文字/数字/アンダースコアで構成する必要があります",
+    "assetCodeRippleValid":"通貨は3文字の通貨コードとして表されます",
     "addressValid":"発行者アカウントが無効です",
     "assetExit":"資産は既に存在します",
     "contractName": "アセット名",

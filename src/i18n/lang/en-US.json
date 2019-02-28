@@ -132,6 +132,7 @@
     "assetIssuer": "Issuer account",
     "assetCodeTip":"Asset code cannot be empty.",
     "assetCodeValid":"Asset code must consist of letters/numbers/underscores.",
+    "assetCodeRippleValid":"Currencies are represented as either 3-character currency codes",
     "addressValid":"Issuer account is invalid.",
     "assetExit":"The asset already exists.",
     "contractName": "Asset name",

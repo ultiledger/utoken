@@ -19,7 +19,8 @@ export default{
           });
           return ret;
         case AccountType.ripple:
-          Object.keys(coin.tokens()).forEach(key => {
+          let cr = coin.tokens();
+          Object.keys(cr).forEach(key => {
             let gateway = coin.tokens()[key];
             gateway.assets.forEach(item => {
               if (item.list) {
@@ -34,8 +35,8 @@ export default{
           });
           return ret;
         case AccountType.stellar:
-          var c = coin.tokens();
-          Object.keys(c).forEach(key => {
+          let cs = coin.tokens();
+          Object.keys(cs).forEach(key => {
             let gateway = coin.tokens()[key];
             gateway.assets.forEach(item => {
               if (item.list) {

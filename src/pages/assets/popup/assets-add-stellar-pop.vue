@@ -54,6 +54,7 @@
   import coins from 'src/wallet/coins';
   import asset from '../mixns/asset';
   import passwordDialog from '../../ui/password-dialog';
+  import tokenConfigHepler from 'src/core/utils/tokenConfigHepler';
   import cryptor from 'core/utils/cryptor';
   import Big from 'big.js';
   export default {
@@ -81,35 +82,64 @@
     //   this.init();
     // },
     methods: {
-      init () {
+      async init () {
         let account = this.$store.state.account;
         this.searchValue = '';
         this.curreAcctountAddress = account.address;
+        await tokenConfigHepler.settingConfig();
         this.assets = this.getAssets(account.type);
       },
       getAssets (type) {
         let coin = coins[type];
-        let result = [
-          {
-            code: coin.symbol,
-            canSelect: false,
-            loading: false
-          }
-        ];
+        let result = [];
 
+        // 账户本身信任的资产
         let selectAssets = this.$store.state.balances[this.curreAcctountAddress];
+        let balancesAssetsArray=[];
         let selectAssetsCode = selectAssets.map(item => {
+          balancesAssetsArray.push({
+            id:item.code+(item.issuer||''),
+            code:item.code,
+            issuer:item.issuer,
+            logo:item.logo || ''
+          });
          return item.code + (item.issuer || '');
         }).join(',');
-
+        // config assets的资产
         let configAssets = this.getConfigAssets(type);
-        configAssets.forEach(token => {
+        let configAssetsArray=[];
+        configAssets.forEach(item => {
+          configAssetsArray.push({
+            id:item.code+(item.issuer||''),
+            code:item.code,
+            issuer:item.issuer,
+            logo:item.logo || ''
+          });
+        });
+        // 取并集
+        let assetsArray = Array.from(this.mergeArrays([balancesAssetsArray,configAssetsArray],'id'));
+        assetsArray.forEach(token => {
           let selected = selectAssetsCode.indexOf(token.code + token.issuer) !== -1;
           token.logo = (!token.logo || token.logo === '')? 'static/img/unknown.png':token.logo;
           let item = {...token, canSelect: true, selected: selected, loading: false};
+          if (item.id === coin.symbol){
+            item.code = coin.symbol;
+            item.logo ="static/img/"+item.code+"@3x.png";
+            item.canSelect = false;
+            item.loading = false;
+          }
           result.push(item);
         });
         return result;
+      },
+      mergeArrays(arrays, prop) {
+        const merged = {};
+        arrays.forEach(arr => {
+          arr.forEach(item => {
+            merged[item[prop]] = Object.assign({}, merged[item[prop]], item);
+          });
+        });
+        return Object.values(merged);
       },
       changeAssets (asset) {
         let balance = this.getBalance(asset.code, asset.issuer).value;

@@ -16,6 +16,7 @@
     </van-popup>
     <token-add ref="tokenAdd" @reload="reload"></token-add>
     <token-add-stellar ref="tokenAddStellar" @reload="reload"></token-add-stellar>
+    <token-add-ripple ref="tokenAddRipple" @reload="reload"></token-add-ripple>
   </div>
 </template>
 <script>
@@ -26,6 +27,7 @@
   import btcion from './assets-add-btcion-pop';
   import tokenAdd from './token-add-pop';
   import tokenAddStellar from './token-add-stellar-pop';
+  import tokenAddRipple from './token-add-ripple-pop';
 
   export default{
     data () {
@@ -41,7 +43,8 @@
       [AccountType.stellar]: stellar,
       [AccountType.ripple]: ripple,
       tokenAdd,
-      tokenAddStellar
+      tokenAddStellar,
+      tokenAddRipple
     },
     computed: {
       type () {
@@ -68,6 +71,9 @@
             break;
           case AccountType.stellar:
             this.$refs.tokenAddStellar.show();
+            break;
+          case AccountType.ripple:
+            this.$refs.tokenAddRipple.show();
             break;
           default:
             break;
