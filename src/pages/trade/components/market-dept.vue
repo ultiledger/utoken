@@ -13,8 +13,8 @@
                  :style="`background: linear-gradient(to left, #dcf6de ${item.pct}%, #fff ${item.pct}%)`"
                  :key="index"
                  @click.stop="selectOnePrice(item)">
-              <div class="text-left text-muted"> {{item.amount | currency('', '4')}}</div>
-              <div class="text-right small-font"> {{item.price | currency('', '7')}}</div>
+              <div class="text-left" style="color:#14ad98"> {{item.amount | currency('', '4')}}</div>
+              <div class="text-right small-font" style="color:#14ad98"> {{item.price | currency('', '7')}}</div>
             </div>
           </div>
         </van-col>
@@ -29,8 +29,8 @@
                  :style="`background: linear-gradient(to right, #fed6d8 ${item.pct}%, #fff ${item.pct}%)`"
                  :key="index"
                  @click.stop="selectOnePrice(item)">
-              <div class="text-left">{{item.price | currency('', '7')}}</div>
-              <div class="text-muted text-right small-font"> {{item.amount | currency('', '4')}}</div>
+              <div class="text-left" style="color:#ee5d81">{{item.price | currency('', '7')}}</div>
+              <div class="text-right small-font" style="color:#ee5d81"> {{item.amount | currency('', '4')}}</div>
             </div>
           </div>
         </van-col>
