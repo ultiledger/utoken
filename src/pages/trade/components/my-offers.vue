@@ -20,13 +20,13 @@
             </th>
           </tr>
           <tr>
-            <td colspan="1" rowspan="1" class="small-font">
+            <td colspan="1" rowspan="1" class="small-font" :style="{color:item.isSelling?'#ed4f78': '#00ac94'}">
               {{item.price | currency('', '7') | cutTail}}
             </td>
-            <td colspan="1" rowspan="1" class="text-right small-font text-muted">
+            <td colspan="1" rowspan="1" class="text-right small-font" :style="{color:item.isSelling?'#ed4f78': '#00ac94'}">
               {{item.amount | currency('', '7') | cutTail}}
             </td>
-            <td colspan="1" rowspan="1" class="text-right small-font text-muted">
+            <td colspan="1" rowspan="1" class="text-right small-font" :style="{color:item.isSelling?'#ed4f78': '#00ac94'}">
               0
             </td>
           </tr>
