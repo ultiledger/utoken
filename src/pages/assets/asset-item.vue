@@ -46,7 +46,7 @@
               <van-icon v-else name="password-not-view" @click="setMode(false)"/>
             </span>
           </div>
-          <span class="add-btn" style="right: 70px;" @click="toTrade" v-if="showTradeBtn">
+          <span class="add-btn" style="right: 60px;background-color: #00c2c2" @click="toTrade" v-if="showTradeBtn">
             <img :src="dprImg(`trade.png`)" width="20" height="20">
           </span>
           <span class="add-btn" @click="addAssets" v-if="showAddBtn">
@@ -83,10 +83,20 @@
                       <pl-privacy :switchable="false">{{item.value | currency('', '8') | cutTail}}</pl-privacy>
                     </div>
                     <div class="text-main small-font" v-if="isShowMarket(item.value, item.code, item.issuer)">
-                      &#8776;&nbsp;
-                      <pl-privacy :suffix="$store.state.setting.currencyUnit" :switchable="false">
-                        {{item.value | market(item.code, item.issuer)}}
-                      </pl-privacy>
+                      <div v-if="item.code !== 'XLM'">
+                        &#8776;&nbsp;
+                        <pl-privacy :suffix="$store.state.setting.currencyUnit"
+                                    :switchable="false">
+                          {{item.value | market(item.code, item.issuer)}}
+                        </pl-privacy>
+                      </div>
+                      <div v-if="item.code === 'XLM'">
+                        {{$t('assets.frozenNative')}}
+                        <pl-privacy :suffix="$store.state.setting.currencyUnit"
+                                    :switchable="false">
+                          {{item.frozenNative}} XLM
+                        </pl-privacy>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -134,7 +144,7 @@
         }
       },
       showTradeBtn () {
-        if (this.data && this.data.type === AccountType.stellar) {
+        if (this.data && (this.data.type === AccountType.stellar || this.data.type === AccountType.ripple)) {
           return true;
         } else {
           return false;
@@ -157,7 +167,7 @@
               let assetMap = assetsMap[item.code + (item.issuer || '')];
               if (assetMap) {
                 asset.logo = assetMap.logo || '';
-                asset.name = assetMap.name;
+                asset.name = assetMap.name || 'unknown';
                 asset.issuer = assetMap.issuer;
                 assets.push(asset);
               } else if (index === 0) {
@@ -327,6 +337,8 @@
     }
     .asset-bar{
       padding: 25px 20px 10px;
+      padding-left: 10px;
+      padding-right: 10px;
       position: relative;
       line-height: 30px;
       .add-btn{
@@ -339,7 +351,8 @@
         display: block;
         position: absolute;
         top:22px;
-        right: 20px;
+       /* right: 20px;*/
+        right: 10px;
         color: $primary-color;
         padding: 5px;
         box-shadow: 0px -2px 20px rgba(0,0,0,0.05);
@@ -350,6 +363,8 @@
       .asset-list-item{
         height: 80px;
         padding: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
         .title{
           @include clearfix();
           margin-bottom: 2px;

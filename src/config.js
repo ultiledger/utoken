@@ -9,5 +9,8 @@ export default {
   },
   updateUrl: 'https://api.github.com/repos/gylsz-dev/utoken/releases/latest', // 检查更新地址
   downloadUrl: 'https://www.pgyer.com/apiv2/app/install?appKey=1d15c396db9ba6a6ba1cb1473a38c407&_api_key=f16c6672198f996f3cd8ff9e3c4d5e02', // 安卓安装包下载地址
-  officialWebsite: 'https://utoken.cash/#/' // 官网
+  officialWebsite: 'https://utoken.cash/#/',// 官网
+  configUrl:'https://ultiledger.github.io/hd-wallet/pages/config.json',
+  configVersionUrl:'https://ultiledger.github.io/hd-wallet/pages/config_version.json'
+
 };

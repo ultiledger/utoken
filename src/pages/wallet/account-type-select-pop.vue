@@ -22,7 +22,6 @@
           </top-block>
           <type-select
             v-model="accountTypes"
-            :filter-types.sync="filterTypes"
             :clickable="false"></type-select>
         </content-block>
       </pl-content-block>
@@ -70,16 +69,16 @@
         }
         this.source = source;
         // 根据来源查询账户里面是否已经存在，如果存在则不允许新增了
-        let identitys = this.$collecitons.identity.findBySource(SourceType.CREATED);
-        if (identitys && identitys.length > 0) {
-          let identity = identitys[0];
-          let accounts = this.$collecitons.account.findByIdentityId(identity.id);
-          if (accounts && accounts.length > 0) {
-            this.filterTypes = accounts.map(item => {
-              return item.type;
-            });
-          }
-        }
+        // let identitys = this.$collecitons.identity.findBySource(SourceType.CREATED);
+        // if (identitys && identitys.length > 0) {
+        //   let identity = identitys[0];
+        //   let accounts = this.$collecitons.account.findByIdentityId(identity.id);
+        //   if (accounts && accounts.length > 0) {
+        //     this.filterTypes = accounts.map(item => {
+        //       return item.type;
+        //     });
+        //   }
+        // }
         this.showVpop = true;
       },
       close () {

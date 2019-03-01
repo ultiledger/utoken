@@ -128,6 +128,13 @@
     "changeTrustNoIssuer": "자산의 발행인이 존재하지 않습니다",
     "changeTrustFail": "신용공여에 실패했습니다",
     "trustRemoveTip": "잔액이 0일 경우만이 신용공여를 삭제할 수 있습니다",
+    "assetCode": "자산 코드",
+    "assetIssuer": "발행자 계정",
+    "assetCodeTip":"애셋 코드는 비워 둘 수 없습니다.",
+    "assetCodeValid":"자산 코드는 문자 / 숫자 / 밑줄로 구성되어야합니다.",
+    "assetCodeRippleValid":"통화는 3 자리 통화 코드",
+    "addressValid":"발급자 계정이 유효하지 않습니다.",
+    "assetExit":"저작물이 이미 있습니다.",
     "contractName": "애셋 이름",
     "contractNameTip": "애셋 이름은 비워 둘 수 없습니다.",
     "contractSymbol": "자산 기호",
@@ -140,7 +147,8 @@
     "contractAddressValid": "계약 주소 또는 ENS가 잘못되었습니다.",
     "contractAddressExist": "계약 주소가 이미 있습니다.",
     "contractERC-20Valid": "무효 ERC-20 Token",
-    "contractAddressFail": "애셋 계약 취득에 실패했습니다."
+    "contractAddressFail": "애셋 계약 취득에 실패했습니다.",
+    "frozenNative":"냉동"
   },
   "find": {
     "discovery": "발견",
@@ -237,7 +245,7 @@
     "nameNotEmpty": "이름은 비워 둘 수 없습니다."
   },
   "transaction": {
-    "balance": "균형",
+    "balance": "사용 가능한 잔액",
     "amtPlaceholder": "금액을 입력하려면 클릭하십시오.",
     "minerFee": "광 회비",
     "slow": "느리게",
@@ -354,6 +362,7 @@
     "name": "거래",
     "buying": "구매",
     "selling": "판매하다",
+    "buyingCode": "구매{code}",
     "available": "사용 가능한 자산",
     "youAsset": "너 자신이야.",
     "buyPrice": "입찰 가격",
@@ -366,6 +375,7 @@
     "sellPrice": "판매 가격",
     "sellAmount": "판매 주문 수",
     "lastExec": "최근 거래",
+    "myExec": "내 거래",
     "myOffer": "나의 커미션",
     "cancel": "취소",
     "price": "가격",

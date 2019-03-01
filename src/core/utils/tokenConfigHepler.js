@@ -3,6 +3,7 @@ import axios from 'axios';
 import store from '../store';
 import Vue from "vue";
 import getMarket from './market';
+import {AccountType} from "../../wallet/constants";
 
 export default {
   async settingConfig () {
@@ -29,18 +30,43 @@ export default {
       // 把新增的合约加载到内存
       let assetConfigs = Vue.collecitons.assetConfig.findAll();
       assetConfigs.forEach(item => {
-        let tokenconfigs = tokens.get(item.type);
-        if (tokenconfigs) {
-          tokenconfigs[item.symbol] = {
-            symbol: item.symbol,
-            name: item.name,
-            displayName: item.name,
-            decimals: item.decimals,
-            address: item.address.toLocaleLowerCase(),
-            abi: item.abi
-          };
-          tokens.set(tokenconfigs);
+        let tokenConfigs = tokens.get(item.type);
+        switch (item.type) {
+          case AccountType.ethereum:
+            if (tokenConfigs) {
+              tokenConfigs[item.symbol] = {
+                symbol: item.symbol,
+                name: item.name,
+                displayName: item.name,
+                decimals: item.decimals,
+                address: item.address.toLocaleLowerCase(),
+                abi: item.abi
+              };
+              tokens.set(tokenConfigs);
+            }
+            break;
+          case AccountType.stellar:
+            if (tokenConfigs) {
+              tokenConfigs[item.symbol] = {
+                name: item.name,
+                assets: [{code:item.symbol,issuer:item.address,list:true}],
+                logo:''
+              };
+              tokens.set(tokenConfigs);
+            }
+            break;
+          case AccountType.ripple:
+            if (tokenConfigs) {
+              tokenConfigs[item.symbol] = {
+                name: item.name,
+                assets: [{code:item.symbol,issuer:item.address,list:true}],
+                logo:''
+              };
+              tokens.set(tokenConfigs);
+            }
+            break;
         }
+
       });
 
     }

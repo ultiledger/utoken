@@ -9,7 +9,7 @@
         :accounts.sync="createAccounts"
         :title="$t('assets.currentAccount')"
         :opt-text="$t('common.add')"
-        :opt-falg.sync="createAccounts.length < 4"
+        :opt-falg.sync="createAccounts.length < 100"
         isImport
         @opt="addWalletAcct"
         @viewDetail="toAcctDetail"

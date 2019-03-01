@@ -23,11 +23,26 @@ export default {
         // 加密密码
         let password = cryptor.encryptMD5(walletPwd);
         // 创建账户钱包
+        /* 1. 检查本地是否存在该accountType的账户
+           2. 如果不存在，则创建index=0的账户；如果存在，找出当下最大的index并计算下一个index的值，再创建账户
+
+         */
         accountType.forEach(item => {
-          let account = wallet.getAccount(coin[item], 0);
+          let accounts = this.$collecitons.account.findByType(item);
+          let pathIndex = -1;
+          accounts.forEach(item => {
+            // 因在支持多账户前，pathIndex不存在，因此如果pathIndex字段不存在，则认为是0
+            if ( ! item.pathIndex){
+              item.pathIndex = 0;
+            }
+            pathIndex = item.pathIndex > pathIndex ? item.pathIndex:pathIndex;
+          });
+          pathIndex = pathIndex + 1;
+          let account = wallet.getAccount(coin[item], pathIndex);
           this.$collecitons.account.insertAccount({
             identityId: identity.id,
             address: account.address,
+            pathIndex:pathIndex,
             type: item,
             secret: cryptor.encryptAES(account.secret, walletPwd),
             name: this.$collecitons.account.genAccountName(item),
@@ -134,18 +149,24 @@ export default {
       if (accountType === AccountType.ethereum) {
         let tokens = coin[accountType].tokens();
         if (tokens) {
-          let ULT = tokens['ULT'];
-          this.$collecitons.asset.insertAsset({
-            address: account.address,
-            code: ULT.symbol,
-            name: ULT.name});
-          let DBT = tokens['DBT'];
-          this.$collecitons.asset.insertAsset({
-            address: account.address,
-            code: DBT.symbol,
-            name: DBT.name});
+          this.saveDefaultToken(tokens['ULT'],account.address);
+          this.saveDefaultToken(tokens['DBT'],account.address);
         }
       }
+    },
+    saveDefaultToken(token,address){
+      let t = this.$collecitons.asset.getInstance().find({address:address,code:token.symbol});
+      if(t && t.length >0){
+        this.$collecitons.asset.findAndUpdateAsset({address:address,code:token.symbol},(asset) => {
+          return asset.selected = true;
+        });
+        return;
+      }
+      this.$collecitons.asset.insertAsset({
+        address: address,
+        code: token.symbol,
+        name: token.name,
+        selected: true });
     },
     /**
      * 筛选出没有选中的账户类型,并创建

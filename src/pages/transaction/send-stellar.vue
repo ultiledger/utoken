@@ -151,6 +151,7 @@
     watch: {
       'form.receiveAddress' () {
         if (this.form.receiveAddress) {
+
           if (!this.$wallet.isValidAddress(this.form.receiveAddress)) {
             this.addressValid = false;
             this.addressActivated = true;
@@ -204,7 +205,12 @@
     },
     computed: {
       balance () {
-        return this.getBalance(this.asset.code, this.asset.issuer).value;
+        let value = this.getBalance(this.asset.code, this.asset.issuer).value;
+        let frozenNative = this.getBalance(this.asset.code, this.asset.issuer).frozenNative;
+        if (frozenNative && frozenNative <= value){
+          value = value - frozenNative;
+        }
+        return value;
       },
       isValidMemo () {
         if (this.form.memo) {

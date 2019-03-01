@@ -68,6 +68,10 @@ class Asset {
     instance = db.getCollection('asset') || db.addCollection('asset');
     return this;
   }
+
+  static findAndUpdateAsset(obj, updateFunction) {
+    return instance.findAndUpdate(obj, updateFunction);
+  }
   /**
    * 返回asset表信息
    * @param db

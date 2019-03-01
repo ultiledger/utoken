@@ -158,7 +158,7 @@ export const initData = ({commit, state, dispatch}) => {
     doInitScript(updateSetting, dispatch);
     let account = Vue.collecitons.account.findByAddress(setting.defaultAddress);
     dispatch('setAccount', account);
-  } else {
+  } else if (!setting){
     setting = {...state.setting};
     Vue.collecitons.setting.insertSetting(JSON.parse(JSON.stringify(setting)));
   }

@@ -128,6 +128,13 @@
     "changeTrustNoIssuer": "The issuer of the asset cannot be found",
     "changeTrustFail": "Trust Fail",
     "trustRemoveTip": "Trust is removable when balance is 0",
+    "assetCode": "Asset code",
+    "assetIssuer": "Issuer account",
+    "assetCodeTip":"Asset code cannot be empty.",
+    "assetCodeValid":"Asset code must consist of letters/numbers/underscores.",
+    "assetCodeRippleValid":"Currencies are represented as either 3-character currency codes",
+    "addressValid":"Issuer account is invalid.",
+    "assetExit":"The asset already exists.",
     "contractName": "Asset name",
     "contractNameTip": "Asset name cannot be empty.",
     "contractSymbol": "Asset symbol",
@@ -140,7 +147,8 @@
     "contractAddressValid": "Contract address or ENS is invalid",
     "contractAddressExist": "contract address already exists",
     "contractERC-20Valid": "Valid ERC-20 Token",
-    "contractAddressFail": "Asset contract acquisition failed"
+    "contractAddressFail": "Asset contract acquisition failed",
+    "frozenNative":"Frozen"
   },
   "find": {
     "discovery": "Discovery",
@@ -237,7 +245,7 @@
     "privacyMode": "Privacy Mode"
   },
   "transaction": {
-    "balance": "Balance",
+    "balance": "Available Balance",
     "amtPlaceholder": "Click And Input Amount",
     "minerFee": "Gas Fee",
     "slow": "Slow",
@@ -353,6 +361,7 @@
   "trade": {
     "name": "Trade",
     "buying": "Buying",
+    "buyingCode": "Buying{code}",
     "selling": "Selling",
     "available": "Available",
     "youAsset": "You own",
@@ -366,6 +375,7 @@
     "sellPrice": "Sell Price",
     "sellAmount": "Sell Amount",
     "lastExec": "Latest Execution",
+    "myExec": "My Deal",
     "myOffer": "My Offer",
     "cancel": "Cancel",
     "price": "Price",

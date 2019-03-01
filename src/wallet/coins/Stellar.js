@@ -57,20 +57,31 @@ class StellarWallet {
       let ret = await this.server.loadAccount(address);
       let balances = [];
       let native;
+      let frozenNative=0;
       ret.balances.forEach(item => {
         if (item.asset_type === 'native') {
           native = {
             code: CoinType.XLM,
             value: item.balance
           };
+          frozenNative = frozenNative + 1;
         } else {
           balances.push({
             code: item.asset_code,
             value: item.balance,
             issuer: item.asset_issuer
           });
+          frozenNative = frozenNative + 0.5;
         }
       });
+      await this.queryOffers(address).then((datas) => {
+        if (datas){
+          frozenNative = frozenNative + datas.length;
+        }
+      }).catch(() => {
+
+      });
+      native.frozenNative = frozenNative;
       balances.unshift(native);
       return balances;
     } catch (e) {
@@ -84,6 +95,9 @@ class StellarWallet {
 
   async isTrustAsset(address, assetCode, assetIssuer) {
     if (CoinType.XLM === assetCode && !assetIssuer) {
+      return true;
+    }
+    if (address && assetIssuer && address === assetIssuer) {
       return true;
     }
     let balances = await  this.getBalances(address);
@@ -267,6 +281,25 @@ class StellarWallet {
     }
     return asset;
   }
+  /**
+   * 判断两个资产是否是同一个
+   * @param code 资产代码（简称）
+   * @param issuer （资产合约，XLM是空）
+   * @returns {*}
+   */
+  compareAsset (asset1, asset2) {
+    if (asset1.issuer || asset2.issuer) {
+      if (asset1.issuer === asset2.issuer
+      && asset1.code === asset2.code) {
+        return true;
+      }
+    }else {
+      if (asset1.code === asset2.code) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /**
    * 获取兑换path，返回数组形式
@@ -370,18 +403,51 @@ class StellarWallet {
    */
   async queryLastBook (baseBuy, counterSelling, optional = {}) {
     return new Promise(async (resolve, reject)=>{
-      try {
-        let action =  this.server.trades().forAssetPair(this.getAsset(baseBuy), this.getAsset(counterSelling)).order(optional.order || 'desc');
-        if (optional.limit) {
-          action = action.limit(optional.limit);
+      //my last book
+      if (optional.forAccount) {
+        try {
+          let action = this.server.trades().forAssetPair(this.getAsset(baseBuy), this.getAsset(counterSelling))
+            .forAccount(optional.forAccount)
+            .order(optional.order || 'desc');
+          if (optional.limit) {
+            action = action.limit(optional.limit);
+          }
+          if (optional.cursor) {
+            action = action.cursor(optional.cursor);
+          }
+          let page = await action.call();
+          let records=[];
+          if (page.records) {
+            page.records.forEach((item) => {
+              let baseAsset = this.getAsset(item.base_asset_code,item.base_asset_issuer);
+              let counterAsset = this.getAsset(item.counter_asset_code,item.counter_asset_issuer);
+              if (this.compareAsset(baseAsset,this.getAsset(baseBuy))
+                && this.compareAsset(counterAsset,this.getAsset(counterSelling))){
+                records.push(item);
+              }else if(this.compareAsset(counterAsset,this.getAsset(baseBuy))
+                && this.compareAsset(baseAsset,this.getAsset(counterSelling))){
+                records.push(item);
+              }
+            });
+          }
+          resolve(records);
+        } catch (err) {
+          reject(err);
         }
-        if (optional.cursor) {
-          action = action.cursor(optional.cursor);
+      }else {
+        try {
+          let action =  this.server.trades().forAssetPair(this.getAsset(baseBuy), this.getAsset(counterSelling)).order(optional.order || 'desc');
+          if (optional.limit) {
+            action = action.limit(optional.limit);
+          }
+          if (optional.cursor) {
+            action = action.cursor(optional.cursor);
+          }
+          let page = await action.call();
+          resolve(page.records);
+        } catch (err) {
+          reject(err);
         }
-        let page = await action.call();
-        resolve(page.records);
-      } catch (err) {
-        reject(err);
       }
     });
   }

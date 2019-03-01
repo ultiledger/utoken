@@ -12,10 +12,11 @@ class Account {
    * @param mnemonicCodeLanguage (助记词)-语言版本
    * @param state (状态)-N-正常，D-删除
    */
-  constructor (address, identityId, type, name, password, mnemonicCode, secret, mnemonicCodeLanguage, state) {
+  constructor (address, identityId, type, pathIndex,name, password, mnemonicCode, secret, mnemonicCodeLanguage, state) {
     this.address = address;
     this.identityId = identityId;
     this.type = type;
+    this.pathIndex = pathIndex;
     this.secret = secret;
     this.name = name;
     this.password = password;
@@ -41,6 +42,7 @@ class Account {
     {
       identityId = '',
       address = '',
+      pathIndex = 0,
       type = '',
       secret = '',
       name = '',
@@ -50,7 +52,7 @@ class Account {
       mnemonicCodeLanguage = 'english'
     } = {}
   ) {
-    let account = new Account(address, identityId, type, name, password, mnemonicCode, secret, mnemonicCodeLanguage, state);
+    let account = new Account(address, identityId, type, pathIndex, name, password, mnemonicCode, secret, mnemonicCodeLanguage, state);
     instance.insert(account);
     return this;
   }

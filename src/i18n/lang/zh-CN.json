@@ -128,6 +128,13 @@
     "changeTrustNoIssuer": "资产的发行人不存在",
     "changeTrustFail": "授信失败",
     "trustRemoveTip": "余额为零时才可以删除授信",
+    "assetCode": "资产代码",
+    "assetIssuer": "发行方账号",
+    "assetCodeTip":"资产代码不能为空",
+    "assetCodeValid":"资产代码必须由字母/数字/下划线组成",
+    "assetCodeRippleValid":"资产代码3位字母组成",
+    "addressValid":"发行方账号无效",
+    "assetExit":"该资产已经存在",
     "contractName": "资产名称",
     "contractNameTip": "资产名称不能为空！",
     "contractSymbol": "资产符号",
@@ -140,7 +147,8 @@
     "contractAddressValid": "合约地址或ENS无效",
     "contractAddressExist": "该合约地址已经存在",
     "contractERC-20Valid": "非法的ERC-20 Token",
-    "contractAddressFail": "资产合约获取失败"
+    "contractAddressFail": "资产合约获取失败",
+    "frozenNative":"冻结"
   },
   "find": {
     "discovery": "发现",
@@ -237,7 +245,7 @@
     "nameNotEmpty": "名称不能为空！"
   },
   "transaction": {
-    "balance": "余额",
+    "balance": "可用余额",
     "amtPlaceholder": "点击输入金额",
     "minerFee": "矿工费",
     "slow": "慢",
@@ -359,6 +367,7 @@
   "trade": {
     "name": "交易",
     "buying": "买入",
+    "buyingCode": "买入{code}",
     "selling": "卖出",
     "available": "可用资产",
     "youAsset": "你拥有",
@@ -372,6 +381,7 @@
     "sellPrice": "卖单价格",
     "sellAmount": "卖单数量",
     "lastExec": "最近成交",
+    "myExec": "我的成交",
     "myOffer": "我的委托",
     "cancel": "撤销",
     "price": "价格",

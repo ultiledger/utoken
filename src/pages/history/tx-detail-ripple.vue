@@ -16,7 +16,7 @@
             <div class="text-muted small-font">{{$t('history.amount')}}</div>
           </van-col>
           <van-col span="18">
-            <div class="big-font">{{item.amount | currency('', '7') | cutTail}}&nbsp;&nbsp;XRP</div>
+            <div class="big-font">{{item.amount | currency('', '7') | cutTail}}&nbsp;&nbsp;{{item.assetCode}}</div>
           </van-col>
         </van-row>
       </div>
@@ -26,7 +26,7 @@
             <p class="text-muted small-font" v-text="$t('common.transactionFee')"></p>
           </van-col>
           <van-col span="18">
-            <div class="small-font">{{item.fee}}&nbsp;&nbsp;{{item.assetCode}}</div>
+            <div class="small-font">{{item.fee}}&nbsp;&nbsp;XRP</div>
           </van-col>
         </van-row>
       </div>
