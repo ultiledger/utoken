@@ -51,10 +51,13 @@
   .application {
     .van-card {
       background: #fff;
-      padding: 5px 15px 5px 100px;
+      padding: 5px 15px 5px 5px;
       border-radius: $border-radius;
       .van-card__thumb {
-        left: 0px!important;
+        display:flex;
+        display: -webkit-flex;
+        align-items:center;
+
       }
     }
     .card-title {
