@@ -9,7 +9,7 @@ Your key is encrypted in your local storage
 
 - A set of mnemonics, easy to manage
 - Offline transaction signing. Protect the secret key from exposure to the Internet.
-- Send/receive/convert xrp, xlm, assets and tokens.
+- Send/receive/convert/trade xrp, xlm, assets and tokens.
 - Send/receive ETH and ERC20 tokens.
 - Send/receive BTC
 - Buy/sell xlm, xrp, assets and tokens
@@ -59,7 +59,7 @@ cordova build android
 
 - 无需注册，一套助记词管理跨连钱包，加密存在本地。
 - 交易本地签名。密钥不会暴露到因特网。
-- 瑞波恒星支持发送、兑换任意资产。
+- 瑞波恒星支持发送、兑换、交易任意资产。
 - 支持发送接收 ETH 和 ERC20 tokens.
 - 支持发送接收 BTC
 - 查询资产和历史记录。
