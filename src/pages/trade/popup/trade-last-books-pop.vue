@@ -85,7 +85,12 @@
             });
           } else if (this.accountType === AccountType.ripple) {
             if (data.count > 0) {
-              let exs = this.preProcessRippleLastBooks(data.exchanges);
+              let exs = [];
+              if (option.forAccount){
+                exs = this.preProcessRippleLastBooks(data.exchanges);
+              }else {
+                exs = data.exchanges;
+              }
               exs.forEach((item) => {
                 if (item.tx_type ==="OfferCreate"){
                   let i = this.processRippleLastBooks(item);
