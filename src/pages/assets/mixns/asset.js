@@ -19,6 +19,7 @@ export default{
           });
           return ret;
         case AccountType.ripple:
+        {
           let cr = coin.tokens();
           Object.keys(cr).forEach(key => {
             let gateway = coin.tokens()[key];
@@ -34,7 +35,9 @@ export default{
             });
           });
           return ret;
+        }
         case AccountType.stellar:
+        {
           let cs = coin.tokens();
           Object.keys(cs).forEach(key => {
             let gateway = coin.tokens()[key];
@@ -50,6 +53,7 @@ export default{
             });
           });
           return ret;
+        }
         default:
           return [];
       }

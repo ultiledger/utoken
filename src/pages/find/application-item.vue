@@ -51,7 +51,7 @@
   .application {
     .van-card {
       background: #fff;
-      padding: 5px 15px 5px 5px;
+      padding: 5px 15px 5px 100px;
       border-radius: $border-radius;
       .van-card__thumb {
         display:flex;
