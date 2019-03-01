@@ -15,22 +15,22 @@
         <span slot="left"><i class="ultfont ult-left"></i></span>
         <i slot="right" @click.stop="toAddTradepair" class="ultfont ult-plus"></i>
       </van-nav-bar>
-      <pl-content-block :offsetTop="46">
+      <pl-content-block :offsetTop="46" class="b-white">
         <div style="padding-top: 10px;padding-left: 20px;text-align: center;">
           <span class="bs-btn buy-btn" :class="bsFlag" @click.stop="toBs('buy')" v-text="$t('trade.buying')"></span>
           <span class="bs-btn sell-btn" :class="bsFlag" @click.stop="toBs('sell')" v-text="$t('trade.selling')"></span>
         </div>
 
         <div class="bs-block item-block">
-          <div class="text-muted b-white item">
+          <div class="text-muted b-white item x-small-font" >
             <span>{{$t('trade.youAsset')}}&nbsp;&nbsp;&nbsp;{{balances[bsCode+bsIssuer] | cutTail}}&nbsp;{{bsCode}}</span>
           </div>
           <div class="item">
             <van-row>
-              <van-col span="11" class="small-font">
+              <van-col span="11" class="x-small-font">
                 <span v-if="bsFlag === 'buy'" v-text="$t('trade.buyPrice')"></span><span v-else-if="bsFlag === 'sell'" v-text="$t('trade.sellPrice')"></span>({{tradepair.counterCode}})
               </van-col>
-              <van-col span="11" offset="2" class="small-font">
+              <van-col span="11" offset="2" class="x-small-font">
                 {{$t('trade.amount')}}({{tradepair.baseCode}})
               </van-col>
             </van-row>
@@ -40,7 +40,7 @@
                   v-if="bsFlag === 'buy'"
                   v-model="form.price"
                   type="number"
-                  class="small-font text-primary"
+                  class="x-small-font text-primary"
                   style="background: #f1f8fb"
                   :placeholder="`${$t('trade.buyPrice')}(${tradepair.counterCode})`">
                 </van-field>
@@ -48,14 +48,14 @@
                   v-if="bsFlag === 'sell'"
                   type="number"
                   v-model="form.price"
-                  class="small-font text-primary"
+                  class="x-small-font text-primary"
                   style="background: #f1f8fb"
                   :placeholder="`${$t('trade.sellPrice')}(${tradepair.counterCode})`">
                 </van-field>
               </van-col>
               <van-col span="11" offset="2">
                 <van-field
-                  class="small-font text-primary"
+                  class="x-small-font text-primary"
                   v-model.number="form.amount"
                   type="number"
                   style="background: #f1f8fb"
@@ -66,7 +66,7 @@
           </div>
           <div class="item">
             <van-row>
-              <van-col span="11" class="small-font text-muted" v-text="$t('trade.estVal')"></van-col>
+              <van-col span="11" class="x-small-font" v-text="$t('trade.estVal')"></van-col>
             </van-row>
             <van-row>
               <van-col span="11" class="text-muted">
