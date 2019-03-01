@@ -4,7 +4,7 @@
       <van-row>
         <van-col span="12" class="van-hairline--right" style="padding-right: 3px;">
           <div class="offer-table">
-            <div class="text-muted small-font header">
+            <div class="text-muted x-small-font header">
               <div class="text-left" v-text="$t('trade.buyAmount')"></div>
               <div class="text-right" v-text="$t('trade.buyPrice')"></div>
             </div>
@@ -20,7 +20,7 @@
         </van-col>
         <van-col span="12" style="padding-left: 3px;">
           <div class="offer-table">
-            <div class="text-muted small-font header">
+            <div class="text-muted x-small-font header">
               <div class="text-left" v-text="$t('trade.sellPrice')"></div>
               <div class="text-right" v-text="$t('trade.sellAmount')"></div>
             </div>
