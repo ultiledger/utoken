@@ -97,6 +97,9 @@
         let selectAssets = this.$store.state.balances[this.curreAcctountAddress];
         let balancesAssetsArray=[];
         let selectAssetsCode = selectAssets.map(item => {
+          if (item.issuer && item.issuer === this.$store.state.account.address){
+            return;
+          }
           balancesAssetsArray.push({
             id:item.code+(item.issuer||''),
             code:item.code,
@@ -109,6 +112,9 @@
         let configAssets = this.getConfigAssets(type);
         let configAssetsArray=[];
         configAssets.forEach(item => {
+          if (item.issuer && item.issuer === this.$store.state.account.address){
+            return;
+          }
           configAssetsArray.push({
             id:item.code+(item.issuer||''),
             code:item.code,
