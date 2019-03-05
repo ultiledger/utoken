@@ -31,11 +31,13 @@
             :tip="$t('wallet.recoverWalletTip')"
             v-model="form.memorizingWords"
             :placeholder="$t('wallet.recoverWalletPlaceholder')"
+            :type="'memorizingWords'"
             v-if="tagSelect=='1'"></wallet-text-area>
           <wallet-text-area
             :tip="$t('wallet.privateKeyTip')"
             v-model="form.privateKey"
             :placeholder="$t('wallet.privateKeyPlaceholder')"
+            :type="'privateKey'"
             v-else-if="tagSelect=='2'"></wallet-text-area>
         </div>
         <wallet-tip :tip="$t('wallet.exportWalletPwdTip')" style="margin-top: 15px;padding-bottom: 10px;"></wallet-tip>

@@ -33,6 +33,9 @@
     },
     watch: {
       value (val) {
+        if (val){
+          val = val.trim();
+        }
         if (val === this.receiveAddress) {
           return;
         }

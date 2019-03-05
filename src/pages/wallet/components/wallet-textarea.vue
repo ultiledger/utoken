@@ -18,12 +18,16 @@
   export default {
     components: {walletTip},
     props: {
+      type:String,
       tip: String,
       value: String,
       placeholder: String
     },
     watch: {
       value (val) {
+        if (val && this.type==="privateKey"){
+          val = val.trim();
+        }
         this.text = val;
       },
       text (val) {
