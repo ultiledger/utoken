@@ -326,7 +326,7 @@ class RippleWallet{
             let amount = ret.specification.quantity.value;
             let price =  Number(new Big(ret.specification.totalPrice.value).div(ret.specification.quantity.value).toFixed(7).toString()).toString();
             if(ret.state){
-              amount = ret.state.fundedAmount.value;
+              amount = ret.state.priceOfFundedAmount.value;
             }
             if (Number(amount)===Number(0)){
               return;
