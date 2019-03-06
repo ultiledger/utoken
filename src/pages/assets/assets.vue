@@ -124,6 +124,7 @@
         if (this.$refs['contentBlock']) {
           setTimeout(() => {
             this.$refs['contentBlock'].$el.scrollTop = 0;
+            this.setSwipeHeight();
           }, 300);
         }
       },
