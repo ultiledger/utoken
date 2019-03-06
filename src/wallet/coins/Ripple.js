@@ -23,8 +23,10 @@ class RippleWallet{
   }
 
   destroy () {
-    if (this.server.isConnected()) {
-      this.server.disconnect();
+    if (this.server) {
+      if (this.server.isConnected()) {
+        this.server.disconnect();
+      }
     }
   }
 
