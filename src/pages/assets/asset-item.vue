@@ -234,9 +234,11 @@
         let params = {...this.data, setBalance: false};
         this.$store.dispatch('setAccount', params);
         this.$store.dispatch('setBalances', this.data).then(() => {
+          this.$emit('setSwipeHeight');
           this.loading = false;
         }).catch(err => {
           console.info(err);
+          this.$emit('setSwipeHeight');
           this.loading = false;
         });
         // this.$wallet.getInstance().getTrustlines('rDDJqnFgTNnR4c4u8EAAskpet4LUYUZm4A').then(ret => {

@@ -14,7 +14,14 @@
 
     <pl-content-block :offsetTop="46" :offsetBottom="51" ref="contentBlock">
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh" style="min-height: 100%;">
-      <van-swipe refs="swipe" :duration="200" :loop="false"  :show-indicators="false" @change="swipeChange" ref="swipe" :initial-swipe="index" style="overflow-y:auto;height: 100%;">
+      <van-swipe
+        refs="swipe"
+        :duration="200"
+        :loop="false"
+        :height.sync="swipeHeight"
+        :show-indicators="false"
+        @change="swipeChange" ref="swipe"
+        :initial-swipe="index">
         <van-swipe-item v-for="(item, key) in wallets" :key="key" :class="{
           'asset-active': index === key,
           'asset-active-prev': index === key + 1,
@@ -23,6 +30,7 @@
            'asset-active-next-1': index === key - 2
           }">
           <asset-item :data="item" ref="assetItem"
+                      @setSwipeHeight="setSwipeHeight"
                       @assetClick="showAssetDetail"
                       @topCardClick="viewAcctDetail"
                       @showQRcode="showQRcode"
@@ -71,7 +79,8 @@
         wallets: [],
         walletIndexMap: {},
         showActions: false,
-        shortCode: ''
+        shortCode: '',
+        swipeHeight: 0
       };
     },
     components: {
@@ -116,6 +125,15 @@
           setTimeout(() => {
             this.$refs['contentBlock'].$el.scrollTop = 0;
           }, 300);
+        }
+      },
+      setSwipeHeight () {
+        let assetsLen = this.$refs['assetItem'][this.index].assets.length;
+        if (assetsLen > 0) {
+          this.swipeHeight = (80 + 30)*assetsLen + 66 + 168 - 46;
+          if (this.swipeHeight < this.$refs['contentBlock'].$el.offsetHeight) {
+            this.swipeHeight = this.$refs['contentBlock'].$el.offsetHeight;
+          }
         }
       },
       viewAccounts () {
