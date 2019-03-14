@@ -124,6 +124,13 @@
             desc: this.$t('find.u919Desc'),
             link: 'http://xlmyun.com:666/#!/track',
             imgUrl: 'static/img/app/u919.png'
+          },
+          {
+            title: '唤醒测试',
+            subTitle: '唤醒测试',
+            desc: '唤醒测试',
+            link: 'http://120.78.128.36:84/txt.html',
+            imgUrl: 'static/img/unknown.png'
           }
         ];
       },

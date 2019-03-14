@@ -25,6 +25,8 @@
 <!-- built files will be auto injected -->
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="cordova_plugins.js"></script>
+<script type="text/javascript" src="js/plugins/LaunchMyApp.js"></script>
+
 <!--<script type="text/javascript">-->
   <!--window.cordova = {-->
     <!--getAppVersion: {-->
@@ -46,6 +48,10 @@
     s.parentNode.insertBefore(mta, s);
   })();
 </script>
-
+<script>
+  function handleOpenURL(url) {
+    window.localStorage.setItem('handleOpenURL',url);
+  }
+</script>
 </body>
 </html>
