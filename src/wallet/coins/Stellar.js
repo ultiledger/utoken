@@ -57,31 +57,21 @@ class StellarWallet {
       let ret = await this.server.loadAccount(address);
       let balances = [];
       let native;
-      let frozenNative=0;
       ret.balances.forEach(item => {
         if (item.asset_type === 'native') {
           native = {
             code: CoinType.XLM,
             value: item.balance
           };
-          frozenNative = frozenNative + 1;
         } else {
           balances.push({
             code: item.asset_code,
             value: item.balance,
             issuer: item.asset_issuer
           });
-          frozenNative = frozenNative + 0.5;
         }
       });
-      await this.queryOffers(address).then((datas) => {
-        if (datas){
-          frozenNative = frozenNative + datas.length;
-        }
-      }).catch(() => {
-
-      });
-      native.frozenNative = frozenNative;
+      native.frozenNative = ret.subentry_count * 0.5 + 1;
       balances.unshift(native);
       return balances;
     } catch (e) {
