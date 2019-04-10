@@ -23,8 +23,10 @@ class RippleWallet{
   }
 
   destroy () {
-    if (this.server.isConnected()) {
-      this.server.disconnect();
+    if (this.server) {
+      if (this.server.isConnected()) {
+        this.server.disconnect();
+      }
     }
   }
 
@@ -83,10 +85,6 @@ class RippleWallet{
       let ret = await this.server.getBalances(address);
       let balances = [];
       let native;
-      // console.info(ret);
-      // console.info('balances:', balances);
-      // let trustlines = await this.server.getTrustlines(address);
-      // console.info('trustlines:', trustlines);
       ret.forEach(item => {
         if (item.currency === CoinType.XRP) {
           native = {
@@ -94,21 +92,6 @@ class RippleWallet{
             value: item.value
           };
         } else {
-          //fix bug #6
-          /* let flag = trustlines.some(line => {
-            if (line.specification.counterparty === item.counterparty && line.specification.currency === item.currency) {
-              return line.specification.limit === '0';
-            }
-            return false;
-          });
-
-          if (!flag) {
-            balances.push({
-              code: item.currency,
-              value: item.value,
-              issuer: item.counterparty || ''
-            });
-          } */
           balances.push({
             code: item.currency,
             value: item.value,
@@ -116,6 +99,7 @@ class RippleWallet{
           });
         }
       });
+      native.frozenNative = 20;
       balances.unshift(native);
       return balances;
     } catch (e) {
@@ -326,7 +310,7 @@ class RippleWallet{
             let amount = ret.specification.quantity.value;
             let price =  Number(new Big(ret.specification.totalPrice.value).div(ret.specification.quantity.value).toFixed(7).toString()).toString();
             if(ret.state){
-              amount = ret.state.fundedAmount.value;
+              amount = ret.state.priceOfFundedAmount.value;
             }
             if (Number(amount)===Number(0)){
               return;
@@ -366,7 +350,7 @@ class RippleWallet{
    * @returns {Promise<any>}
    */
   async queryOffers (address, optional = {}) {
-    console.debug('offers', address);
+    //console.debug('offers', address);
     return new Promise(async (resolve, reject)=>{
       try {
         let options = {};
@@ -376,7 +360,7 @@ class RippleWallet{
           options.limit = optional.limit;
         }
         let page = await this.server.getOrders(address, options);
-        console.info(page);
+        //console.info(page);
         resolve(page);
       } catch (err) {
         reject(err);

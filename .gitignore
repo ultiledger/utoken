@@ -37,6 +37,7 @@ node_modules/
 jspm_packages/
 cordova/
 dist/
+build.sh
 
 # TypeScript v1 declaration files
 typings/

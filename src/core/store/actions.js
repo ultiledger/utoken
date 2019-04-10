@@ -58,7 +58,7 @@ export const setNetwork = async ({commit, state, dispatch}, {type, url, accounts
   coins[type].wallet.destroy();
   coins[type].wallet.setServer(url);
   accounts.forEach((item) => {
-    dispatch('setBalances', item.address);
+    dispatch('setBalances', {address:item.address,type:type});
   });
 };
 

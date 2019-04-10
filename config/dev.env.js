@@ -20,6 +20,14 @@ module.exports = merge(prodEnv, {
       pathRewrite: {
         '^/ticker.stellar.org-api': ''
       }
+    },
+    'https://h.fchain.io/': {
+      target: 'https://h.fchain.io/',//api代理服务器地址http://ip:port
+      changeOrigin: true,
+      projectName: '',// 项目名称，配置该选项，请求的url会加上项目名称，比如/api/common/get-data => /api/projectName/common/get-data
+      pathRewrite: {
+        'https://h.fchain.io/': ''
+      }
     }
   }
 });

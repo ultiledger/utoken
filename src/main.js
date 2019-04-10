@@ -95,6 +95,10 @@ const initApp = () => {
     store, // （缩写）相当于 store:store
     created () {
       this.$store.dispatch('initData');
+      let href_ = window.localStorage.getItem('handleOpenURL');
+      if (href_){
+        this.$router.push({name:'setting'});
+      }
     },
     computed: {
       language () {

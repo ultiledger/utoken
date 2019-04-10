@@ -22,10 +22,13 @@ const state = {
   network: {
     [AccountType.stellar]: [
       {value: 'https://horizon.stellar.org', type: 'public'},
+      {value: 'https://h.fchain.io', type: 'public'},
       {value: 'https://horizon-testnet.stellar.org', type: 'test'}
     ],
     [AccountType.ripple]: [
       {value: 'wss://s1.ripple.com', type: 'public'},
+      {value: 'wss://s-east.ripple.com', type: 'public'},
+      {value: 'wss://s-west.ripple.com', type: 'public'},
       {value: 'wss://s.altnet.rippletest.net:51233', type: 'test'}
     ],
     [AccountType.ethereum]: [
