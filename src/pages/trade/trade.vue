@@ -422,11 +422,11 @@
         this.$wallet.sendOffer(selling, buying, amount, price, this.currentAccount.address, cryptor.decryptAES(this.currentAccount.secret, password), this.bsFlag).then(ret => {
           if (ret) {
             toast.message = this.$t('trade.offerSuccess');
-            setTimeout(() => {
-              toast.clear();
-              this.tabActive = 1;
-              this.tabChange();
-            }, 1000);
+            toast.clear();
+            this.$refs.myOffers.clearTimer();
+            this.$refs.marketDept.clearTimer();
+            this.$refs.marketDept.getBooks();
+            this.$refs.myOffers.getOffers();
           }
           this.loading = false;
           this.onRefreshBalances();

@@ -9,9 +9,22 @@
             "request": "launch",
             "name": "vuejs: firefox",
             "url": "http://localhost:3030",
+            "reAttach": true,
             "webRoot": "${workspaceFolder}/src",
-            "firefoxExecutable": "D:/Program Files/Mozilla Firefox/firefox.exe",
+            "firefoxExecutable": "D:/Program Files/Mozilla Firefox/firefox.exe"  ,
             "pathMappings": [{ "url": "webpack:///src/", "path": "${webRoot}/" }]
+          }
+          ,
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "vuejs: chrome",
+            "url": "http://localhost:3030",
+            "webRoot": "${workspaceFolder}/src",
+            "breakOnLoad": true,
+            "sourceMapPathOverrides": {
+            "webpack:///src/*": "${webRoot}/*"
+            }
           }
     ]
 }
