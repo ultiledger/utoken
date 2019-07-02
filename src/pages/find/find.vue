@@ -56,7 +56,7 @@
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
             link: 'https://wipple.devnull.network/live/accounts',
-            imgUrl: 'static/img/XRP@3x.png'
+            imgUrl: 'static/img/XRP-1@3x.png'
           },
           {
             title: this.$t('find.xmlTitle'),
@@ -80,11 +80,11 @@
             imgUrl: 'static/img/app/u919.png'
           },
           {
-            title: 'Fomo3D',
+            title: '瑞波行情',
             subTitle: this.$t('find.fomo3DSubTitle'),
             desc: this.$t('find.fomo3DDsc'),
-            link: 'http://exitscam.me',
-            imgUrl: 'static/img/app/Fomo3D.png'
+            link: 'http://chart.ripplefox.com',
+            imgUrl: 'static/img/XRP-1@3x.png'
           }
         ];
       },
@@ -102,7 +102,7 @@
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
             link: 'https://wipple.devnull.network/live/accounts',
-            imgUrl: 'static/img/XRP@3x.png'
+            imgUrl: 'static/img/XRP-1@3x.png'
           },
           {
             title: this.$t('find.xmlTitle'),
@@ -136,13 +136,7 @@
       },
       game () {
         return [
-          {
-            title: 'Fomo3D',
-            subTitle: this.$t('find.fomo3DSubTitle'),
-            desc: this.$t('find.fomo3DDsc'),
-            link: 'http://exitscam.me',
-            imgUrl: 'static/img/app/Fomo3D.png'
-          }
+          
         ];
       }
     },

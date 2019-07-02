@@ -151,16 +151,18 @@
         }, 800);
       },
       onRefresh () {
-        this.isLoading = true;
-        if (this.$refs['rxHistory']) {
-          this.$refs['rxHistory'].getHistory();
-        }
-        this.$store.dispatch('setBalances', this.$store.state.account.address).then(() => {
-          this.isLoading = false;
-        }).catch(err => {
-          console.info(err);
-          this.isLoading = false;
-        });
+        setTimeout(() => {
+                 if (this.$refs['rxHistory']) {
+                    this.$refs['rxHistory'].getHistory();
+                  }
+                  this.$store.dispatch('setBalances', this.$store.state.account.address).then(() => {
+                    this.isLoading = false;
+                  }).catch(err => {
+                    console.info(err);
+                    this.isLoading = false;
+                  });
+                
+              }, 5000);
       },
       removeStyle () {
         if (this.$refs['pullRefresh']) {
