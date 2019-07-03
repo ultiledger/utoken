@@ -99,7 +99,8 @@ class RippleWallet{
           });
         }
       });
-      native.frozenNative = 20;
+      let accountInfo = await this.server.getAccountInfo(address);
+      native.frozenNative = 20 + 5 * accountInfo.ownerCount;
       balances.unshift(native);
       return balances;
     } catch (e) {

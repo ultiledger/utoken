@@ -226,7 +226,7 @@
       },
       'form.amount' () {
         if (this.form.amount) {
-          this.form.amount = (this.form.amount.toString().match(/^\d*(\.?\d{0,7})/g)[0]) || null;
+          this.form.amount = (this.form.amount.toString().match(/^\d*(\.?\d{0,6})/g)[0]) || null;
         }
       }
     },
@@ -440,7 +440,7 @@
           }
           setTimeout(() => {
             toast.clear();
-          }, 2000);
+          }, 3000);
           this.loading = false;
         });
       },

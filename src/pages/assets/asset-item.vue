@@ -90,13 +90,14 @@
                           {{item.value | market(item.code, item.issuer)}}
                         </pl-privacy>
                       </div>
-                      <div v-if="item.code === 'XLM'">
+  
+                    </div>
+					<div v-if="item.code === 'XLM' || item.code === 'XRP'">
                         {{$t('assets.frozenNative')}}
                         <pl-privacy :suffix="$store.state.setting.currencyUnit"
                                     :switchable="false">
-                          {{item.frozenNative}} XLM
+                          {{item.frozenNative}} {{item.code}}
                         </pl-privacy>
-                      </div>
                     </div>
                   </td>
                 </tr>

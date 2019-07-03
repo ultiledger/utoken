@@ -101,7 +101,7 @@
         if (!this.marketTimer) {
           this.marketTimer = window.setInterval(() => {
             this.getBooks();
-          }, 1000 * 60 * 0.5);
+          }, 1000 * 15 * 0.5);
         }
       },
       getBooks () {
