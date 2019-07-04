@@ -132,7 +132,6 @@ const initApp = () => {
     }
   });
 };
-
 if (process.env.NODE_ENV !== 'production') {
   loadData(() => {
     initApp();
