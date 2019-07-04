@@ -92,7 +92,7 @@
                       </div>
   
                     </div>
-					<div v-if="item.code === 'XLM' || item.code === 'XRP'">
+					<div v-if="(item.code === 'XLM' && !item.issuer) || (item.code === 'XRP' && !item.issuer)">
                         {{$t('assets.frozenNative')}}
                         <pl-privacy :suffix="$store.state.setting.currencyUnit"
                                     :switchable="false">

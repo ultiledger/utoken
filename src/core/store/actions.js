@@ -25,7 +25,7 @@ export const setAccount = async ({commit, state, dispatch}, account) => {
   // account.isActivated = activated;
   commit(types.SET_ACCOUNT, JSON.parse(JSON.stringify(account)));
   Vue.collecitons.setting.updateSetting(setting => {
-    return setting.defaultAddress = account.type+account.address;
+    return setting.defaultAddress = account.address;
   });
   if (setBalance === false) {
     return;

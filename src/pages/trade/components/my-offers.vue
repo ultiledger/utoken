@@ -76,7 +76,7 @@
         if (!this.offerTimer) {
           this.offerTimer = window.setInterval(() => {
             this.getOffers();
-          }, 1000 * 60 * 1);
+          }, 1000 * 6 * 1);
         }
       },
       shortType () {
