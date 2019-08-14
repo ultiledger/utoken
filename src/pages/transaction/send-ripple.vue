@@ -77,7 +77,7 @@
               </van-cell>
               <van-cell>
                 <span slot="title" class="text-muted">Tag</span>
-                <div>{{tag}}</div>
+                <div>{{tagAddress?tag:form.tag}}</div>
               </van-cell>
             </van-cell-group>
           </div>
@@ -132,6 +132,7 @@
         addressValid: true,
         addressActivated: true,
         trustAsset: true,
+        tagAddress: false,
         receiveAddress: '',
         tag:'',
         ripple: AccountType.ripple
@@ -144,9 +145,11 @@
             var decode=this.$wallet.decodeTagAddress(this.form.receiveAddress);
             this.receiveAddress=decode.account;
             this.tag=decode.tag;
+            this.tagAddress=true;
           }else{
             this.receiveAddress=this.form.receiveAddress;
             this.tag=this.form.tag;
+            this.tagAddress=false;
           }
           if (!this.$wallet.isValidAddress(this.receiveAddress)) {
             this.addressValid = false;
@@ -297,7 +300,7 @@
         });
 
         let options = {
-          tag: this.tag
+          tag: this.tagAddress ? this.tag : this.form.tag
         };
 
         if (this.asset && this.asset.code && this.asset.issuer) {
