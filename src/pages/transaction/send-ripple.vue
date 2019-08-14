@@ -69,7 +69,7 @@
               </van-cell>
               <van-cell>
                 <span slot="title" class="text-muted" v-text="$t('common.receivablesAddress')"></span>
-                <div>{{form.receiveAddress}}</div>
+                <div>{{receiveAddress}}</div>
               </van-cell>
               <van-cell>
                 <span slot="title" class="text-muted" v-text="$t('common.paymentAddress')"></span>
@@ -77,7 +77,7 @@
               </van-cell>
               <van-cell>
                 <span slot="title" class="text-muted">Tag</span>
-                <div>{{form.tag}}</div>
+                <div>{{tagAddress?tag:form.tag}}</div>
               </van-cell>
             </van-cell-group>
           </div>
@@ -132,13 +132,26 @@
         addressValid: true,
         addressActivated: true,
         trustAsset: true,
+        tagAddress: false,
+        receiveAddress: '',
+        tag:'',
         ripple: AccountType.ripple
       };
     },
     watch: {
       'form.receiveAddress' () {
         if (this.form.receiveAddress) {
-          if (!this.$wallet.isValidAddress(this.form.receiveAddress)) {
+          if (this.$wallet.isTagAddress(this.form.receiveAddress)){
+            var decode=this.$wallet.decodeTagAddress(this.form.receiveAddress);
+            this.receiveAddress=decode.account;
+            this.tag=decode.tag;
+            this.tagAddress=true;
+          }else{
+            this.receiveAddress=this.form.receiveAddress;
+            this.tag=this.form.tag;
+            this.tagAddress=false;
+          }
+          if (!this.$wallet.isValidAddress(this.receiveAddress)) {
             this.addressValid = false;
             this.addressActivated = true;
             this.trustAsset = true;
@@ -146,10 +159,10 @@
           } else {
             this.addressValid = true;
           }
-          this.$wallet.isActivated(this.form.receiveAddress).then(ret => {
+          this.$wallet.isActivated(this.receiveAddress).then(ret => {
             this.addressActivated = ret;
             if (this.addressActivated) {
-              this.$wallet.isTrustAsset(this.form.receiveAddress, this.asset.code, this.asset.issuer).then(ret => {
+              this.$wallet.isTrustAsset(this.receiveAddress, this.asset.code, this.asset.issuer).then(ret => {
                 this.trustAsset = ret;
               });
             } else {
@@ -243,7 +256,7 @@
           return;
         }
 
-        if (!this.$wallet.isValidAddress(this.form.receiveAddress)) {
+        if (!this.$wallet.isValidAddress(this.receiveAddress)) {
           this.$toast(this.$t('address.invalidAddressTip'));
           return;
         }
@@ -287,7 +300,7 @@
         });
 
         let options = {
-          tag: this.form.tag
+          tag: this.tagAddress ? this.tag : this.form.tag
         };
 
         if (this.asset && this.asset.code && this.asset.issuer) {
@@ -295,7 +308,7 @@
           options.assetIssuer = this.asset.issuer;
         }
 
-        this.$wallet.sendTransaction(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.form.receiveAddress, this.form.amt, options)
+        this.$wallet.sendTransaction(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.receiveAddress, this.form.amt, options)
           .then(ret => {
             if (ret && ret.resultCode === 'tesSUCCESS') {
               console.info(ret);

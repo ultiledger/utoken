@@ -1,5 +1,6 @@
 import {RippleAPI} from 'ripple-lib';
 import RippleAddress from 'ripple-address-codec';
+import {Decode} from 'xrpl-tagged-address-codec';
 import {AccountType, CoinType} from '../constants';
 import tradingPlatformConfig from '../config/trading-platform';
 import rippleKeypairs from 'ripple-keypairs';
@@ -223,6 +224,19 @@ class RippleWallet{
         });
       });
     });
+  }
+
+  isTagAddress (address) {
+    try{
+      Decode(address);
+      return true;
+    }catch (e) {return false;}
+  }
+
+  decodeTagAddress (address) {
+    try{      
+      return Decode(address);
+    }catch (e) {return {error: e.message};}
   }
 
   isValidAddress (address) {
