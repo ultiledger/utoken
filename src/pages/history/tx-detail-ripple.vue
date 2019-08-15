@@ -30,13 +30,13 @@
           </van-col>
         </van-row>
       </div>
-      <div class="text-block" v-if="item.data && item.data.specification && item.data.specification.destination && item.data.specification.destination.tag">
+      <div class="text-block" v-if="item.data && item.toTag">
         <van-row>
           <van-col span="6">
             <p class="text-muted small-font">Tag</p>
           </van-col>
           <van-col span="18">
-            <div class="small-font">{{item.data.specification.destination.tag}}</div>
+            <div class="small-font">{{item.toTag}}</div>
           </van-col>
         </van-row>
       </div>

@@ -138,7 +138,27 @@ class RippleWallet{
   getTransactions (address, option = {}) {
     return new Promise(async (resolve, reject)=>{
       try {
-        const serverInfo = await this.server.getServerInfo();
+        const options = {
+          account: address,
+          limit: 20
+        };
+        const command = 'account_tx';
+        if (option.hasMore && option.historys) {
+          let rsp2 = await this.server.requestNextPage(command, options, option.historys);
+          if (rsp2 && rsp2.marker) {
+            resolve({'hashMore': true, 'data': rsp2});
+          } else {
+            resolve({'hashMore': false, 'data': rsp2});
+          }
+        } else {
+          let rsp = await this.server.request(command, options);
+          if (rsp && rsp.marker) {
+            resolve({'hashMore': true, 'data': rsp});
+          } else {
+            resolve({'hashMore': false, 'data': rsp});
+          }
+        }
+        /* const serverInfo = await this.server.getServerInfo();
         const ledgers = serverInfo.completeLedgers.split('-');
         const minLedgerVersion = Number(ledgers[0]);
         const maxLedgerVersion = Number(ledgers[1]);
@@ -148,7 +168,8 @@ class RippleWallet{
         };
         params = {...params, ...option};
         let transactions = await this.server.getTransactions(address, params);
-        resolve(transactions);
+        console.info(transactions);
+        resolve(transactions); */
       } catch (err) {
         console.error(err);
         reject(err);
@@ -234,7 +255,7 @@ class RippleWallet{
   }
 
   decodeTagAddress (address) {
-    try{      
+    try{
       return Decode(address);
     }catch (e) {return {error: e.message};}
   }
