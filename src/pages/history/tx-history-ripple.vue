@@ -105,11 +105,28 @@
                   }
                 }
               });
+              this.filterHistory();
               this.nextLoading = false;
             }).catch(err => {
           this.nextLoading = false;
           console.info(err);
         });
+      },
+      filterHistory () {
+        if (this.normalHistory && this.normalHistory.length > 0) {
+          let address = this.$store.state.account.address;
+          let acctType = this.$store.state.account.type;
+          this.normalHistory = this.normalHistory.filter(item => {
+            if (this.asset.issuer) {
+              return item.assetCode === this.asset.code && item.assetIssuer === this.asset.issuer && item.address === address && item.acctType === acctType;
+            } else {
+              return item.assetCode === this.asset.code && item.address === address && item.acctType === acctType;
+            }
+          });
+          if (this.hasMore && this.normalHistory.length < 20) {
+            this.hasMore = false;
+          }
+        }
       },
       toHistory (data) {
         let toAddress = data.Destination;
@@ -124,17 +141,30 @@
             }
           }
         } */
+        let assetCode = '';
+        let assetIssuer = '';
+        let amount = null;
+        let fromAddress = data.Account;
+        if (data.Amount.issuer && data.Amount.currency) {
+          assetIssuer = data.Amount.issuer;
+          assetCode = data.Amount.currency;
+          amount = data.Amount.value;
+          fromAddress = data.Amount.issuer;
+        } else {
+          assetCode = this.asset.code;
+          amount = data.Amount / 1000000;
+        }
         let history = {
           address: this.$store.state.account.address,
           acctType: this.$store.state.account.type,
-          assetCode: this.asset.code,
-          assetIssuer: this.asset.issuer,
+          assetCode: assetCode,
+          assetIssuer: assetIssuer,
           txHash: data.hash,
-          amount: data.Amount / 1000000,
+          amount: amount,
           blockNumber: data.inLedger,
           to: toAddress,
           toTag: data.DestinationTag,
-          from: data.Account,
+          from: fromAddress,
           txTime: moment((data.date + 0x386D4380) * 1000).format('YYYYMMDD HH:mm:ss'),
           fee:  data.Fee / 1000000,
           txType: toAddress.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0',
