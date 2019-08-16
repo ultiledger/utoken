@@ -93,7 +93,6 @@
         }
         this.$wallet.getTransactions(this.$store.state.account.address, option)
             .then(ret => {
-              console.info(ret);
               this.hasMore = ret.hashMore;
               if (this.hasMore) {
                 this.rsp = ret.data;
