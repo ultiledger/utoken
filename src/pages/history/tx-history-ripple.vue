@@ -123,9 +123,6 @@
               return item.assetCode === this.asset.code && item.address === address && item.acctType === acctType;
             }
           });
-          if (this.hasMore && this.normalHistory.length < 20) {
-            this.hasMore = false;
-          }
         }
       },
       toHistory (data) {
