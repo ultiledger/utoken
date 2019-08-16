@@ -142,14 +142,14 @@
       },
       selectWallet (item) {
         this.$store.dispatch('setAccount' ,item);
-        this.index = this.walletIndexMap[item.type+item.address];
+        this.index = this.walletIndexMap[item.address];
         this.$refs['swipe'].swipeTo(this.index);
         this.$refs.viewAccounts.close();
       },
       setWallets () {
         this.wallets = this.$collecitons.account.findAllSoryByType();
         this.wallets.forEach((item, index) => {
-          this.walletIndexMap[item.type+item.address] = index;
+          this.walletIndexMap[item.address] = index;
         });
         let setting = this.$collecitons.setting.findSetting();
         this.index = this.walletIndexMap[setting.defaultAddress] || 0;

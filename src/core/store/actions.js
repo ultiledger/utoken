@@ -25,7 +25,7 @@ export const setAccount = async ({commit, state, dispatch}, account) => {
   // account.isActivated = activated;
   commit(types.SET_ACCOUNT, JSON.parse(JSON.stringify(account)));
   Vue.collecitons.setting.updateSetting(setting => {
-    return setting.defaultAddress = account.type+account.address;
+    return setting.defaultAddress = account.address;
   });
   if (setBalance === false) {
     return;
@@ -154,7 +154,10 @@ export const initData = ({commit, state, dispatch}) => {
   let setting = Vue.collecitons.setting.findSetting();
   if (setting && setting.defaultAddress) {
     let updateSetting = JSON.parse(JSON.stringify(setting));
+    let mytokenApi = state.setting.mytokenApi;
     commit(types.SET_SETTING, updateSetting);
+    // 修复卡住问题
+    commit(types.SET_MYTOKEN_API, mytokenApi);
     doInitScript(updateSetting, dispatch);
     let account = Vue.collecitons.account.findByAddress(setting.defaultAddress);
     dispatch('setAccount', account);
