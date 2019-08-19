@@ -1,5 +1,6 @@
 import {RippleAPI} from 'ripple-lib';
 import RippleAddress from 'ripple-address-codec';
+import {Decode} from 'xrpl-tagged-address-codec';
 import {AccountType, CoinType} from '../constants';
 import tradingPlatformConfig from '../config/trading-platform';
 import rippleKeypairs from 'ripple-keypairs';
@@ -137,7 +138,27 @@ class RippleWallet{
   getTransactions (address, option = {}) {
     return new Promise(async (resolve, reject)=>{
       try {
-        const serverInfo = await this.server.getServerInfo();
+        const options = {
+          account: address,
+          limit: 20
+        };
+        const command = 'account_tx';
+        if (option.hasMore && option.historys) {
+          let rsp2 = await this.server.requestNextPage(command, options, option.historys);
+          if (rsp2 && rsp2.marker) {
+            resolve({'hashMore': true, 'data': rsp2});
+          } else {
+            resolve({'hashMore': false, 'data': rsp2});
+          }
+        } else {
+          let rsp = await this.server.request(command, options);
+          if (rsp && rsp.marker) {
+            resolve({'hashMore': true, 'data': rsp});
+          } else {
+            resolve({'hashMore': false, 'data': rsp});
+          }
+        }
+        /* const serverInfo = await this.server.getServerInfo();
         const ledgers = serverInfo.completeLedgers.split('-');
         const minLedgerVersion = Number(ledgers[0]);
         const maxLedgerVersion = Number(ledgers[1]);
@@ -147,7 +168,8 @@ class RippleWallet{
         };
         params = {...params, ...option};
         let transactions = await this.server.getTransactions(address, params);
-        resolve(transactions);
+        console.info(transactions);
+        resolve(transactions); */
       } catch (err) {
         console.error(err);
         reject(err);
@@ -223,6 +245,19 @@ class RippleWallet{
         });
       });
     });
+  }
+
+  isTagAddress (address) {
+    try{
+      Decode(address);
+      return true;
+    }catch (e) {return false;}
+  }
+
+  decodeTagAddress (address) {
+    try{
+      return Decode(address);
+    }catch (e) {return {error: e.message};}
   }
 
   isValidAddress (address) {

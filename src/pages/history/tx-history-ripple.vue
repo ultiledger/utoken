@@ -7,7 +7,7 @@
                            @leftClick="addAddress(item)"  @rightClick="showDetail(item)"  @click.native="showDetail(item)"></tx-history-item>
         </van-cell-group>
         <div class="text-center">
-          <load-more-btn :loading="nextLoading" @load-more="getRemoteHistory({}, 'down')" :has-next="hasNext"></load-more-btn>
+          <load-more-btn :loading="nextLoading" @load-more="getRemoteHistory({}, 'down')" :has-next.sync="hasMore"></load-more-btn>
           <br>
         </div>
       </van-tab>
@@ -17,7 +17,7 @@
                            @leftClick="addAddress(item)" @rightClick="showDetail(item)"  @click.native="showDetail(item)"></tx-history-item>
         </van-cell-group>
         <div class="text-center">
-          <load-more-btn :loading="nextLoading" @load-more="getRemoteHistory({}, 'down')" :has-next="hasNext"></load-more-btn>
+          <load-more-btn :loading="nextLoading" @load-more="getRemoteHistory({}, 'down')" :has-next.sync="hasMore && outHistory.length > 0"></load-more-btn>
           <br>
         </div>
       </van-tab>
@@ -27,7 +27,7 @@
                            @leftClick="addAddress(item)" @rightClick="showDetail(item)"  @click.native="showDetail(item)"></tx-history-item>
         </van-cell-group>
         <div class="text-center">
-          <load-more-btn :loading="nextLoading" @load-more="getRemoteHistory({}, 'down')" :has-next="hasNext"></load-more-btn>
+          <load-more-btn :loading="nextLoading" @load-more="getRemoteHistory({}, 'down')" :has-next.sync="hasMore && inHistory.length > 0"></load-more-btn>
           <br>
         </div>
       </van-tab>
@@ -39,7 +39,17 @@
   import history from './mixns/history';
   export default{
     mixins: [history],
+    data () {
+      return {
+        hasMore: false,
+        rps: null
+      };
+    },
     methods: {
+      clearHistory () {
+        this.tempHistory = [];
+        this.normalHistory = [];
+      },
       setRegion () {
         let tempAllHistorys = this.$collecitons.history.findHistory(this.$store.state.account.type, this.$store.state.account.address);
         if (tempAllHistorys && tempAllHistorys.length > 0) {
@@ -66,9 +76,58 @@
         }
         return option;
       },
-      async toHistory (data) {
-        let toAddress = data.specification.destination.address;
-        let deliveredAmount = data.outcome.deliveredAmount || {};
+      getHistory () {
+        this.getRemoteHistory();
+      },
+      getRemoteHistory (param, direction = 'up') {
+        if (direction !== 'up') {
+          this.nextLoading = true;
+        }
+        if (direction === 'up') {
+          this.hasMore = false;
+          this.clearHistory();
+        }
+        let option = {};
+        if (this.hasMore) {
+          option = {hasMore: true, historys: this.rsp};
+        }
+        this.$wallet.getTransactions(this.$store.state.account.address, option)
+            .then(ret => {
+              this.hasMore = ret.hashMore;
+              if (this.hasMore) {
+                this.rsp = ret.data;
+              }
+              ret.data.transactions.forEach(item => {
+                if (item.tx && item.tx.TransactionType === 'Payment') {
+                  let history = this.toHistory(item.tx);
+                  if (history) {
+                    this.normalHistory.push(history);
+                  }
+                }
+              });
+              this.filterHistory();
+              this.nextLoading = false;
+            }).catch(err => {
+          this.nextLoading = false;
+          console.info(err);
+        });
+      },
+      filterHistory () {
+        if (this.normalHistory && this.normalHistory.length > 0) {
+          let address = this.$store.state.account.address;
+          let acctType = this.$store.state.account.type;
+          this.normalHistory = this.normalHistory.filter(item => {
+            if (this.asset.issuer) {
+              return item.assetCode === this.asset.code && item.assetIssuer === this.asset.issuer && item.address === address && item.acctType === acctType;
+            } else {
+              return item.assetCode === this.asset.code && item.address === address && item.acctType === acctType;
+            }
+          });
+        }
+      },
+      toHistory (data) {
+        let toAddress = data.Destination;
+        /* let deliveredAmount = data.outcome.deliveredAmount || {};
         let assetIssuer = deliveredAmount.counterparty;
         if (deliveredAmount.currency && deliveredAmount.currency !== 'XRP') {
           let balanceChanges = data.outcome.balanceChanges[this.$store.state.account.address];
@@ -78,23 +137,36 @@
               break;
             }
           }
+        } */
+        let assetCode = '';
+        let assetIssuer = '';
+        let amount = null;
+        let fromAddress = data.Account;
+        if (data.Amount.issuer && data.Amount.currency) {
+          assetIssuer = data.Amount.issuer;
+          assetCode = data.Amount.currency;
+          amount = data.Amount.value;
+          fromAddress = data.Amount.issuer;
+        } else {
+          assetCode = this.asset.code;
+          amount = data.Amount / 1000000;
         }
         let history = {
           address: this.$store.state.account.address,
           acctType: this.$store.state.account.type,
-          assetCode: deliveredAmount.currency,
+          assetCode: assetCode,
           assetIssuer: assetIssuer,
-          txHash: data.id,
-          amount: deliveredAmount.value || '',
-          blockNumber: data.outcome.ledgerVersion,
+          txHash: data.hash,
+          amount: amount,
+          blockNumber: data.inLedger,
           to: toAddress,
-          from: data.specification.source.address,
-          txTime: moment(data.outcome.timestamp).format('YYYYMMDD HH:mm:ss'),
-          fee:  data.outcome.fee,
+          toTag: data.DestinationTag,
+          from: fromAddress,
+          txTime: moment((data.date + 0x386D4380) * 1000).format('YYYYMMDD HH:mm:ss'),
+          fee:  data.Fee / 1000000,
           txType: toAddress.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0',
           data: data
         };
-
         return history;
       }
     }
