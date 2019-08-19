@@ -17,7 +17,7 @@ class RippleWallet{
     this.url = url;
     if (!this.server || !this.server.isConnected()) {
       this.server = new RippleAPI({
-        server: url
+        server: url,maxFeeXRP: "0.05" 
       });
     }
   }
