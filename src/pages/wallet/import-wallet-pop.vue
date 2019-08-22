@@ -16,17 +16,18 @@
       <pl-content-block
       :offsetTop="46">
         <div>
-          <div class="padding text-center" style="margin-top: 10px;margin-bottom: 15px;">
-          <!--<span
+          <!--<div class="padding text-center" style="margin-top: 10px;margin-bottom: 15px;">
+          <span
             style="border-radius: 3px 0 0 3px;"
             class="top-btn"
             :class="{'select text-white':tagSelect=='1'}"
-            @click.stop="onchangeTag('1')">{{$t('wallet.mnemonicCode')}}</span>--><span
+            @click.stop="onchangeTag('1')">{{$t('wallet.mnemonicCode')}}</span><span
             @click.stop="onchangeTag('2')"
             :class="{'select text-white':tagSelect=='2'}"
             class="top-btn"
             style="border-radius: 0 3px 3px 0;">{{$t('wallet.privateKey')}}</span>
-          </div>
+          </div>-->
+          <div style="margin-top: 15px;"></div>
           <wallet-text-area
             :tip="$t('wallet.recoverWalletTip')"
             v-model="form.memorizingWords"
