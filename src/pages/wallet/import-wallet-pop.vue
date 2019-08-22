@@ -17,11 +17,11 @@
       :offsetTop="46">
         <div>
           <div class="padding text-center" style="margin-top: 10px;margin-bottom: 15px;">
-          <span
+          <!--<span
             style="border-radius: 3px 0 0 3px;"
             class="top-btn"
             :class="{'select text-white':tagSelect=='1'}"
-            @click.stop="onchangeTag('1')">{{$t('wallet.mnemonicCode')}}</span><span
+            @click.stop="onchangeTag('1')">{{$t('wallet.mnemonicCode')}}</span>--><span
             @click.stop="onchangeTag('2')"
             :class="{'select text-white':tagSelect=='2'}"
             class="top-btn"
@@ -70,7 +70,7 @@
       return {
         coin: {},
         source: '',
-        tagSelect: '1',
+        tagSelect: '2',
         showVpop: false,
         form: {
           memorizingWords: '',
@@ -104,7 +104,7 @@
         this.showVpop = false;
       },
       resetForm () {
-        this.tagSelect = '1';
+        this.tagSelect = '2';
         this.form.memorizingWords = '';
         this.form.privateKey = '';
         this.$nextTick(() => {
