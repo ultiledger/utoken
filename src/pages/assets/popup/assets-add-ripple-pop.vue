@@ -112,7 +112,7 @@
         let configAssets = this.getConfigAssets(type);
         let configAssetsArray=[];
         configAssets.forEach(item => {
-          if (item.issuer && item.issuer === this.$store.state.account.address){
+          if (item.issuer && item.issuer === this.$store.state.account.address && item.code === this.$store.state.account.type ){
             return;
           }
           configAssetsArray.push({

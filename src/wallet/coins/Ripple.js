@@ -18,7 +18,7 @@ class RippleWallet{
     this.url = url;
     if (!this.server || !this.server.isConnected()) {
       this.server = new RippleAPI({
-        server: url,maxFeeXRP: "0.05" 
+        server: url,maxFeeXRP: '0.05'
       });
     }
   }
@@ -140,7 +140,7 @@ class RippleWallet{
       try {
         const options = {
           account: address,
-          limit: 20
+          limit: 50
         };
         const command = 'account_tx';
         if (option.hasMore && option.historys) {

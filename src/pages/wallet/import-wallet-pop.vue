@@ -16,7 +16,7 @@
       <pl-content-block
       :offsetTop="46">
         <div>
-          <div class="padding text-center" style="margin-top: 10px;margin-bottom: 15px;">
+          <!--<div class="padding text-center" style="margin-top: 10px;margin-bottom: 15px;">
           <span
             style="border-radius: 3px 0 0 3px;"
             class="top-btn"
@@ -26,7 +26,8 @@
             :class="{'select text-white':tagSelect=='2'}"
             class="top-btn"
             style="border-radius: 0 3px 3px 0;">{{$t('wallet.privateKey')}}</span>
-          </div>
+          </div>-->
+          <div style="margin-top: 15px;"></div>
           <wallet-text-area
             :tip="$t('wallet.recoverWalletTip')"
             v-model="form.memorizingWords"
@@ -70,7 +71,7 @@
       return {
         coin: {},
         source: '',
-        tagSelect: '1',
+        tagSelect: '2',
         showVpop: false,
         form: {
           memorizingWords: '',
@@ -104,7 +105,7 @@
         this.showVpop = false;
       },
       resetForm () {
-        this.tagSelect = '1';
+        this.tagSelect = '2';
         this.form.memorizingWords = '';
         this.form.privateKey = '';
         this.$nextTick(() => {
