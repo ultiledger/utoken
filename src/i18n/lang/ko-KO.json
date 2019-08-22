@@ -106,7 +106,9 @@
     "creating": "새로 만드는 중입니다...",
     "correctMnemonic": "연상기호가 정확합니다！",
     "cnMnemonic": "중국어",
-    "enMnemonic": "영어"
+    "enMnemonic": "영어",
+    "backMnemonicNext": "백업이 좋다",
+    "selectMnemonicLang": "니모닉 언어 선택"
   },
   "assets": {
     "assets": "자산",

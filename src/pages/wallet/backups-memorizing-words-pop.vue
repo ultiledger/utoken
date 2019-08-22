@@ -51,7 +51,7 @@
         <div class="text-muted small-font item text-tip-color"  v-text="$t('wallet.backMnemonicCodeSubTip')"></div>
         <!--按钮部分-->
         <button-bottom>
-          <van-button size="large" round type="primary" @click="next()" v-text="$t('common.next')"></van-button>
+          <van-button size="large" round type="primary" @click="next()" v-text="$t('wallet.backMnemonicNext')"></van-button>
         </button-bottom>
       </pl-content-block>
     </van-popup>
@@ -98,12 +98,14 @@
       close () {
         this.showVpop = false;
       },
-      show (mnemonicCode, password, backupsSource, source, accountTypes) {
+      show (mnemonicCode, password, backupsSource, source, accountTypes, memorizingCodeLanguage) {
         if (mnemonicCode) { // 导出助记词跳转
           this.form.memorizingWords = mnemonicCode;
           this.memorizingCodes = mnemonicCode.split(' ');
           this.isShowTag = false;
         } else { // 创建跳转
+          this.isShowTag = false;
+          this.memorizingCodeLanguage = memorizingCodeLanguage;
           this.setDefaultMnemonic();
         }
         this.form.password = password;
@@ -124,7 +126,7 @@
         });
       },
       setDefaultMnemonic () {
-        this.memorizingCodeLanguage = 'english';
+        /* this.memorizingCodeLanguage = 'english';
         this.isShowTag = false;
         if (this.$store.state.setting.language === 'zh-CN') {
           this.isShowTag = true;
@@ -132,11 +134,11 @@
           this.memorizingCodeLanguage = 'chinese_simplified';
         }else {
           this.tagSelect = '2';
-        }
+        } */
         this.form.memorizingWords = hdWallet.generateMnemonic({entropyBits: 128, language: this.memorizingCodeLanguage});
         this.memorizingCodes = this.form.memorizingWords.split(' ');
       },
-      onchangeTag (type) {
+      /* onchangeTag (type) {
         this.tagSelect = type;
         this.memorizingCodeLanguage = 'english';
         if (type === '1') {
@@ -144,7 +146,7 @@
         }
         this.form.memorizingWords = hdWallet.generateMnemonic({entropyBits: 128, language: this.memorizingCodeLanguage});
         this.memorizingCodes = this.form.memorizingWords.split(' ');
-      },
+      }, */
       closeDialog () {
         this.showDialog = false;
       },

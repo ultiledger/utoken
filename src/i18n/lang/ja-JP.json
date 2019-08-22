@@ -106,7 +106,9 @@
     "creating": "作成中...",
     "correctMnemonic": "復元パスフレーズが正しいです！",
     "cnMnemonic": "中国語",
-    "enMnemonic": "英語"
+    "enMnemonic": "英語",
+    "backMnemonicNext": "バックアップが良い",
+    "selectMnemonicLang": "ニーモニック言語を選択"
   },
   "assets": {
     "assets": "資産",

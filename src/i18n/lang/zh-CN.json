@@ -106,7 +106,9 @@
     "creating": "创建中...",
     "correctMnemonic": "助记词正确！",
     "cnMnemonic": "中文",
-    "enMnemonic": "英文"
+    "enMnemonic": "英文",
+    "backMnemonicNext": "助记词已抄好",
+    "selectMnemonicLang": "选择助记词语言"
   },
   "assets": {
     "assets": "资产",
