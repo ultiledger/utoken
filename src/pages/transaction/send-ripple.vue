@@ -245,10 +245,11 @@
           this.$toast(this.$t('transaction.amountGreaterThanZero'));
           return;
         }
-
-        if (amt.gt(this.balance)) {
-          this.$toast(this.$t('transaction.balanceTooLowTip'));
-          return;
+        if (this.asset.issuer !== this.$store.state.account.address) {
+          if (amt.gt(this.balance) && this) {
+            this.$toast(this.$t('transaction.balanceTooLowTip'));
+            return;
+          }
         }
 
         if (!this.addressActivated && amt.lt('20')) {

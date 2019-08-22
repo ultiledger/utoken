@@ -98,8 +98,8 @@
                 this.rsp = ret.data;
               }
               ret.data.transactions.forEach(item => {
-                if (item.tx && item.tx.TransactionType === 'Payment') {
-                  let history = this.toHistory(item.tx);
+                if (item.tx && item.tx.TransactionType === 'Payment' && item.validated && item.meta.TransactionResult === 'tesSUCCESS') {
+                  let history = this.toHistory(item);
                   if (history) {
                     this.normalHistory.push(history);
                   }
@@ -126,7 +126,8 @@
         }
       },
       toHistory (data) {
-        let toAddress = data.Destination;
+        let tx = data.tx;
+        let toAddress = tx.Destination;
         /* let deliveredAmount = data.outcome.deliveredAmount || {};
         let assetIssuer = deliveredAmount.counterparty;
         if (deliveredAmount.currency && deliveredAmount.currency !== 'XRP') {
@@ -140,32 +141,32 @@
         } */
         let assetCode = '';
         let assetIssuer = '';
-        let amount = null;
-        let fromAddress = data.Account;
-        if (data.Amount.issuer && data.Amount.currency) {
-          assetIssuer = data.Amount.issuer;
-          assetCode = data.Amount.currency;
-          amount = data.Amount.value;
-          fromAddress = data.Amount.issuer;
+        let fromAddress = tx.Account;
+        let amount = data.meta.delivered_amount;
+        if (data.meta.delivered_amount instanceof Object) {
+          amount = data.meta.delivered_amount.value;
+          assetIssuer = data.meta.delivered_amount.issuer;
+          assetCode = data.meta.delivered_amount.currency;
+          fromAddress = data.meta.delivered_amount.issuer;
         } else {
+          amount = data.meta.delivered_amount / 1000000;
           assetCode = this.asset.code;
-          amount = data.Amount / 1000000;
         }
         let history = {
           address: this.$store.state.account.address,
           acctType: this.$store.state.account.type,
           assetCode: assetCode,
           assetIssuer: assetIssuer,
-          txHash: data.hash,
+          txHash: tx.hash,
           amount: amount,
-          blockNumber: data.inLedger,
+          blockNumber: tx.inLedger,
           to: toAddress,
-          toTag: data.DestinationTag,
+          toTag: tx.DestinationTag,
           from: fromAddress,
-          txTime: moment((data.date + 0x386D4380) * 1000).format('YYYYMMDD HH:mm:ss'),
-          fee:  data.Fee / 1000000,
+          txTime: moment((tx.date + 0x386D4380) * 1000).format('YYYYMMDD HH:mm:ss'),
+          fee:  tx.Fee / 1000000,
           txType: toAddress.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0',
-          data: data
+          data: tx
         };
         return history;
       }
