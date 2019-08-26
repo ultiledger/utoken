@@ -145,7 +145,11 @@
         let amount = data.meta.delivered_amount;
         if (data.meta.delivered_amount instanceof Object) {
           amount = data.meta.delivered_amount.value;
-          assetIssuer = data.meta.delivered_amount.issuer;
+          if (toAddress === data.meta.delivered_amount.issuer && this.$store.state.account.address === data.meta.delivered_amount.issuer) {
+            assetIssuer = fromAddress;
+          } else {
+            assetIssuer = data.meta.delivered_amount.issuer;
+          }
           assetCode = data.meta.delivered_amount.currency;
           // fromAddress = data.meta.delivered_amount.issuer;
         } else {
