@@ -147,7 +147,7 @@
           amount = data.meta.delivered_amount.value;
           assetIssuer = data.meta.delivered_amount.issuer;
           assetCode = data.meta.delivered_amount.currency;
-          fromAddress = data.meta.delivered_amount.issuer;
+          // fromAddress = data.meta.delivered_amount.issuer;
         } else {
           amount = data.meta.delivered_amount / 1000000;
           assetCode = this.asset.code;
