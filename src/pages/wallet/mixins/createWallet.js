@@ -149,6 +149,7 @@ export default {
       if (accountType === AccountType.ethereum) {
         let tokens = coin[accountType].tokens();
         if (tokens) {
+          this.saveDefaultToken(tokens['USDT'],account.address);
           this.saveDefaultToken(tokens['ULT'],account.address);
           this.saveDefaultToken(tokens['DBT'],account.address);
         }

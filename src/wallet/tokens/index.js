@@ -1,6 +1,14 @@
 import {AccountType} from '../constants';
 let tokensCofing = {
   [AccountType.ethereum]: {
+    'USDT': {
+      symbol: 'USDT',
+      name: 'USDT',
+      displayName: 'USDT',
+      decimals: 18,
+      address: '0xdAC17F958D2ee523a2206206994597C13D831ec7'.toLocaleLowerCase(),
+      abi: require('./USDT_abi.json')
+    },
     'ULT': {
       symbol: 'ULT',
       name: 'Ultiledger',
