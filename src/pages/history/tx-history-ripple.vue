@@ -37,6 +37,7 @@
 <script>
   import moment from 'moment';
   import history from './mixns/history';
+  import coins from 'src/wallet/coins';
   export default{
     mixins: [history],
     data () {
@@ -112,15 +113,18 @@
           console.info(err);
         });
       },
+      shortType (type) {
+        return coins[type].symbol || type;
+      },
       filterHistory () {
         if (this.normalHistory && this.normalHistory.length > 0) {
           let address = this.$store.state.account.address;
           let acctType = this.$store.state.account.type;
           this.normalHistory = this.normalHistory.filter(item => {
-            if (this.asset.issuer) {
-              return item.assetCode === this.asset.code && item.assetIssuer === this.asset.issuer && item.address === address && item.acctType === acctType;
-            } else {
+            if (item.assetIssuer) {
               return item.assetCode === this.asset.code && item.address === address && item.acctType === acctType;
+            } else {
+              return item.assetCode === this.shortType(acctType) && item.address === address && item.acctType === acctType;
             }
           });
         }
