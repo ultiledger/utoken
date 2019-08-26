@@ -121,11 +121,7 @@
           let address = this.$store.state.account.address;
           let acctType = this.$store.state.account.type;
           this.normalHistory = this.normalHistory.filter(item => {
-            if (item.assetIssuer) {
-              return item.assetCode === this.asset.code && item.address === address && item.acctType === acctType;
-            } else {
-              return item.assetCode === this.shortType(acctType) && item.address === address && item.acctType === acctType;
-            }
+            return item.assetCode === this.asset.code && item.address === address && item.acctType === acctType;
           });
         }
       },
@@ -158,7 +154,7 @@
           // fromAddress = data.meta.delivered_amount.issuer;
         } else {
           amount = data.meta.delivered_amount / 1000000;
-          assetCode = this.asset.code;
+          assetCode = this.shortType(this.$store.state.account.type);
         }
         let history = {
           address: this.$store.state.account.address,
