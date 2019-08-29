@@ -42,7 +42,11 @@ const state = {
     [AccountType.bitcoin]: [
       {value: 'https://blockchain.info', type: 'public'},
       {value: 'https://testnet.blockchain.info', type: 'test'}
-    ]
+    ],
+    // [AccountType.usdt]: [
+    //   {value: 'https://blockchain.info', type: 'public'},
+    //   {value: 'https://testnet.blockchain.info', type: 'test'}
+    // ]
   },
   setting: {
     id: '1',

@@ -2,7 +2,7 @@ import hdWallet from 'src/wallet/hd-wallet';
 import coin from 'src/wallet/coins';
 import uuid from 'core/utils/uuid';
 import cryptor from 'core/utils/cryptor';
-import {AccountType} from 'src/wallet/constants';
+import { AccountType } from 'src/wallet/constants';
 export default {
   methods: {
     /**
@@ -14,12 +14,28 @@ export default {
      * @param backFlag 助记词是否已经备份
      * @param state 账户状态
      */
-    createWalletAcctByMnemonicCode (accountType, mnemonicCode, walletPwd, source, backFlag=true, state = 'N') {
+    createWalletAcctByMnemonicCode(
+      accountType,
+      mnemonicCode,
+      walletPwd,
+      source,
+      backFlag = true,
+      state = 'N'
+    ) {
       let memorizingCodeLanguage = this.getMemorizingCodeLanguage(mnemonicCode);
-      let wallet = hdWallet.fromMnemonic(mnemonicCode, null,  memorizingCodeLanguage);
+      let wallet = hdWallet.fromMnemonic(
+        mnemonicCode,
+        null,
+        memorizingCodeLanguage
+      );
       if (wallet) {
         mnemonicCode = cryptor.encryptAES(mnemonicCode, walletPwd);
-        let identity = this.genIdentity('mnemonicCode', mnemonicCode, source, backFlag);
+        let identity = this.genIdentity(
+          'mnemonicCode',
+          mnemonicCode,
+          source,
+          backFlag
+        );
         // 加密密码
         let password = cryptor.encryptMD5(walletPwd);
         // 创建账户钱包
@@ -32,17 +48,17 @@ export default {
           let pathIndex = -1;
           accounts.forEach(item => {
             // 因在支持多账户前，pathIndex不存在，因此如果pathIndex字段不存在，则认为是0
-            if ( ! item.pathIndex){
+            if (!item.pathIndex) {
               item.pathIndex = 0;
             }
-            pathIndex = item.pathIndex > pathIndex ? item.pathIndex:pathIndex;
+            pathIndex = item.pathIndex > pathIndex ? item.pathIndex : pathIndex;
           });
           pathIndex = pathIndex + 1;
           let account = wallet.getAccount(coin[item], pathIndex);
           this.$collecitons.account.insertAccount({
             identityId: identity.id,
             address: account.address,
-            pathIndex:pathIndex,
+            pathIndex: pathIndex,
             type: item,
             secret: cryptor.encryptAES(account.secret, walletPwd),
             name: this.$collecitons.account.genAccountName(item),
@@ -65,8 +81,17 @@ export default {
      * @param source 来源，1-创建，2-导入
      * @param backFlag 助记词是否已经备份
      */
-    createWalletAcctByPrivateKey(accountType, privateKey, walletPwd, source, backFlag=false) {
-      let account = hdWallet.getAccountFromSecret(coin[accountType], privateKey);
+    createWalletAcctByPrivateKey(
+      accountType,
+      privateKey,
+      walletPwd,
+      source,
+      backFlag = false
+    ) {
+      let account = hdWallet.getAccountFromSecret(
+        coin[accountType],
+        privateKey
+      );
       if (account) {
         privateKey = cryptor.encryptAES(privateKey, walletPwd);
         let identity = this.genIdentity('secret', privateKey, source, backFlag);
@@ -93,15 +118,19 @@ export default {
      * @param privateKey
      * @returns {*}
      */
-    getHdWalletAccount (accountType, mnemonicCode, privateKey) {
+    getHdWalletAccount(accountType, mnemonicCode, privateKey) {
       try {
         if (privateKey) {
           return hdWallet.getAccountFromSecret(coin[accountType], privateKey);
         } else if (mnemonicCode) {
-          let wallet = hdWallet.fromMnemonic(mnemonicCode, null, this.getMemorizingCodeLanguage(mnemonicCode));
+          let wallet = hdWallet.fromMnemonic(
+            mnemonicCode,
+            null,
+            this.getMemorizingCodeLanguage(mnemonicCode)
+          );
           return wallet.getAccount(coin[accountType], 0);
         }
-      }catch (e) {
+      } catch (e) {
         console.error(e);
       }
     },
@@ -113,7 +142,7 @@ export default {
      * @param backFlag
      * @returns {{type: *, value: *, source: *}}
      */
-    genIdentity (type, value, source, backFlag) {
+    genIdentity(type, value, source, backFlag) {
       // 如果身份已经存在，那么就直接挂到上面就好，不存在则创建
       let identity = {
         type: type,
@@ -126,16 +155,18 @@ export default {
       } else {
         identity.id = uuid.getUUID();
         identity.backFlag = backFlag;
-        this.$collecitons.identity.insertIdentity (identity);
+        this.$collecitons.identity.insertIdentity(identity);
       }
       return identity;
     },
-    getFirstAcct () { // 获取保存的第一个账户作为默认账户
+    getFirstAcct() {
+      // 获取保存的第一个账户作为默认账户
       return this.$collecitons.account.findAll()[0];
     },
-    getMemorizingCodeLanguage (memorizingCode) { // 获取助记词的语言
-      let reg=/^[\u4e00-\u9fa5]+$/;
-      if (reg.test(memorizingCode.replace(/\s+/g, ''))){
+    getMemorizingCodeLanguage(memorizingCode) {
+      // 获取助记词的语言
+      let reg = /^[\u4e00-\u9fa5]+$/;
+      if (reg.test(memorizingCode.replace(/\s+/g, ''))) {
         return 'chinese_simplified';
       }
       return 'english';
@@ -145,29 +176,36 @@ export default {
      * @param accountType 账户类型
      * @param account 账户包含公钥
      */
-    saveDefaultAssets (accountType, account) {
+    saveDefaultAssets(accountType, account) {
       if (accountType === AccountType.ethereum) {
         let tokens = coin[accountType].tokens();
         if (tokens) {
-          this.saveDefaultToken(tokens['USDT'],account.address);
-          this.saveDefaultToken(tokens['ULT'],account.address);
-          this.saveDefaultToken(tokens['DBT'],account.address);
+          // 默认进去的资产
+          this.saveDefaultToken(tokens['USDT'], account.address);
+          this.saveDefaultToken(tokens['ULT'], account.address);
+          this.saveDefaultToken(tokens['DBT'], account.address);
         }
       }
     },
-    saveDefaultToken(token,address){
-      let t = this.$collecitons.asset.getInstance().find({address:address,code:token.symbol});
-      if(t && t.length >0){
-        this.$collecitons.asset.findAndUpdateAsset({address:address,code:token.symbol},(asset) => {
-          return asset.selected = true;
-        });
+    saveDefaultToken(token, address) {
+      let t = this.$collecitons.asset
+        .getInstance()
+        .find({ address: address, code: token.symbol });
+      if (t && t.length > 0) {
+        this.$collecitons.asset.findAndUpdateAsset(
+          { address: address, code: token.symbol },
+          asset => {
+            return (asset.selected = true);
+          }
+        );
         return;
       }
       this.$collecitons.asset.insertAsset({
         address: address,
         code: token.symbol,
         name: token.name,
-        selected: true });
+        selected: true
+      });
     },
     /**
      * 筛选出没有选中的账户类型,并创建
@@ -179,14 +217,28 @@ export default {
      * @param state
      * @returns {any[]}
      */
-    filterAndCreateNotSelectAccountType (accountTypes, mnemonicCode, walletPwd, source, backFlag, state) {
+    filterAndCreateNotSelectAccountType(
+      accountTypes,
+      mnemonicCode,
+      walletPwd,
+      source,
+      backFlag,
+      state
+    ) {
       let values = Object.values(AccountType);
       let filterAccounts = values.filter(item => {
         return accountTypes.indexOf(item) < 0;
       });
       if (filterAccounts.length > 0) {
-        this.createWalletAcctByMnemonicCode(filterAccounts, mnemonicCode, walletPwd, source, backFlag, state);
+        this.createWalletAcctByMnemonicCode(
+          filterAccounts,
+          mnemonicCode,
+          walletPwd,
+          source,
+          backFlag,
+          state
+        );
       }
-    },
+    }
   }
 };

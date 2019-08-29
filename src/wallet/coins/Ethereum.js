@@ -2,12 +2,10 @@ import Web3 from 'web3';
 import EthTx from 'ethereumjs-tx';
 import Big from 'big.js';
 import tokens from '../tokens';
-import {AccountType, CoinType} from '../constants';
+import { AccountType, CoinType } from '../constants';
 import axios from 'axios';
 
-const apiKeys = [
-  'EB9IXHJKA7W233MV4W7MSME7GTF564Y54R'
-];
+const apiKeys = ['EB9IXHJKA7W233MV4W7MSME7GTF564Y54R'];
 
 const etherscanApiUrl = {
   test: 'https://api-rinkeby.etherscan.io/api',
@@ -22,22 +20,22 @@ class EthereumWallet {
     this.option = option;
   }
 
-  setServer (url) {
+  setServer(url) {
     this.url = url;
     this.server = new Web3(new Web3.providers.WebsocketProvider(url));
   }
 
-  destroy () {}
+  destroy() {}
 
-  isActivated () {
+  isActivated() {
     return true;
   }
 
-  getInstance () {
+  getInstance() {
     return this.server;
   }
 
-  async getBalances (address, assetCodes = []) {
+  async getBalances(address, assetCodes = []) {
     this.setServer(this.url);
     // let url = `http://api.ethplorer.io/getAddressInfo/${address}?apiKey=freekey`;
     // let ret = await axios.get(url);
@@ -80,9 +78,11 @@ class EthereumWallet {
     //   });
     // }
     let balances = [];
+    // web3.eth.getBalance方法返回链上指定地址的账户余额。
     let ethBalance = await this.server.eth.getBalance(address);
     balances.push({
       code: CoinType.ETH,
+      // ether 货币单位
       value: this.server.utils.fromWei(ethBalance, 'ether')
     });
     for (const tokenCode of assetCodes) {
@@ -94,22 +94,36 @@ class EthereumWallet {
     return balances;
   }
 
-  async _getTokenBalance (address, tokenCode) {
+  async _getTokenBalance(address, tokenCode) {
     let tokenConfig = tokens.get(AccountType.ethereum);
     if (tokenConfig[tokenCode]) {
       let token = tokenConfig[tokenCode];
+      let decimal = token.decimals;
+      //这允许您与智能合约进行交互
       let contract = new this.server.eth.Contract(token.abi, token.address);
       let tokenBalance = await contract.methods.balanceOf(address).call();
+      let value = tokenBalance / Math.pow(10, decimal);
+      //判断 如果是ustd就调整单位
+      // if(tokenCode === 'USDT') {
+      //   return {
+      //     value: Web3.utils.fromWei(tokenBalance, 'mwei'),
+      //     code: tokenCode,
+      //     issuer: token.address
+      //   };
+      // } else {
       return {
-        value: Web3.utils.fromWei(tokenBalance, 'ether'),
+        value: value,
         code: tokenCode,
         issuer: token.address
       };
+      // }
+      // let aa = Web3.utils.fromWei(tokenBalance, 'mwei');
+      // console.log(address, tokenCode, aa);
     }
     return null;
   }
 
-  async getGasPriceForGwei () {
+  async getGasPriceForGwei() {
     let gasPrice = await this.server.eth.getGasPrice();
     return Web3.utils.fromWei(gasPrice, 'gwei');
   }
@@ -144,9 +158,16 @@ class EthereumWallet {
     if (this.url && this.url.indexOf('mainnet.infura') != -1) {
       mode = 'public';
     }
-    let url = `${etherscanApiUrl[mode]}?module=account&apikey=${apiKeys[0]}&address=${address}`;
+    let url = `${etherscanApiUrl[mode]}?module=account&apikey=${
+      apiKeys[0]
+    }&address=${address}`;
     let tokenConfig = tokens.get(AccountType.ethereum);
-    if (option && option.assetCode && option.assetCode != CoinType.ETH && tokenConfig[option.assetCode]) {
+    if (
+      option &&
+      option.assetCode &&
+      option.assetCode != CoinType.ETH &&
+      tokenConfig[option.assetCode]
+    ) {
       let token = tokenConfig[option.assetCode];
       url += `&action=tokentx&contractaddress=${token.address}`;
     } else {
@@ -158,16 +179,19 @@ class EthereumWallet {
         url += `&${key}=${option[key]}`;
       }
     });
-    return new Promise((resolve, reject)=>{
-      axios.get(url).then(ret => {
-        if (ret.data.status === '1' && ret.data.message === 'OK') {
-          resolve(ret.data.result);
-        } else {
-          resolve([]);
-        }
-      }).catch(err => {
-        reject(err);
-      });
+    return new Promise((resolve, reject) => {
+      axios
+        .get(url)
+        .then(ret => {
+          if (ret.data.status === '1' && ret.data.message === 'OK') {
+            resolve(ret.data.result);
+          } else {
+            resolve([]);
+          }
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   }
 
@@ -181,7 +205,7 @@ class EthereumWallet {
     fromSecret = `0x${fromSecret}`;
     let account = this.server.eth.accounts.privateKeyToAccount(fromSecret);
     const from = account.address;
-    const gasPrice = option.gasPrice || await this.server.eth.getGasPrice();
+    const gasPrice = option.gasPrice || (await this.server.eth.getGasPrice());
     const gasLimit = option.gasLimit || 21000;
     const nonce = await this.server.eth.getTransactionCount(from, 'pending');
     let amountValue;
@@ -194,7 +218,12 @@ class EthereumWallet {
       let contract = new this.server.eth.Contract(token.abi, token.address);
       toAddress = token.address;
       amountValue = '0';
-      data = contract.methods.transfer(to, new Big(amount).times(new Big(10).pow(token.decimals)).toFixed()).encodeABI();
+      data = contract.methods
+        .transfer(
+          to,
+          new Big(amount).times(new Big(10).pow(token.decimals)).toFixed()
+        )
+        .encodeABI();
     } else {
       amountValue = this.server.utils.toWei(amount, 'ether');
       toAddress = to;
@@ -211,16 +240,16 @@ class EthereumWallet {
       data: data
     };
 
-    let privateKey =  Buffer.from(fromSecret.substr(2), 'hex');
+    let privateKey = Buffer.from(fromSecret.substr(2), 'hex');
     let tx = new EthTx(rawTransaction);
     tx.sign(privateKey);
     let serializedTx = `0x${tx.serialize().toString('hex')}`;
 
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
       this.server.eth.sendSignedTransaction(serializedTx, (err, hash) => {
-        if (!err){
+        if (!err) {
           resolve(hash);
-          console.info("tx hash:" + hash);
+          console.info('tx hash:' + hash);
         } else {
           reject(err);
           console.error(err);
@@ -229,17 +258,17 @@ class EthereumWallet {
     });
   }
 
-  async isContract (address) {
+  async isContract(address) {
     this.setServer(this.url);
     let code = await this.server.eth.getCode(address);
-    if(code === '0x')  {
+    if (code === '0x') {
       return false;
     } else {
       return true;
     }
   }
 
-  isValidAddress (address) {
+  isValidAddress(address) {
     return Web3.utils.isAddress(address);
   }
 
@@ -253,9 +282,11 @@ class EthereumWallet {
 
   getAccountFromSecret(secret) {
     let web3 = new Web3();
-    const account = web3.eth.accounts.privateKeyToAccount(this.handleSecret(secret));
+    const account = web3.eth.accounts.privateKeyToAccount(
+      this.handleSecret(secret)
+    );
     const address = account.address;
-    return { secret, address};
+    return { secret, address };
   }
 
   /**
@@ -263,7 +294,7 @@ class EthereumWallet {
    * @param secret （私钥）
    * @returns {*}
    */
-  handleSecret (secret) {
+  handleSecret(secret) {
     /*私钥规定是64位的排除0x*/
     if (secret.indexOf('0x') === 0 && secret.length > 64) {
       return secret;
@@ -276,22 +307,27 @@ class EthereumWallet {
    * @param address (合约地址)
    * @returns {Promise<any>}
    */
-  getContractAbi (address) {
+  getContractAbi(address) {
     let mode = 'test';
     if (this.url && this.url.indexOf('mainnet.infura') != -1) {
       mode = 'public';
     }
-    let url = `${etherscanApiUrl[mode]}?module=contract&action=getabi&address=${address}&apikey=${apiKeys[0]}`;
+    let url = `${
+      etherscanApiUrl[mode]
+    }?module=contract&action=getabi&address=${address}&apikey=${apiKeys[0]}`;
     return new Promise((resolve, reject) => {
-      axios.get(url).then((ret) => {
-        if (ret.data.status === '1' && ret.data.message === 'OK') {
-          resolve(JSON.parse(ret.data.result));
-        } else {
-          reject(ret.data.result);
-        }
-      }).catch(error => {
-        reject(error);
-      });
+      axios
+        .get(url)
+        .then(ret => {
+          if (ret.data.status === '1' && ret.data.message === 'OK') {
+            resolve(JSON.parse(ret.data.result));
+          } else {
+            reject(ret.data.result);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   }
 
