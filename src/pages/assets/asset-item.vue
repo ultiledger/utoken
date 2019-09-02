@@ -212,7 +212,6 @@ export default {
       let assets = [];
       if (this.data && this.data.address) {
         let assetsMap = this.getConfigAssetsMap(this.data.type);
-        console.log(this.balances);
         if (this.balances) {
           //以太坊的数据
           this.balances.forEach((item, index) => {
@@ -233,7 +232,6 @@ export default {
               }
               assets.push(asset);
             }
-            console.log(assets);
           });
         }
       }

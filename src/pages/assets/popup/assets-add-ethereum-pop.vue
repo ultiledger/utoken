@@ -84,7 +84,6 @@ export default {
       this.curreAcctountAddress = account.address;
       // 初始化assets
       this.assets = this.getAssets(account.type);
-      console.log(this.assets);
     },
     getAssets(type) {
       let coin = coins[type];
@@ -95,19 +94,16 @@ export default {
           canSelect: false
         }
       ];
-      console.log(coin);
       //找到当前钱包下的资产
       let selectAssets = this.$collecitons.asset.findByAddress(
         this.curreAcctountAddress
       );
-      console.log(selectAssets);
       //把usdt的地址加进去
       let selectAssetsCode = selectAssets
         .map(item => {
           return item.code;
         })
         .join(",");
-      console.log(selectAssetsCode);
       // 当前钱包下的资产
       let configAssets = this.getConfigAssets(type);
 
@@ -119,7 +115,6 @@ export default {
       return result;
     },
     changeAssets(asset) {
-      console.log(asset, this.assets);
       if (asset.selected) {
         // 保存数据库
         this.$collecitons.asset.insertAsset({

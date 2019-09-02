@@ -90,7 +90,6 @@ export default {
           const trxConfirmations = await this.$wallet.getConfirmations(
             item.txHash
           );
-          console.log("trxConfirmations:", trxConfirmations);
           if (trxConfirmations === -1) {
             this.$collecitons.tempHistory.removeHistory({
               txHash: item.txHash

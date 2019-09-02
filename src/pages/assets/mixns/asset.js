@@ -15,7 +15,6 @@ export default {
               name: token.name,
               issuer: token.address
             };
-            console.log(item);
             ret.push(item);
           });
           return ret;

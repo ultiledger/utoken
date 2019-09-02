@@ -38,7 +38,7 @@
       <div class="amount normal-font" :class="type.cls">
         <table style="height: 100%;width: 100%;">
           <tr>
-            <td @click="aa(item)">{{type.symbol}}&nbsp;{{item.amount | currency('', '7') | cutTail}}</td>
+            <td>{{type.symbol}}&nbsp;{{item.amount | currency('', '7') | cutTail}}</td>
           </tr>
         </table>
       </div>
@@ -107,9 +107,6 @@ export default {
     }
   },
   methods: {
-    aa(item) {
-      console.log(item.amount);
-    },
     onClose(clickPosition, instance) {
       switch (clickPosition) {
         case "left":

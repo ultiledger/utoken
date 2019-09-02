@@ -14,7 +14,6 @@ import ContentBlock from './ContentBlock';
 import PasswordStrength from './PasswordStrength';
 import Privacy from './privacy';
 
-console.log(PageList);
 
 const install = function(Vue) {
   /* istanbul ignore if */
