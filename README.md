@@ -48,6 +48,7 @@ cordova plugin add cordova-plugin-android-permissions
 cordova plugin add cordova-plugin-file-opener2
 cordova plugin add cordova-plugin-device
 cordova plugin add cordova-plugin-file-transfer
+cordova plugin add cordova-plugin-statusbar
 cordova build android
 ```
 

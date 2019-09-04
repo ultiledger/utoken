@@ -141,6 +141,10 @@ router.router.instance.afterEach(() => {
   backbuttonHandler.clearLayer();
 });
 document.addEventListener('deviceready', function () {
+  // 需要配合cordova-plugin-statusbar使用
+  if (window.StatusBar) {
+    window.StatusBar.styleDefault();
+  }
   // 需要deviceready之后
   document.addEventListener('backbutton', backbuttonHandler.handleBackbuttonEvent, false);
   loadData(() => {

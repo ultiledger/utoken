@@ -37,6 +37,7 @@
 <script>
   import moment from 'moment';
   import history from './mixns/history';
+  import coins from 'src/wallet/coins';
   export default{
     mixins: [history],
     data () {
@@ -112,16 +113,15 @@
           console.info(err);
         });
       },
+      shortType (type) {
+        return coins[type].symbol || type;
+      },
       filterHistory () {
         if (this.normalHistory && this.normalHistory.length > 0) {
           let address = this.$store.state.account.address;
           let acctType = this.$store.state.account.type;
           this.normalHistory = this.normalHistory.filter(item => {
-            if (this.asset.issuer) {
-              return item.assetCode === this.asset.code && item.assetIssuer === this.asset.issuer && item.address === address && item.acctType === acctType;
-            } else {
-              return item.assetCode === this.asset.code && item.address === address && item.acctType === acctType;
-            }
+            return item.assetCode === this.asset.code && item.address === address && item.acctType === acctType;
           });
         }
       },
@@ -145,12 +145,16 @@
         let amount = data.meta.delivered_amount;
         if (data.meta.delivered_amount instanceof Object) {
           amount = data.meta.delivered_amount.value;
-          assetIssuer = data.meta.delivered_amount.issuer;
+          if (toAddress === data.meta.delivered_amount.issuer && this.$store.state.account.address === data.meta.delivered_amount.issuer) {
+            assetIssuer = fromAddress;
+          } else {
+            assetIssuer = data.meta.delivered_amount.issuer;
+          }
           assetCode = data.meta.delivered_amount.currency;
-          fromAddress = data.meta.delivered_amount.issuer;
+          // fromAddress = data.meta.delivered_amount.issuer;
         } else {
           amount = data.meta.delivered_amount / 1000000;
-          assetCode = this.asset.code;
+          assetCode = this.shortType(this.$store.state.account.type);
         }
         let history = {
           address: this.$store.state.account.address,
