@@ -12,7 +12,18 @@ class Account {
    * @param mnemonicCodeLanguage (助记词)-语言版本
    * @param state (状态)-N-正常，D-删除
    */
-  constructor (address, identityId, type, pathIndex,name, password, mnemonicCode, secret, mnemonicCodeLanguage, state) {
+  constructor(
+    address,
+    identityId,
+    type,
+    pathIndex,
+    name,
+    password,
+    mnemonicCode,
+    secret,
+    mnemonicCodeLanguage,
+    state
+  ) {
     this.address = address;
     this.identityId = identityId;
     this.type = type;
@@ -38,21 +49,30 @@ class Account {
    * @param state
    * @returns {*}
    */
-  static insertAccount (
-    {
-      identityId = '',
-      address = '',
-      pathIndex = 0,
-      type = '',
-      secret = '',
-      name = '',
-      password = '',
-      mnemonicCode = '',
-      state = 'N',
-      mnemonicCodeLanguage = 'english'
-    } = {}
-  ) {
-    let account = new Account(address, identityId, type, pathIndex, name, password, mnemonicCode, secret, mnemonicCodeLanguage, state);
+  static insertAccount({
+    identityId = '',
+    address = '',
+    pathIndex = 0,
+    type = '',
+    secret = '',
+    name = '',
+    password = '',
+    mnemonicCode = '',
+    state = 'N',
+    mnemonicCodeLanguage = 'english'
+  } = {}) {
+    let account = new Account(
+      address,
+      identityId,
+      type,
+      pathIndex,
+      name,
+      password,
+      mnemonicCode,
+      secret,
+      mnemonicCodeLanguage,
+      state
+    );
     instance.insert(account);
     return this;
   }
@@ -62,8 +82,8 @@ class Account {
    * @param identityId
    * @returns {*} 返回一个数组，多个
    */
-  static findByIdentityId (identityId) {
-    let resultRet = instance.find({identityId: identityId, state: 'N'});
+  static findByIdentityId(identityId) {
+    let resultRet = instance.find({ identityId: identityId, state: 'N' });
     return resultRet;
   }
 
@@ -71,8 +91,8 @@ class Account {
    * 根据地址查询
    * @returns {Object|*} 返回单个
    */
-  static findByAddress (address) {
-    let result = instance.findOne({address});
+  static findByAddress(address) {
+    let result = instance.findOne({ address });
     return result;
   }
 
@@ -83,7 +103,7 @@ class Account {
    * @returns {Object|*}
    */
   static findByTypeAndMnemonicCode(type, mnemonicCode) {
-    return instance.findOne({type: type, mnemonicCode: mnemonicCode});
+    return instance.findOne({ type: type, mnemonicCode: mnemonicCode });
   }
 
   /**
@@ -93,7 +113,7 @@ class Account {
    * @returns {Object|*}
    */
   static findByTypeAndSecret(type, secret) {
-    return instance.findOne({type: type, secret: secret});
+    return instance.findOne({ type: type, secret: secret });
   }
 
   /**
@@ -103,23 +123,25 @@ class Account {
    * @returns {Object|*}
    */
   static findByType(type) {
-    return instance.find({type: type, state: 'N'});
+    return instance.find({ type: type, state: 'N' });
   }
 
   /**
    *查询全部
    */
-  static findAll () {
-    return instance.find({state: 'N'});
+  static findAll() {
+    return instance.find({ state: 'N' });
   }
-
 
   /**
    *查询全部，按类型排序
    */
-  static findAllSoryByType () {
-    let resultRet = instance.chain().find({state: 'N'})
-      .simplesort('type', true).data();
+  static findAllSoryByType() {
+    let resultRet = instance
+      .chain()
+      .find({ state: 'N' })
+      .simplesort('type', true)
+      .data();
     return resultRet;
   }
 
@@ -129,12 +151,12 @@ class Account {
    * @returns {*}
    */
   static genAccountName(type) {
-    let results = instance.find({type: type, state: 'N'});
+    let results = instance.find({ type: type, state: 'N' });
     let accountNames = results.map(item => {
       return item.name;
     });
     let name = type.charAt(0).toUpperCase() + type.substring(1);
-    for(let i = 0, len = results.length; i < len; i++) {
+    for (let i = 0, len = results.length; i < len; i++) {
       let tempName = name + '_' + (i + 1);
       if (accountNames.indexOf(tempName) == -1) {
         name = tempName;
@@ -157,7 +179,7 @@ class Account {
    * 根据条件删除账户
    * @param obj
    */
-  static findAndRemoveAcct (obj) {
+  static findAndRemoveAcct(obj) {
     return instance.findAndRemove(obj);
   }
 
@@ -174,7 +196,7 @@ class Account {
    * @param db
    * @returns {Account}
    */
-  static newInstance (db) {
+  static newInstance(db) {
     instance = db.getCollection('account') || db.addCollection('account');
     return this;
   }
@@ -183,10 +205,9 @@ class Account {
    * @param db
    * @returns {*}
    */
-  static getInstance () {
+  static getInstance() {
     return instance;
   }
 }
 
 export default Account;
-

@@ -14,7 +14,8 @@ import ContentBlock from './ContentBlock';
 import PasswordStrength from './PasswordStrength';
 import Privacy from './privacy';
 
-const install = function (Vue) {
+
+const install = function(Vue) {
   /* istanbul ignore if */
   if (install.installed) return;
   Vue.component(PageList.name, PageList);

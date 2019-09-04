@@ -1,9 +1,9 @@
 import coins from 'src/wallet/coins';
-import {AccountType} from "../../../wallet/constants";
+import { AccountType } from '../../../wallet/constants';
 
-export default{
+export default {
   methods: {
-    getConfigAssets (type) {
+    getConfigAssets(type) {
       let coin = coins[type];
       let ret = [];
       switch (type) {
@@ -18,8 +18,7 @@ export default{
             ret.push(item);
           });
           return ret;
-        case AccountType.ripple:
-        {
+        case AccountType.ripple: {
           let cr = coin.tokens();
           Object.keys(cr).forEach(key => {
             let gateway = coin.tokens()[key];
@@ -36,8 +35,7 @@ export default{
           });
           return ret;
         }
-        case AccountType.stellar:
-        {
+        case AccountType.stellar: {
           let cs = coin.tokens();
           Object.keys(cs).forEach(key => {
             let gateway = coin.tokens()[key];
@@ -58,12 +56,13 @@ export default{
           return [];
       }
     },
-    getConfigAssetsMap (type) {
+    getConfigAssetsMap(type) {
       let assets = this.getConfigAssets(type);
       let assetsMap = {};
       assets.forEach(item => {
         assetsMap[item.code + (item.issuer || '')] = item;
       });
+
       return assetsMap;
     }
   }
