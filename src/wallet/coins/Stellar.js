@@ -210,7 +210,7 @@ class StellarWallet {
     const fromPair = StellarSdk.Keypair.fromSecret(fromSecret);
     const address = fromPair.publicKey();
     const asset = new StellarSdk.Asset(code, issuer);
-    console.debug('Turst asset', asset, limit);
+    //console.debug('Turst asset', asset, limit);
     const account = await this.server.loadAccount(address);
     const op = StellarSdk.Operation.changeTrust({
       asset: asset,
@@ -306,7 +306,7 @@ class StellarWallet {
         await this.server.paths(src, dest, this.getAsset(code, issuer), amount).call().then((data) => {
           resolve(data);
         }).catch((err) => {
-          console.info(err);
+          //console.info(err);
           reject(this.getErrMsg(err));
         });
       } catch (err) {
@@ -368,13 +368,13 @@ class StellarWallet {
    * @returns {Promise<any>}
    */
   async queryBook (baseBuy, counterSelling) {
-    console.debug('orderbook', `${baseBuy.code}/${counterSelling.code}`);
+    //console.debug('orderbook', `${baseBuy.code}/${counterSelling.code}`);
     return new Promise(async (resolve, reject)=>{
       try {
         await this.server.orderbook(this.getAsset(baseBuy), this.getAsset(counterSelling)).call().then((data) => {
           resolve(data);
         }).catch((err) => {
-          console.error(err, `${baseBuy.code}/${counterSelling.code}`);
+          //console.error(err, `${baseBuy.code}/${counterSelling.code}`);
           reject(this.getErrMsg(err));
         });
       } catch (err) {
@@ -486,7 +486,7 @@ class StellarWallet {
    * @returns {Promise<any>}
    */
   async queryOffers (address, optional = {}) {
-    console.debug('offers', address);
+    //console.debug('offers', address);
     return new Promise(async (resolve, reject)=>{
       try {
         let action =  this.server.offers('accounts', address);
@@ -509,7 +509,7 @@ class StellarWallet {
     if (now - _seq.time < 5000) {
       for (;account.sequence <= _seq.snapshot;) {
         account.incrementSequenceNumber();
-        console.debug('Sequence: ' + _seq.snapshot + ' -> ' + account.sequence);
+        //console.debug('Sequence: ' + _seq.snapshot + ' -> ' + account.sequence);
       }
     }
     _seq.snapshot = account.sequence;
@@ -607,7 +607,7 @@ class StellarWallet {
       message = err.detail || err.message;
     }
 
-    if (!message) console.error("Fail in getErrMsg", err);
+    //if (!message) console.error("Fail in getErrMsg", err);
     return message;
   }
 
