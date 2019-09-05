@@ -46,7 +46,7 @@ class EthereumWallet {
     //     code: CoinType.ETH,
     //     value: addressInfo[CoinType.ETH].balance
     //   });
-    //   // console.info(assetCodes);
+    //   // //console.info(assetCodes);
     //   let tokenConfig = tokens.get(AccountType.ethereum);
     //   if (addressInfo.tokens && addressInfo.tokens.length > 0) {
     //     addressInfo.tokens.forEach(item => {
@@ -118,7 +118,7 @@ class EthereumWallet {
       };
       // }
       // let aa = Web3.utils.fromWei(tokenBalance, 'mwei');
-      // console.log(address, tokenCode, aa);
+      // //console.log(address, tokenCode, aa);
     }
     return null;
   }
@@ -131,7 +131,7 @@ class EthereumWallet {
   // subscribe (address) {
   //   this.subscription = this.server.eth.subscribe('pendingTransactions', (error) => {
   //     if (error) {
-  //       console.error(error);
+  //       //console.error(error);
   //       return;
   //     }
   //   }).on('data', (txHash) => {
@@ -249,10 +249,10 @@ class EthereumWallet {
       this.server.eth.sendSignedTransaction(serializedTx, (err, hash) => {
         if (!err) {
           resolve(hash);
-          console.info('tx hash:' + hash);
+          //console.info('tx hash:' + hash);
         } else {
           reject(err);
-          console.error(err);
+          //console.error(err);
         }
       });
     });
@@ -341,7 +341,7 @@ class EthereumWallet {
       }
       return trx.blockNumber === null ? 0 : currentBlock - trx.blockNumber;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       return error;
     }
   }

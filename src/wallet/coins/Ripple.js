@@ -53,7 +53,7 @@ class RippleWallet{
 
   // subscribe (address) {
   //   this.server.connection.on('transaction', (response) => {
-  //     console.info(response);
+  //     //console.info(response);
   //     store.dispatch('setBalances', address); // 更新余额
   //   }); // 指定地址发生交易时触发
   //
@@ -61,7 +61,7 @@ class RippleWallet{
   //     accounts: [ address ]
   //   }).then(response => {
   //     if (response.status === 'success') {
-  //       console.log('Successfully subscribed');
+  //       //console.log('Successfully subscribed');
   //     }
   //   });
   // }
@@ -73,7 +73,7 @@ class RippleWallet{
   //     accounts: [ address ]
   //   }).then(response => {
   //     if (response.status === 'success') {
-  //       console.log('Successfully subscribed');
+  //       //console.log('Successfully subscribed');
   //     }
   //   });
   // }
@@ -105,7 +105,7 @@ class RippleWallet{
       balances.unshift(native);
       return balances;
     } catch (e) {
-      console.error(e);
+      ////console.error(e);
       return [{
           value: '0',
           code: CoinType.XRP
@@ -121,7 +121,7 @@ class RippleWallet{
       return true;
     }
     let trustlines = await this.server.getTrustlines(address);
-    // console.info(trustlines);
+    // //console.info(trustlines);
     if (!trustlines && trustlines.length === 0) {
       return false;
     }
@@ -168,10 +168,10 @@ class RippleWallet{
         };
         params = {...params, ...option};
         let transactions = await this.server.getTransactions(address, params);
-        console.info(transactions);
+        //console.info(transactions);
         resolve(transactions); */
       } catch (err) {
-        console.error(err);
+        ////console.error(err);
         reject(err);
       }
     });
@@ -211,10 +211,10 @@ class RippleWallet{
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
-            console.info(result);
+            ////console.info(result);
             resolve(result);
           }).catch (err => {
-          console.info(err);
+          ////console.info(err);
           reject(err);
         });
       });
@@ -231,16 +231,16 @@ class RippleWallet{
       ripplingDisabled: true
       // ripplingDisabled: ripplingDisabled
     };
-    // console.info(ripplingDisabled);
+    // //console.info(ripplingDisabled);
     return new Promise((resolve, reject)=> {
       this.server.prepareTrustline(fromAddress, trustline).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
-            console.info(result);
+            //console.info(result);
             resolve(result);
           }).catch (err => {
-          console.info(err);
+          //console.info(err);
           reject(err);
         });
       });
@@ -370,7 +370,7 @@ class RippleWallet{
           });
           resolve(result);
         }).catch((err) => {
-          console.error(err);
+          //console.error(err);
           reject(err);
         });
       } catch (err) {
@@ -386,7 +386,7 @@ class RippleWallet{
    * @returns {Promise<any>}
    */
   async queryOffers (address, optional = {}) {
-    //console.debug('offers', address);
+    ////console.debug('offers', address);
     return new Promise(async (resolve, reject)=>{
       try {
         let options = {};
@@ -396,7 +396,7 @@ class RippleWallet{
           options.limit = optional.limit;
         }
         let page = await this.server.getOrders(address, options);
-        //console.info(page);
+        ////console.info(page);
         resolve(page);
       } catch (err) {
         reject(err);
@@ -442,14 +442,14 @@ class RippleWallet{
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
-            console.info(result);
+            //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
               resolve(result);
             } else {
               reject(result.resultMessage);
             }
           }).catch (err => {
-          console.info(err);
+          //console.info(err);
           reject(err);
         });
       } catch (err) {
@@ -473,14 +473,14 @@ class RippleWallet{
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
-            console.info(result);
+            //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
               resolve(result);
             } else {
               reject(result.resultMessage);
             }
           }).catch (err => {
-          console.info(err);
+          //console.info(err);
           reject(err);
         });
       } catch (err) {

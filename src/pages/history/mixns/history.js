@@ -162,9 +162,9 @@ export default{
             }
           }
           this.nextLoading = false;
-        }).catch(err => {
+        }).catch(() => {
         this.nextLoading = false;
-        console.info(err);
+        //console.info(err);
       });
     }
   }

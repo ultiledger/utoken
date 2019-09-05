@@ -81,8 +81,8 @@ export default {
           downloadFile();
         }
       };
-      permissions.checkPermission(permissions.READ_EXTERNAL_STORAGE, checkPermissionCallback, (error) => {
-        console.error(error);
+      permissions.checkPermission(permissions.READ_EXTERNAL_STORAGE, checkPermissionCallback, () => {
+        //console.error(error);
       });
     });
   },
