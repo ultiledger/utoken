@@ -51,13 +51,13 @@
             link: 'https://etherscan.io',
             imgUrl: 'static/img/app/Etherscan.png'
           },
-          {
-            title: this.$t('find.xrpTitle'),
-            subTitle: this.$t('find.xrpSubTitle'),
-            desc: this.$t('find.xrpDesc'),
-            link: 'https://wipple.devnull.network/live/accounts',
-            imgUrl: 'static/img/XRP-1@3x.png'
-          },
+          // {
+          //   title: this.$t('find.xrpTitle'),
+          //   subTitle: this.$t('find.xrpSubTitle'),
+          //   desc: this.$t('find.xrpDesc'),
+          //   link: 'https://wipple.devnull.network/live/accounts',
+          //   imgUrl: 'static/img/XRP-1@3x.png'
+          // },
           {
             title: this.$t('find.xrpTitle'),
             subTitle: this.$t('find.xrpSubTitle'),
