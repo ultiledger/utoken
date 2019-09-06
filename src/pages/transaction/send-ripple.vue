@@ -267,7 +267,14 @@
           return;
         }
 
-        this.showFirstStep = true;
+        this.$wallet.getAccountSettings(this.form.receiveAddress).then(ret => {
+          if (ret && ret.requireDestinationTag && !this.form.tag) {
+            this.$toast(this.$t('transaction.requiredTag'));
+            return;
+          } else {
+            this.showFirstStep = true;
+          }
+        });
       },
       secondStep () {
         this.showSecondStep = true;

@@ -102,6 +102,8 @@ class RippleWallet{
       });
       let accountInfo = await this.server.getAccountInfo(address);
       native.frozenNative = 20 + 5 * accountInfo.ownerCount;
+      let settings = await this.getAccountSettings(address);
+      native.accountSetting = settings;
       balances.unshift(native);
       return balances;
     } catch (e) {
@@ -111,6 +113,13 @@ class RippleWallet{
           code: CoinType.XRP
       }];
     }
+  }
+
+  async getAccountSettings(address) {
+    return new Promise(async (resolve) => {
+      let settings = await this.server.getSettings(address);
+      resolve(settings);
+    });
   }
 
   async isTrustAsset(address, assetCode, assetIssuer) {
@@ -143,21 +152,23 @@ class RippleWallet{
           limit: 50
         };
         const command = 'account_tx';
+        let result = {};
         if (option.hasMore && option.historys) {
           let rsp2 = await this.server.requestNextPage(command, options, option.historys);
           if (rsp2 && rsp2.marker) {
-            resolve({'hashMore': true, 'data': rsp2});
+            result = {'hashMore': true, 'data': rsp2};
           } else {
-            resolve({'hashMore': false, 'data': rsp2});
+            result = {'hashMore': false, 'data': rsp2};
           }
         } else {
           let rsp = await this.server.request(command, options);
           if (rsp && rsp.marker) {
-            resolve({'hashMore': true, 'data': rsp});
+            result = {'hashMore': true, 'data': rsp};
           } else {
-            resolve({'hashMore': false, 'data': rsp});
+            result = {'hashMore': false, 'data': rsp};
           }
         }
+        resolve(result);
         /* const serverInfo = await this.server.getServerInfo();
         const ledgers = serverInfo.completeLedgers.split('-');
         const minLedgerVersion = Number(ledgers[0]);
@@ -205,12 +216,16 @@ class RippleWallet{
       let tag = new Number(option.tag);
       payment.destination.tag = tag.valueOf();
     }
+    if (option.memos) {
+      payment.memos = [{data: encodeURIComponent(option.memos), type: 'rippleutoken.com', format: 'plain/text'}];
+    }
 
     return new Promise((resolve, reject)=> {
       this.server.preparePayment(fromAddress, payment).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
+            // console.info(result);
             ////console.info(result);
             resolve(result);
           }).catch (err => {
@@ -514,6 +529,32 @@ class RippleWallet{
         xmlhttp.send();
       }catch (err) {
         reject(err);
+      }
+    });
+  }
+
+  /**
+   *AccountSet设置(包含DefaultRipple和RequireDestTag)
+   * @param address
+   * @param fromSecret
+   * @param settings
+   * @returns {Promise<void>}
+   */
+  async accountSettings (address, fromSecret, settings) {
+    return new Promise((resolve, reject)=> {
+      try {
+        this.server.prepareSettings(address, settings).then(prepared => {
+          const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+          this.server.submit(signedTransaction).then(ret => {
+            resolve(ret);
+          }).catch (err => {
+            reject(err);
+          });
+        }).catch(err => {
+          reject(err);
+        });
+      }catch (e) {
+        reject(e);
       }
     });
   }
