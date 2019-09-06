@@ -33,7 +33,6 @@
       </pl-content-block>
     </van-popup>
     <backups-memoring-words ref="backupsMW"></backups-memoring-words>
-    <password-dialog ref="pwdDialog" @done="toBackups"></password-dialog>
   </div>
 </template>
 <script>
@@ -41,9 +40,8 @@
   import topBlock from './components/top-block';
   import contentBlock from './components/content-block';
   import buttonBottom from './components/button-bottom';
-  import passwordDialog from '../ui/password-dialog';
   export default {
-    components: {backupsMemoringWords, topBlock, contentBlock, passwordDialog, buttonBottom},
+    components: {backupsMemoringWords, topBlock, contentBlock, buttonBottom},
     data () {
       return {
         showVpop: false,

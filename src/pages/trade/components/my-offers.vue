@@ -34,7 +34,7 @@
       </div>
       <!--<div class="text-primary x-small-font" style="margin-top: 10px;" @click="viewOfferHistory">委托历史<i class="ultfont ult-right x-small-font"></i></div>-->
     </div>
-    <password-dialog ref="pwdDialog" @done="cancelOffer"></password-dialog>
+    <password-dialog ref="pwdDialog" @done="cancelOffer" :address.sync="address"></password-dialog>
     <offer-history ref="offerHistory"></offer-history>
   </div>
 </template>
@@ -214,14 +214,10 @@
         });
       },
       toCancel (item) {
-        if (this.$store.state.passwordMap[this.address]) {
-          this.cancelOffer (this.$store.state.passwordMap[this.address], item);
-        } else {
-          this.$refs.pwdDialog.show(item);
-        }
+        this.$refs.pwdDialog.show(item);
       },
       cancelOffer (password, item) {
-        this.$emit('savePasswordInMemory', password);
+        // this.$emit('savePasswordInMemory', password);
         const toast = this.$toast.loading({
           duration: 0,
           forbidClick: true,

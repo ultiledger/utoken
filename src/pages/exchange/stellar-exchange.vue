@@ -101,7 +101,7 @@
         @confirm="onConfirm"
       />
     </van-popup>
-    <password-dialog ref="pwdDialog" @done="exchange"></password-dialog>
+    <password-dialog ref="pwdDialog" @done="exchange" :address.sync="currentAccount.address"></password-dialog>
   </div>
 </template>
 <script>
@@ -283,7 +283,11 @@
         this.showPicker = false;
       },
       showPasswordDialog () {
-        this.$refs.pwdDialog.show();
+        if (this.$store.state.passwordMap[this.currentAccount.address]) {
+          this.exchange(this.$store.state.passwordMap[this.currentAccount.address]);
+        } else {
+          this.$refs.pwdDialog.show();
+        }
       },
       exchange (password) {
         this.loading = true;
