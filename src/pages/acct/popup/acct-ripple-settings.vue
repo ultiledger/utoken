@@ -101,7 +101,6 @@
           setting.requireDestinationTag = this.form.requireDestinationTag;
         }
         this.$wallet.accountSettings(this.currentAccount.address, cryptor.decryptAES(this.currentAccount.secret, this.password), setting).then(ret => {
-          console.info(ret);
           this.setBooleanByType(type, false);
           if (ret && ret.resultCode === 'tesSUCCESS') {
             // 成功
@@ -112,7 +111,6 @@
             this.$toast(`${ret.resultCode}: ${ret.resultMessage}`);
           }
         }).catch(error => {
-          console.error(error);
           this.setBooleanByType(type, false);
           this.$toast(error.message);
           this.defaultSet();
