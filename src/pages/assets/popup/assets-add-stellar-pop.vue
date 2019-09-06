@@ -46,7 +46,7 @@
           </van-pull-refresh>
         </pl-content-block>
       </div>
-      <password-dialog ref="pwdDialog" @done="changeTrust"></password-dialog>
+      <password-dialog ref="pwdDialog" @done="changeTrust" :address.sync="curreAcctountAddress"></password-dialog>
   </div>
 </template>
 <script>
@@ -154,11 +154,7 @@
           this.$toast(this.$t('assets.trustRemoveTip'));
           return;
         }
-        if (this.$store.state.passwordMap[this.curreAcctountAddress]) {
-          this.changeTrust (this.$store.state.passwordMap[this.curreAcctountAddress], asset);
-        } else {
-          this.$refs['pwdDialog'].show(asset);
-        }
+        this.$refs['pwdDialog'].show(asset);
       },
       getErrMsg (err) {
         let retMsg = this.$t('assets.changeTrustFail');
@@ -171,9 +167,6 @@
         return retMsg;
       },
       changeTrust (password, asset) {
-        let map = {};
-        map[this.curreAcctountAddress] = password;
-        this.$store.dispatch('setPasswordMap', map);
         let amount = '0';
         if (!asset.selected) {
           amount = '100000000000';

@@ -15,6 +15,9 @@
 <script>
   import cryptor from 'core/utils/cryptor';
   export default {
+    props: {
+      address: String
+    },
     data () {
       return {
         loading: false,
@@ -25,16 +28,29 @@
     },
     methods: {
       show (params) {
-        this.value = '';
         this.params = params;
-        this.showPop = true;
+        let password = this.$store.state.passwordMap[this.address];
+        if (this.address && password) {
+          this.$emit('done', password, this.params);
+        } else {
+          this.value = '';
+          this.showPop = true;
+        }
       },
       close () {
         this.showPop = false;
       },
+      savePasswordInMemory (password) {
+        if (this.address) {
+          let map = {};
+          map[this.address] = password;
+          this.$store.dispatch('setPasswordMap', map);
+        }
+      },
       sure () {
         if (this.value) {
           if (this.$store.state.account.password === cryptor.encryptMD5(this.value)) {
+            this.savePasswordInMemory(this.value);
             this.$emit('done', this.value, this.params);
           } else {
             this.$toast(this.$t('acct.pwdError'));
