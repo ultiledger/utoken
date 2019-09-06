@@ -317,7 +317,7 @@ export default {
       this.$emit("addAssets");
     },
     toTrade() {
-      if (this.balances.length > 1) {
+      if (this.balances.length > 1 || this.data.type === AccountType.ripple) { // fix#86
         this.$emit("toTrade");
       } else {
         this.$dialog
