@@ -308,7 +308,9 @@
     "oldPwdErrorTip": "Old Password Incorrect",
     "deleteWallet": "Delete Wallet",
     "acctNotexist": "Wallet does not exist",
-    "delAcctTip": "After deleting the account, you can add it again"
+    "delAcctTip": "After deleting the account, you can add it again",
+    "gatewaySetting": "Gateway Settings",
+    "domainPh": "Please input domain"
   },
   "history": {
     "contractSuccess": "Call contract Succeeded",

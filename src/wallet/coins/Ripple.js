@@ -102,8 +102,6 @@ class RippleWallet{
       });
       let accountInfo = await this.server.getAccountInfo(address);
       native.frozenNative = 20 + 5 * accountInfo.ownerCount;
-      let settings = await this.getAccountSettings(address);
-      native.accountSetting = settings;
       balances.unshift(native);
       return balances;
     } catch (e) {

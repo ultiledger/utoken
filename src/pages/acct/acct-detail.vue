@@ -40,7 +40,7 @@
           </van-cell>
           <van-cell
             v-if="isRipple"
-            :title="$t('setting.setting')"
+            :title="$t('acct.gatewaySetting')"
             is-link
             @click="toCheckPassword('4')"></van-cell>
         </van-cell-group>
@@ -112,7 +112,7 @@
         return this.$store.state.account;
       },
       isRipple () {
-        if (this.$store.state.account.type === AccountType.ripple) {
+        if (this.$store.state.account.type === AccountType.ripple && this.$store.state.activatedMap[this.$store.state.account.address]) {
           return true;
         }
         return  false;
