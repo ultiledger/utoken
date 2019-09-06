@@ -90,6 +90,12 @@
                           :address="item.issuer" :length="4" :show-copy="false"></pl-wallet-addr>
                       </span>
                     </span>
+                    <span class="text-main" v-else-if="item.issuer">
+                        <pl-wallet-addr
+                          class="x-small-font"
+                          :complete="false"
+                          :address="item.issuer" :length="4" :show-copy="false"></pl-wallet-addr>
+                      </span>
                   </td>
                   <td class="text-right">
                     <van-radio :name="item.code+item.issuer" />
