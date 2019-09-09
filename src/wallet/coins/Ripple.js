@@ -34,7 +34,7 @@ class RippleWallet{
         }
       });
       this.server.on('ledger', ledger => {
-        console.log('Rippleledger',JSON.stringify(ledger.hash, null, 2));
+        console.log('Rippleledger',JSON.stringify(ledger.ledgerHash, null, 2));
       });
     }
   }

@@ -37,6 +37,7 @@ const state = {
       // {value: 'https://mainnet.infura.io/', type: 'public'},
       // {value: 'https://rinkeby.infura.io/', type: 'test'}
       {value: 'wss://mainnet.infura.io/ws', type: 'public'},
+      //{value: 'https://mainnet-eth.token.im/', type: 'public'},
       {value: 'wss://rinkeby.infura.io/ws', type: 'test'}
     ],
     [AccountType.bitcoin]: [
