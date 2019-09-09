@@ -18,7 +18,23 @@ class RippleWallet{
     this.url = url;
     if (!this.server || !this.server.isConnected()) {
       this.server = new RippleAPI({
-        server: url,maxFeeXRP: '0.05'
+        server: url, maxFeeXRP: '0.05',timeout:6000
+      });
+      this.server.on('error', (errorCode, errorMessage) => {
+        console.log(errorCode + ': ' + errorMessage);
+      });
+      this.server.on('connected', () => {
+        console.log('RippleApi connected');
+      });
+      this.server.on('disconnected', (code) => {
+        if (code !== 1000) {
+          console.log('Connection is closed due to error.');
+        } else {
+          console.log('Connection is closed normally.');
+        }
+      });
+      this.server.on('ledger', ledger => {
+        console.log('Rippleledger',JSON.stringify(ledger.ledgerHash, null, 2));
       });
     }
   }
@@ -53,7 +69,7 @@ class RippleWallet{
 
   // subscribe (address) {
   //   this.server.connection.on('transaction', (response) => {
-  //     console.info(response);
+  //     //console.info(response);
   //     store.dispatch('setBalances', address); // 更新余额
   //   }); // 指定地址发生交易时触发
   //
@@ -61,7 +77,7 @@ class RippleWallet{
   //     accounts: [ address ]
   //   }).then(response => {
   //     if (response.status === 'success') {
-  //       console.log('Successfully subscribed');
+  //       //console.log('Successfully subscribed');
   //     }
   //   });
   // }
@@ -73,7 +89,7 @@ class RippleWallet{
   //     accounts: [ address ]
   //   }).then(response => {
   //     if (response.status === 'success') {
-  //       console.log('Successfully subscribed');
+  //       //console.log('Successfully subscribed');
   //     }
   //   });
   // }
@@ -105,12 +121,19 @@ class RippleWallet{
       balances.unshift(native);
       return balances;
     } catch (e) {
-      console.error(e);
+      ////console.error(e);
       return [{
           value: '0',
           code: CoinType.XRP
       }];
     }
+  }
+
+  async getAccountSettings(address) {
+    return new Promise(async (resolve) => {
+      let settings = await this.server.getSettings(address);
+      resolve(settings);
+    });
   }
 
   async isTrustAsset(address, assetCode, assetIssuer) {
@@ -121,7 +144,7 @@ class RippleWallet{
       return true;
     }
     let trustlines = await this.server.getTrustlines(address);
-    // console.info(trustlines);
+    // //console.info(trustlines);
     if (!trustlines && trustlines.length === 0) {
       return false;
     }
@@ -143,21 +166,23 @@ class RippleWallet{
           limit: 50
         };
         const command = 'account_tx';
+        let result = {};
         if (option.hasMore && option.historys) {
           let rsp2 = await this.server.requestNextPage(command, options, option.historys);
           if (rsp2 && rsp2.marker) {
-            resolve({'hashMore': true, 'data': rsp2});
+            result = {'hashMore': true, 'data': rsp2};
           } else {
-            resolve({'hashMore': false, 'data': rsp2});
+            result = {'hashMore': false, 'data': rsp2};
           }
         } else {
           let rsp = await this.server.request(command, options);
           if (rsp && rsp.marker) {
-            resolve({'hashMore': true, 'data': rsp});
+            result = {'hashMore': true, 'data': rsp};
           } else {
-            resolve({'hashMore': false, 'data': rsp});
+            result = {'hashMore': false, 'data': rsp};
           }
         }
+        resolve(result);
         /* const serverInfo = await this.server.getServerInfo();
         const ledgers = serverInfo.completeLedgers.split('-');
         const minLedgerVersion = Number(ledgers[0]);
@@ -168,10 +193,10 @@ class RippleWallet{
         };
         params = {...params, ...option};
         let transactions = await this.server.getTransactions(address, params);
-        console.info(transactions);
+        //console.info(transactions);
         resolve(transactions); */
       } catch (err) {
-        console.error(err);
+        ////console.error(err);
         reject(err);
       }
     });
@@ -205,16 +230,20 @@ class RippleWallet{
       let tag = new Number(option.tag);
       payment.destination.tag = tag.valueOf();
     }
+    if (option.memos) {
+      payment.memos = [{data: encodeURIComponent(option.memos), type: 'rippleutoken.com', format: 'plain/text'}];
+    }
 
     return new Promise((resolve, reject)=> {
       this.server.preparePayment(fromAddress, payment).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
-            console.info(result);
+            // console.info(result);
+            ////console.info(result);
             resolve(result);
           }).catch (err => {
-          console.info(err);
+          ////console.info(err);
           reject(err);
         });
       });
@@ -231,16 +260,16 @@ class RippleWallet{
       ripplingDisabled: true
       // ripplingDisabled: ripplingDisabled
     };
-    // console.info(ripplingDisabled);
+    // //console.info(ripplingDisabled);
     return new Promise((resolve, reject)=> {
       this.server.prepareTrustline(fromAddress, trustline).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
-            console.info(result);
+            //console.info(result);
             resolve(result);
           }).catch (err => {
-          console.info(err);
+          //console.info(err);
           reject(err);
         });
       });
@@ -370,7 +399,7 @@ class RippleWallet{
           });
           resolve(result);
         }).catch((err) => {
-          console.error(err);
+          //console.error(err);
           reject(err);
         });
       } catch (err) {
@@ -386,7 +415,7 @@ class RippleWallet{
    * @returns {Promise<any>}
    */
   async queryOffers (address, optional = {}) {
-    //console.debug('offers', address);
+    ////console.debug('offers', address);
     return new Promise(async (resolve, reject)=>{
       try {
         let options = {};
@@ -396,7 +425,7 @@ class RippleWallet{
           options.limit = optional.limit;
         }
         let page = await this.server.getOrders(address, options);
-        //console.info(page);
+        ////console.info(page);
         resolve(page);
       } catch (err) {
         reject(err);
@@ -442,14 +471,14 @@ class RippleWallet{
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
-            console.info(result);
+            //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
               resolve(result);
             } else {
               reject(result.resultMessage);
             }
           }).catch (err => {
-          console.info(err);
+          //console.info(err);
           reject(err);
         });
       } catch (err) {
@@ -473,14 +502,14 @@ class RippleWallet{
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
           .then(result => {
-            console.info(result);
+            //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
               resolve(result);
             } else {
               reject(result.resultMessage);
             }
           }).catch (err => {
-          console.info(err);
+          //console.info(err);
           reject(err);
         });
       } catch (err) {
@@ -514,6 +543,32 @@ class RippleWallet{
         xmlhttp.send();
       }catch (err) {
         reject(err);
+      }
+    });
+  }
+
+  /**
+   *AccountSet设置(包含DefaultRipple和RequireDestTag)
+   * @param address
+   * @param fromSecret
+   * @param settings
+   * @returns {Promise<void>}
+   */
+  async accountSettings (address, fromSecret, settings) {
+    return new Promise((resolve, reject)=> {
+      try {
+        this.server.prepareSettings(address, settings).then(prepared => {
+          const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+          this.server.submit(signedTransaction).then(ret => {
+            resolve(ret);
+          }).catch (err => {
+            reject(err);
+          });
+        }).catch(err => {
+          reject(err);
+        });
+      }catch (e) {
+        reject(e);
       }
     });
   }

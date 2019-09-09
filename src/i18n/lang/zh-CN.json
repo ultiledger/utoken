@@ -308,7 +308,9 @@
     "oldPwdErrorTip": "原密码输入不正确",
     "deleteWallet": "删除钱包",
     "acctNotexist": "该钱包不存在",
-    "delAcctTip": "删除该账户后，您可以重新添加"
+    "delAcctTip": "删除该账户后，您可以重新添加",
+    "gatewaySetting": "网关设置",
+    "domainPh": "请输入domain"
   },
   "history": {
     "contractSuccess": "调用合约成功",

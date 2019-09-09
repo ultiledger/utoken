@@ -64,7 +64,7 @@
 <style lang="scss">
   .addr-container{
     width: 100%;
-    bakground: transparent;
+    background: transparent;
     .address-text{
       display: inline-block;
       /*width: 100%;*/

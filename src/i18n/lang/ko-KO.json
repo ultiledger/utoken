@@ -308,7 +308,9 @@
     "oldPwdErrorTip": "원래 암호가 잘못 입력되었습니다.",
     "deleteWallet": "지갑 삭제",
     "acctNotexist": "지갑이 존재하지 않습니다.",
-    "delAcctTip": "계정을 삭제 한 후 다시 추가 할 수 있습니다."
+    "delAcctTip": "계정을 삭제 한 후 다시 추가 할 수 있습니다.",
+    "gatewaySetting": "게이트웨이 설정",
+    "domainPh": "도메인을 입력하십시오"
   },
   "history": {
     "contractSuccess": "계약을 전용하는데 성공하였습니다.",

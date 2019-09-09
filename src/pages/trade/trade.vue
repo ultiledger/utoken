@@ -159,7 +159,7 @@
     </van-popup>
     <trade-last-book-pop ref="tradeLastBookPop" :accountType="currentAccount.type"></trade-last-book-pop>
     <tradepair-add-pop ref="tradepairAddPop" @done="pairAddDone"></tradepair-add-pop>
-    <password-dialog ref="pwdDialog" @done="tradeTx"></password-dialog>
+    <password-dialog ref="pwdDialog" @done="tradeTx" :address.sync="currentAccount.address"></password-dialog>
   </div>
 </template>
 <script>
@@ -437,13 +437,7 @@ export default {
       if (!this.checkForm()) {
         return;
       }
-      if (this.$store.state.passwordMap[this.currentAccount.address]) {
-        this.tradeTx(
-          this.$store.state.passwordMap[this.currentAccount.address]
-        );
-      } else {
-        this.$refs.pwdDialog.show();
-      }
+      this.$refs.pwdDialog.show();
     },
     getErrMsg(err) {
       if (err && this.errMsg[err]) {
@@ -451,13 +445,13 @@ export default {
       }
       return null;
     },
-    savePasswordInMemory(password) {
+    savePasswordInMemory(password) { // Deprecated
       let map = {};
       map[this.currentAccount.address] = password;
       this.$store.dispatch("setPasswordMap", map);
     },
     tradeTx(password) {
-      this.savePasswordInMemory(password);
+      // this.savePasswordInMemory(password);
       this.loading = true;
       const toast = this.$toast.loading({
         duration: 0,

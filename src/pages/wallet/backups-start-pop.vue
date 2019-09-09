@@ -34,7 +34,6 @@
       </pl-content-block>
     </van-popup>
     <select-memorizing-language ref="selectML"></select-memorizing-language>
-    <password-dialog ref="pwdDialog" @done="toBackups"></password-dialog>
   </div>
 </template>
 <script>
@@ -42,9 +41,8 @@
   import topBlock from './components/top-block';
   import contentBlock from './components/content-block';
   import buttonBottom from './components/button-bottom';
-  import passwordDialog from '../ui/password-dialog';
   export default {
-    components: {SelectMemorizingLanguage, topBlock, contentBlock, passwordDialog, buttonBottom},
+    components: {SelectMemorizingLanguage, topBlock, contentBlock, buttonBottom},
     data () {
       return {
         showVpop: false,

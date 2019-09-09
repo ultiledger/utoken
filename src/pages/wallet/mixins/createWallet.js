@@ -131,7 +131,7 @@ export default {
           return wallet.getAccount(coin[accountType], 0);
         }
       } catch (e) {
-        console.error(e);
+        //console.error(e);
       }
     },
     /**

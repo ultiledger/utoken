@@ -309,7 +309,9 @@
     "oldPwdErrorTip": "元のパスワードが誤って入力された",
     "deleteWallet": "ウォレットを削除",
     "acctNotexist": "ウォレットは存在しません",
-    "delAcctTip": "アカウントを削除した後、再度追加することができます"
+    "delAcctTip": "アカウントを削除した後、再度追加することができます",
+    "gatewaySetting": "ゲートウェイ設定",
+    "domainPh": "ドメインを入力してください"
   },
   "history": {
     "contractSuccess": "コントラクト呼び出しに成功",

@@ -61,7 +61,7 @@ Vue.api = {
       let config = await axios.get(configJS.configUrl+'?timestamp='+(new Date().getTime()));
       return config.data;
     } catch (e) {
-      console.error(e);
+      //console.error(e);
       return null;
     }
   }

@@ -178,8 +178,8 @@ const doInitScript = (setting, dispatch) => {
     return;
   }
   window.cordova.getAppVersion.getVersionNumber().then( (version) => {
-    console.info('setting.appVersion', setting.appVersion);
-    console.info('appVersion', version);
+    //console.info('setting.appVersion', setting.appVersion);
+    //console.info('appVersion', version);
     if (version !== setting.appVersion) {
       dispatch('setAppVersion', version);
       initScript.done();
@@ -214,7 +214,7 @@ export const setMarket = ({commit, state}, market) => {
 export const setPasswordMap = ({commit, state}, passwordMapObj) => {
   let passwordMap = JSON.parse(JSON.stringify(state.passwordMap));
   if (!passwordMapObj) {
-    console.info('clear password');
+    //console.info('clear password');
     commit(types.SET_PASSWORD_MAP, {});
     return;
   }
