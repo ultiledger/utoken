@@ -38,6 +38,11 @@
             is-link
             @click="toCheckPassword('2')">
           </van-cell>
+          <van-cell
+            v-if="isRipple"
+            :title="$t('acct.gatewaySetting')"
+            is-link
+            @click="toCheckPassword('4')"></van-cell>
         </van-cell-group>
 
         <pl-block class="margin-top item-block margin-bottom">
@@ -73,9 +78,10 @@
 
     </van-popup>
     <modify-password ref="modifyPassword"></modify-password>
-    <password-dialog ref="pwdDialog" @done="done"></password-dialog>
+    <password-dialog ref="pwdDialog" @done="done" :address.sync="currentAccount.address"></password-dialog>
     <export-secret ref="exportSecret"></export-secret>
     <backups-memorizing-words ref="backupsMemorizing"></backups-memorizing-words>
+    <acct-ripple-settings ref="acctRippleSettings"></acct-ripple-settings>
   </div>
 </template>
 <script>
@@ -83,12 +89,14 @@
   import passwordDialog from '../ui/password-dialog';
   import exportSecret from './popup/export-secret-dialog';
   import backupsMemorizingWords from '../wallet/backups-memorizing-words-pop';
+  import acctRippleSettings from './popup/acct-ripple-settings';
   // import encryptor from 'core/utils/encryptor';
   import qrcode from '@xkeshi/vue-qrcode';
   import cryptor from 'core/utils/cryptor';
   import {SourceType} from 'core/constants';
+  import {AccountType} from 'src/wallet/constants';
   export default{
-    components: {modifyPassword, passwordDialog, exportSecret, backupsMemorizingWords, qrcode},
+    components: {modifyPassword, passwordDialog, exportSecret, backupsMemorizingWords, qrcode, acctRippleSettings},
     data () {
       return {
         showPop: false,
@@ -102,6 +110,12 @@
     computed: {
       currentAccount () {
         return this.$store.state.account;
+      },
+      isRipple () {
+        if (this.$store.state.account.type === AccountType.ripple && this.$store.state.activatedMap[this.$store.state.account.address]) {
+          return true;
+        }
+        return  false;
       },
       delFlag () {
         let identity = this.$collecitons.identity.findById(this.account.identityId);
@@ -197,12 +211,14 @@
       },
       done (password) {
         if (this.currentAccount.password === cryptor.encryptMD5(password)) {
-          if (this.checkType === '1') {
+          if (this.checkType === '1') { // export secret
             this.$refs.exportSecret.show(password);
-          } else if (this.checkType === '2') {
+          } else if (this.checkType === '2') { // export mnemonicCode
             this.$refs.backupsMemorizing.show(cryptor.decryptAES(this.currentAccount.mnemonicCode, password), password, 'backups');
-          } else if (this.checkType === '3') { // 删除钱包
+          } else if (this.checkType === '3') { // delete wallet
             this.delWallet();
+          } else if (this.checkType === '4') { // fix#91
+            this.$refs.acctRippleSettings.show(password);
           }
         } else {
           this.$toast(this.$t('acct.pwdError'));

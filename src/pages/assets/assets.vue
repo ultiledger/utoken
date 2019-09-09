@@ -267,12 +267,6 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" rel="stylesheet/scss" scoped>
-@import "~assets/scss/variables";
-.assets-container {
-}
-</style>
 <style lang="scss" rel="stylesheet/scss">
 @import "~assets/scss/variables";
 .assets-container {
