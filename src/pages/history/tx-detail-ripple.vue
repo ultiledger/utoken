@@ -84,7 +84,7 @@
         </van-row>
       </div>
       <div class="qrcode-parent">
-        <qrcode class="qrcode" :value="`https://wipple.devnull.network/live/transactions/${item.txHash}`" :options="{ size: 85 }"></qrcode>
+        <qrcode class="qrcode" :value="`https://xrpscan.com/tx/${item.txHash}`" :options="{ size: 85 }"></qrcode>
       </div>
     </pl-block>
     <br>
