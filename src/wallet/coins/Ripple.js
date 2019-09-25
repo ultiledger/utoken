@@ -279,8 +279,8 @@ class RippleWallet{
   isTagAddress (address) {
     try{
       Decode(address);
-      return true;
     }catch (e) {return false;}
+    return true;
   }
 
   decodeTagAddress (address) {
