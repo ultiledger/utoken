@@ -9,7 +9,8 @@ const apiKeys = ['EB9IXHJKA7W233MV4W7MSME7GTF564Y54R'];
 
 const etherscanApiUrl = {
   test: 'https://api-rinkeby.etherscan.io/api',
-  public: 'https://api.etherscan.io/api'
+  //public: 'https://api.etherscan.io/api' 
+  public: 'https://api.utoken.cash/api' 
 };
 
 class EthereumWallet {
