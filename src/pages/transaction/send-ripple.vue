@@ -142,7 +142,7 @@
       'form.receiveAddress' () {
         if (this.form.receiveAddress) {
           if (this.$wallet.isTagAddress(this.form.receiveAddress)){
-            var decode=this.$wallet.decodeTagAddress(this.form.receiveAddress);
+            let decode=this.$wallet.decodeTagAddress(this.form.receiveAddress);
             this.receiveAddress=decode.account;
             this.tag=decode.tag;
             this.tagAddress=true;
