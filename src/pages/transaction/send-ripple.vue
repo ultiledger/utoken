@@ -267,8 +267,8 @@
           return;
         }
 
-        this.$wallet.getAccountSettings(this.form.receiveAddress).then(ret => {
-          if (ret && ret.requireDestinationTag && !this.form.tag) {
+        this.$wallet.getAccountSettings(this.receiveAddress).then(ret => {
+          if (ret && ret.requireDestinationTag && !this.form.tag && !this.tag) {
             this.$toast(this.$t('transaction.requiredTag'));
             return;
           } else {
