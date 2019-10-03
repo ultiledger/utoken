@@ -175,6 +175,12 @@
           this.trustAsset = true;
         }
       },
+      "form.amt"() {
+        if (this.form.amt) {
+          this.form.amt =
+            this.form.amt.toString().match(/^\d*(\.?\d{0,6})/g)[0] || null;
+        }
+      },
       displayPassword () {
         if (this.showSecondStep) {
           if (this.displayPassword) {
