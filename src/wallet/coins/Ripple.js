@@ -447,7 +447,7 @@ class RippleWallet{
   async sendOffer(selling, buying, amount, price , address, fromSecret, direction) {
     return new Promise(async (resolve, reject) => {
       try {
-        let totalPrice = Number(new Big(amount).times(price).toString()).toFixed(8).toString();
+        let totalPrice = Number(new Big(amount).times(price).toString()).toFixed(6).toString();
         const order = {
           'direction': direction,
           'quantity': {
