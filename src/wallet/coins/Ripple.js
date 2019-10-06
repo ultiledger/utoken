@@ -230,8 +230,9 @@ class RippleWallet{
       let tag = new Number(option.tag);
       payment.destination.tag = tag.valueOf();
     }
+    payment.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
     if (option.memos) {
-      payment.memos = [{data: encodeURIComponent(option.memos), type: 'rippleutoken.com', format: 'plain/text'}];
+      payment.memos.push({data: encodeURIComponent(option.memos), type: 'memo', format: 'plain/text'});
     }
 
     return new Promise((resolve, reject)=> {
@@ -260,6 +261,7 @@ class RippleWallet{
       ripplingDisabled: true
       // ripplingDisabled: ripplingDisabled
     };
+    trustline.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
     // //console.info(ripplingDisabled);
     return new Promise((resolve, reject)=> {
       this.server.prepareTrustline(fromAddress, trustline).then(prepared => {
@@ -467,6 +469,7 @@ class RippleWallet{
         if (buying.issuer) {
           order.quantity.counterparty = buying.issuer;
         }
+        order.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrder(address, order);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
@@ -498,6 +501,7 @@ class RippleWallet{
     return new Promise(async (resolve, reject) => {
       try {
         const orderCancellation = {orderSequence: offer.id};
+        orderCancellation.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrderCancellation(address, orderCancellation);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
@@ -557,6 +561,7 @@ class RippleWallet{
   async accountSettings (address, fromSecret, settings) {
     return new Promise((resolve, reject)=> {
       try {
+        settings.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         this.server.prepareSettings(address, settings).then(prepared => {
           const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
           this.server.submit(signedTransaction).then(ret => {
