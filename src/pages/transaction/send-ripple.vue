@@ -182,7 +182,7 @@
         }
       },
       "form.amt"() {
-        if (this.form.amt) {
+        if (this.form.amt && this.asset.code === 'XRP') {
           this.form.amt =
             this.form.amt.toString().match(/^\d*(\.?\d{0,6})/g)[0] || null;
         }
