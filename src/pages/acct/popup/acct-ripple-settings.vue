@@ -37,10 +37,10 @@
             @blur="handleBlur"
             @focus="handleFocus"
             :placeholder="$t('acct.domainPh')">
-            <div slot="button" v-if="form.domain && isFocus" @click="toSettings('3')">
+            <div slot="button" v-if="!domainLoading && isFocus" @click="toSettings('3')">
               <van-icon name="success" class="icon text-success"></van-icon>
             </div>
-            <div slot="button" v-if="form.domain && domainLoading">
+            <div slot="button" v-if="domainLoading">
               <van-loading size="24px"/>
             </div>
           </van-field>
