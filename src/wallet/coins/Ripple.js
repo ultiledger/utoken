@@ -463,7 +463,7 @@ class RippleWallet{
         };
         if (selling.issuer) {
           order.totalPrice.counterparty = selling.issuer;
-          order.totalPrice.value = totalPrice.toString();
+          order.totalPrice.value = totalPrice.toFixed(8).toString();
         }else{
           order.totalPrice.value =  totalPrice.toFixed(6).toString();
         }
