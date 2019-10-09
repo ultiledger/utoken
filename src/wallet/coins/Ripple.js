@@ -230,8 +230,9 @@ class RippleWallet{
       let tag = new Number(option.tag);
       payment.destination.tag = tag.valueOf();
     }
+    payment.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
     if (option.memos) {
-      payment.memos = [{data: encodeURIComponent(option.memos), type: 'rippleutoken.com', format: 'plain/text'}];
+      payment.memos.push({data: encodeURIComponent(option.memos), type: 'memo', format: 'plain/text'});
     }
 
     return new Promise((resolve, reject)=> {
@@ -260,6 +261,7 @@ class RippleWallet{
       ripplingDisabled: true
       // ripplingDisabled: ripplingDisabled
     };
+    trustline.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
     // //console.info(ripplingDisabled);
     return new Promise((resolve, reject)=> {
       this.server.prepareTrustline(fromAddress, trustline).then(prepared => {
@@ -447,26 +449,31 @@ class RippleWallet{
   async sendOffer(selling, buying, amount, price , address, fromSecret, direction) {
     return new Promise(async (resolve, reject) => {
       try {
-        let totalPrice = Number(new Big(amount).times(price).toString()).toFixed(8).toString();
+        let totalPrice = Number(new Big(amount).times(price).toString());
         const order = {
           'direction': direction,
           'quantity': {
-            'currency': buying.code,
-            'value': amount
+            'currency': buying.code
           },
           'totalPrice': {
-            'currency': selling.code,
-            'value': totalPrice
+            'currency': selling.code
           },
           "passive": false,
           "fillOrKill": false
         };
         if (selling.issuer) {
           order.totalPrice.counterparty = selling.issuer;
+          order.totalPrice.value = totalPrice.toFixed(8).toString();
+        }else{
+          order.totalPrice.value =  totalPrice.toFixed(6).toString();
         }
         if (buying.issuer) {
           order.quantity.counterparty = buying.issuer;
+          order.quantity.value = amount.toString();
+        }else{
+          order.quantity.value = amount.toFixed(6).toString();
         }
+        order.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrder(address, order);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
@@ -498,6 +505,7 @@ class RippleWallet{
     return new Promise(async (resolve, reject) => {
       try {
         const orderCancellation = {orderSequence: offer.id};
+        orderCancellation.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrderCancellation(address, orderCancellation);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction)
@@ -557,6 +565,7 @@ class RippleWallet{
   async accountSettings (address, fromSecret, settings) {
     return new Promise((resolve, reject)=> {
       try {
+        settings.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         this.server.prepareSettings(address, settings).then(prepared => {
           const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
           this.server.submit(signedTransaction).then(ret => {
