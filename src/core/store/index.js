@@ -58,7 +58,7 @@ const state = {
     gesturePwd: '',
     tokenConfig: {},
     privacyMode: false,
-    mytokenApi: 'https://speed-api.mytokenapi.com', // mytoken-api获取行情
+    mytokenApi: 'https://api.mytokenapi.com', // mytoken-api获取行情
     network: {
       [AccountType.stellar]: 'https://horizon.stellar.org',
       [AccountType.ripple]: 'wss://s1.ripple.com',

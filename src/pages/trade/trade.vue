@@ -501,11 +501,15 @@ export default {
         .then(ret => {
           if (ret) {
             toast.message = this.$t("trade.offerSuccess");
-            toast.clear();
-            this.$refs.myOffers.clearTimer();
+            setTimeout(() => {
+              toast.clear();
+            }, 2000);
+            if (this.$refs.myOffers) {
+              this.$refs.myOffers.clearTimer();
+              this.$refs.myOffers.getOffers();
+            }
             this.$refs.marketDept.clearTimer();
             this.$refs.marketDept.getBooks();
-            this.$refs.myOffers.getOffers();
           }
           this.loading = false;
           this.onRefreshBalances();
@@ -520,7 +524,7 @@ export default {
           }
           setTimeout(() => {
             toast.clear();
-          }, 3000);
+          }, 4000);
           this.loading = false;
         });
     },
