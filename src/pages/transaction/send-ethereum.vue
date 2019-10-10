@@ -331,7 +331,7 @@
               callback();
               return;
             }
-            setTimeout(done, 2000);
+            setTimeout(done, 3000);
             return;
           }
           let account = this.$store.state.account;

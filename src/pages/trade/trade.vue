@@ -217,7 +217,6 @@ export default {
           bs.forEach(item => {
             let issuer = item.issuer ? item.issuer : "";
             result[item.code + issuer] = new Big(item.value)
-              .toFixed(6)
               .toString();
           });
           return result;
@@ -276,9 +275,9 @@ export default {
       }
     },
     "form.amount"() {
-      if (this.form.amount) {
+      if (this.form.amount && this.currentAccount.type === AccountType.stellar) {
         this.form.amount =
-          this.form.amount.toString().match(/^\d*(\.?\d{0,6})/g)[0] || null;
+          this.form.amount.toString().match(/^\d*(\.?\d{0,7})/g)[0] || null;
       }
     }
   },
@@ -503,7 +502,7 @@ export default {
             toast.message = this.$t("trade.offerSuccess");
             setTimeout(() => {
               toast.clear();
-            }, 2000);
+            }, 3000);
             if (this.$refs.myOffers) {
               this.$refs.myOffers.clearTimer();
               this.$refs.myOffers.getOffers();

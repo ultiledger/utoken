@@ -135,6 +135,7 @@
         tagAddress: false,
         receiveAddress: '',
         tag:'',
+        requireDestinationTag:false,
         ripple: AccountType.ripple
       };
     },
@@ -165,14 +166,25 @@
               this.$wallet.isTrustAsset(this.receiveAddress, this.asset.code, this.asset.issuer).then(ret => {
                 this.trustAsset = ret;
               });
+              this.$wallet.getAccountSettings(this.receiveAddress).then(ret => {
+                this.requireDestinationTag = ret.requireDestinationTag;
+              });
             } else {
               this.trustAsset = true;
+              this.requireDestinationTag = false;
             }
           });
         } else {
           this.addressValid = true;
           this.addressActivated = true;
           this.trustAsset = true;
+          this.requireDestinationTag = false;
+        }
+      },
+      "form.amt"() {
+        if (this.form.amt && this.asset.code === 'XRP') {
+          this.form.amt =
+            this.form.amt.toString().match(/^\d*(\.?\d{0,6})/g)[0] || null;
         }
       },
       displayPassword () {
@@ -267,14 +279,12 @@
           return;
         }
 
-        this.$wallet.getAccountSettings(this.form.receiveAddress).then(ret => {
-          if (ret && ret.requireDestinationTag && !this.form.tag) {
-            this.$toast(this.$t('transaction.requiredTag'));
-            return;
-          } else {
-            this.showFirstStep = true;
-          }
-        });
+        if (this.requireDestinationTag && !this.form.tag && !this.tag) {
+          this.$toast(this.$t('transaction.requiredTag'));
+          return;
+        } else {
+          this.showFirstStep = true;
+        }
       },
       secondStep () {
         this.showSecondStep = true;
@@ -324,13 +334,13 @@
               setTimeout(() => {
                 toast.clear();
                 this.$emit('done');
-              }, 1000);
+              }, 3000);
             } else {
               console.error(ret);
               this.$toast(this.getErrMsg(ret));
               setTimeout(() => {
                 toast.clear();
-              }, 2000);
+              }, 3500);
             }
           })
           .catch(err => {
@@ -338,7 +348,7 @@
             toast.message = this.$t('common.transactionFail');
             setTimeout(() => {
               toast.clear();
-            }, 2000);
+            }, 3500);
           });
       }
     }
