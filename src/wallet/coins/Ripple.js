@@ -6,6 +6,14 @@ import tradingPlatformConfig from '../config/trading-platform';
 import rippleKeypairs from 'ripple-keypairs';
 import Big from 'big.js';
 
+const round = function(dight, howMany) {
+  if(howMany) {
+    dight = Math.round(dight * Math.pow(10, howMany)) / Math.pow(10, howMany);
+  } else {
+    dight = Math.round(dight);
+  }
+  return dight;
+};
 class RippleWallet{
   constructor(url, option = {}) {
     if (url) {
@@ -463,15 +471,15 @@ class RippleWallet{
         };
         if (selling.issuer) {
           order.totalPrice.counterparty = selling.issuer;
-          order.totalPrice.value = totalPrice.toFixed(8).toString();
+          order.totalPrice.value = round(totalPrice,8).toString();
         }else{
-          order.totalPrice.value =  totalPrice.toFixed(6).toString();
+          order.totalPrice.value =  round(totalPrice,6).toString();
         }
         if (buying.issuer) {
           order.quantity.counterparty = buying.issuer;
           order.quantity.value = amount.toString();
         }else{
-          order.quantity.value = amount.toFixed(6).toString();
+          order.quantity.value = round(amount,6).toString();
         }
         order.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrder(address, order);
