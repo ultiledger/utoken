@@ -755,6 +755,13 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@types/base-x@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/base-x/-/base-x-3.0.0.tgz#a1365259d1d3fa3ff973ab543192a6bdd4cb2f90"
+  integrity sha512-vnqSlpsv9uFX5/z8GyKWAfWHhLGJDBkrgRRsnxlsX23DHOlNyqP/eHQiv4TwnYcZULzQIxaWA/xRWU9Dyy4qzw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -769,10 +776,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/lodash@^4.14.85":
-  version "4.14.136"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.136.tgz#413e85089046b865d960c9ff1d400e04c31ab60f"
-  integrity sha512-0GJhzBdvsW2RUccNHOBkabI8HZVdOXmXbXhuKlDEd5Vv12P7oAVGfomGp3Ne21o5D/qu1WmthlNKFaoZJJeErA==
+"@types/lodash@^4.14.136":
+  version "4.14.144"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.144.tgz#12e57fc99064bce45e5ab3c8bc4783feb75eab8e"
+  integrity sha512-ogI4g9W5qIQQUhXAclq6zhqgqNUr7UlFaqDHbch7WLSLeeM/7d3CRaw7GLajxvyFvhJqw4Rpcz5bhoaYtIx6Tg==
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -1267,7 +1274,7 @@ aes-js@^3.1.1:
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.1.2.tgz#db9aabde85d5caabbfc0d4f2a4446960f627146a"
   integrity sha512-e5pEa2kBnBOgR4Y/p20pskXI74UEz7de8ZGVo58asOtvSVG5YAbJeELPZxOmt+Bnz3rX753YKhfIn4X4l1PPRQ==
 
-agent-base@^4.1.0:
+agent-base@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-4.3.0.tgz#8165f01c436009bccad0b1d122f05ed770efc6ee"
   integrity sha512-salcGninV0nPrwpGNn4VTXBb1SOuXQBiqbrNXoeizJsHrsL6ERFM2Ne3JUSBWRE6aeNJI2ROP/WEEIDUiDe3cg==
@@ -1633,6 +1640,13 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
+base-x@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.4.tgz#94c1788736da065edb1d68808869e357c977fa77"
+  integrity sha512-UYOadoSIkEI/VrRGSG6qp93rp2WdokiAiNYDfGW5qURAY8GiAQkvMbwNNSDYiVJopqv4gCna7xqf4rrNGp+5AA==
+  dependencies:
+    safe-buffer "^5.0.1"
+
 base-x@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/base-x/-/base-x-1.1.0.tgz#42d3d717474f9ea02207f6d1aa1f426913eeb7ac"
@@ -1704,6 +1718,11 @@ big.js@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz#65f0af382f578bcdc742bd9c281e9cb2d7768328"
   integrity sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==
+
+bignumber.js@8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-8.1.1.tgz#4b072ae5aea9c20f6730e4e5d529df1271c4d885"
+  integrity sha512-QD46ppGintwPGuL1KqmwhR0O+N2cZUg8JG/VzwI2e28sM9TqHjQB10lI4QAaMHVbLzwVLLAwEglpKPViWX+5NQ==
 
 bignumber.js@^4.0.0, bignumber.js@^4.1.0:
   version "4.1.0"
@@ -4956,12 +4975,12 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-https-proxy-agent@2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-2.2.1.tgz#51552970fa04d723e04c56d04178c3f92592bbc0"
-  integrity sha512-HPCTS1LW51bcyMYbxUIOO4HEOlQ1/1qRaFWcyxvwaqUS9TY88aoEuHUY33kuAh1YhVVaDQhLZsnPd+XNARWZlQ==
+https-proxy-agent@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-3.0.1.tgz#b8c286433e87602311b01c8ea34413d856a4af81"
+  integrity sha512-+ML2Rbh6DAuee7d07tYGEKOEi2voWPUGan+ExdPbPW6Z3svq+JCqr0v8WmKPOkz1vOVykPCBSuobe7G8GJUtVg==
   dependencies:
-    agent-base "^4.1.0"
+    agent-base "^4.3.0"
     debug "^3.1.0"
 
 iconv-lite@0.4.24, iconv-lite@^0.4.17, iconv-lite@^0.4.4:
@@ -5834,6 +5853,11 @@ lodash.defaultsdeep@^4.6.1:
   resolved "https://registry.yarnpkg.com/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.1.tgz#512e9bd721d272d94e3d3a63653fa17516741ca6"
   integrity sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA==
 
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
+
 lodash.kebabcase@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.kebabcase/-/lodash.kebabcase-4.1.1.tgz#8489b1cb0d29ff88195cceca448ff6d6cc295c36"
@@ -5869,7 +5893,7 @@ lodash@^3.10.0:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
   integrity sha1-W/Rejkm6QYnhfUgnid/RW9FAt7Y=
 
-lodash@^4.0.0, lodash@^4.12.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@~4.17.10:
+lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@~4.17.10:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -8114,28 +8138,35 @@ ripple-address-codec@^2.0.1:
     hash.js "^1.0.3"
     x-address-codec "^0.7.0"
 
-ripple-binary-codec@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/ripple-binary-codec/-/ripple-binary-codec-0.2.1.tgz#f343da758a64f3aceb4164b8a98fbc153b088c14"
-  integrity sha512-R1+equWtaJs505/G2NRvxKJVlMkZMqo4fiE6eBXi1c2IvL7dDRZPlb8JHdSgD6eT/Qo5TkovuUf3qmRz5dinNw==
+ripple-address-codec@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/ripple-address-codec/-/ripple-address-codec-3.0.4.tgz#a7a8bb040df41cb082330fd828f09b9e6478c7fd"
+  integrity sha512-GFk1BgavW+9oy5Z1Cp6YAGMfB51QdbeuhOo0Zir+s+S40F5vHtVZYu6zZE1eOAX92A5kygPuBRX4APH2v8Yhmg==
+  dependencies:
+    base-x "3.0.4"
+    create-hash "^1.1.2"
+
+ripple-address-codec@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ripple-address-codec/-/ripple-address-codec-4.0.0.tgz#c20f39eea38def43d2379462e47bff4adabece30"
+  integrity sha512-PsKl9aytg6fZG2F4RtfPT0c1gj42suAQY9VvJVGz+DfQTdXQaTT9V/StVhaJ6jhVpl7oCd981BB9p2Kq+Kyrng==
+  dependencies:
+    "@types/base-x" "^3.0.0"
+    base-x "3.0.4"
+    create-hash "^1.1.2"
+
+ripple-binary-codec@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/ripple-binary-codec/-/ripple-binary-codec-0.2.4.tgz#555d64c52182a215222af6045b5170e43f0530b1"
+  integrity sha512-lfT9bybaVqA8IJmGFnSWaISCXmwvNY/P5HHKm6zQ1yTIXJpC+hDIeQqm/eD/2HLv82y2IvqGYd0GhEQ41lpNpQ==
   dependencies:
     babel-runtime "^6.6.1"
     bn.js "^4.11.3"
     create-hash "^1.1.2"
     decimal.js "^5.0.8"
     inherits "^2.0.1"
-    lodash "^4.12.0"
-    ripple-address-codec "^2.0.1"
-
-ripple-hashes@0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/ripple-hashes/-/ripple-hashes-0.3.2.tgz#f3ac3b1832cec6d0bac07e82acc10a0a6a1cc84e"
-  integrity sha512-1Emm/raLNChNR5nVoQPJ7NWQpHr8jJjIZDoug4ukw4RZ3+eehO5nyx86a+MaQKAeAc1nJRFwVjBvh9SeYpelYw==
-  dependencies:
-    bignumber.js "^4.1.0"
-    create-hash "^1.1.2"
-    ripple-address-codec "^2.0.1"
-    ripple-binary-codec "0.2.1"
+    lodash "^4.17.15"
+    ripple-address-codec "^3.0.4"
 
 ripple-keypairs@^0.10.1:
   version "0.10.2"
@@ -8149,30 +8180,30 @@ ripple-keypairs@^0.10.1:
     hash.js "^1.0.3"
     ripple-address-codec "^2.0.1"
 
-ripple-lib-transactionparser@0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/ripple-lib-transactionparser/-/ripple-lib-transactionparser-0.7.1.tgz#5ececb1e03d65d05605343f4b9dbb76d1089145b"
-  integrity sha1-Xs7LHgPWXQVgU0P0udu3bRCJFFs=
+ripple-lib-transactionparser@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/ripple-lib-transactionparser/-/ripple-lib-transactionparser-0.8.0.tgz#1dea607f8c16a410a4211386accc3388d7239272"
+  integrity sha512-M3HjfPABR6tpU5goQQh1b6tx1PbpDNMyYSKMkyW9LzYSMzJLFfWiQJ8wFFBrduJkwmtDfuolIVT0/f235a3YTw==
   dependencies:
-    bignumber.js "^4.1.0"
+    bignumber.js "8.1.1"
     lodash "^4.17.4"
 
-ripple-lib@^1.1.2:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/ripple-lib/-/ripple-lib-1.2.4.tgz#834c318aae1a255beb9a57bc2b36a08cf9226019"
-  integrity sha512-hmlj+AIisg4XuSS4ee4uhB9Glc/kM02ZNfl7KF336NDPu81vhqJuR8pikSGwJ/Ay7wIVrP9ny1zR/6FI6lZTZg==
+ripple-lib@^1.2.4:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/ripple-lib/-/ripple-lib-1.4.0.tgz#708eebcee9b50676803b6af8797a982342083e48"
+  integrity sha512-69VP9BBowK8/MdAywVv8GjhF0usaOfgYJqsBx6wgA12Yp9AK9KQGondVvHWFL9rOjCFBbYbU+7lAFek59OPcuQ==
   dependencies:
-    "@types/lodash" "^4.14.85"
+    "@types/lodash" "^4.14.136"
     "@types/ws" "^3.2.0"
     bignumber.js "^4.1.0"
-    https-proxy-agent "2.2.1"
+    https-proxy-agent "^3.0.0"
     jsonschema "1.2.2"
     lodash "^4.17.4"
-    ripple-address-codec "^2.0.1"
-    ripple-binary-codec "0.2.1"
-    ripple-hashes "0.3.2"
+    lodash.isequal "^4.5.0"
+    ripple-address-codec "^4.0.0"
+    ripple-binary-codec "^0.2.4"
     ripple-keypairs "^0.10.1"
-    ripple-lib-transactionparser "0.7.1"
+    ripple-lib-transactionparser "0.8.0"
     ws "^3.3.1"
 
 rlp@^2.0.0:
@@ -9678,10 +9709,10 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.0.tgz#bd76d6a23323e2ca8ffa12028dc04559c75f9019"
   integrity sha512-iq+S7vZJE60yejDYM0ek6zg308+UZsdtPExWP9VZoCFCz1zkJoXFnAX7aZfd/ZwrkidzdUZL0C/ryW+JwAiIGw==
 
-vue-clipboard2@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/vue-clipboard2/-/vue-clipboard2-0.2.1.tgz#9f06690af1c98aef344be1fc4beb00cdc5307ee1"
-  integrity sha512-n6ie/0g0bKohmLlC/5ja1esq2Q0jQ5hWmhNSZcvCsWfDeDnVARjl6cBB9p72XV1nlVfuqsZcfV8HTjjZAIlLBA==
+vue-clipboard2@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/vue-clipboard2/-/vue-clipboard2-0.3.1.tgz#6e551fb7bd384889b28b0da3b12289ed6bca4894"
+  integrity sha512-H5S/agEDj0kXjUb5GP2c0hCzIXWRBygaWLN3NEFsaI9I3uWin778SFEMt8QRXiPG+7anyjqWiw2lqcxWUSfkYg==
   dependencies:
     clipboard "^2.0.0"
 
@@ -10322,6 +10353,13 @@ xmlhttprequest@1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
   integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
+
+xrpl-tagged-address-codec@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/xrpl-tagged-address-codec/-/xrpl-tagged-address-codec-0.2.0.tgz#a61d2131875dfd3af89d9f1c6906d2bd40720bf9"
+  integrity sha512-ztxpXJaoPZuSgfWsmeoFfrl+YhnOmjnBlxFfvZyfGyWc57hrUZ5+MOaM3GR8Li7n4L/zrh8Q/cdnrdcuRuA49w==
+  dependencies:
+    ripple-address-codec "^2.0.1"
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
