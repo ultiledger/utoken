@@ -23,7 +23,7 @@
     "vant": "^1.4.3",
     "vee-validate": "^2.1.0-beta.11",
     "vue": "^2.5.17",
-    "vue-clipboard2": "^0.2.1",
+    "vue-clipboard2": "^0.3.1",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vue-slider-component": "^2.8.3",
