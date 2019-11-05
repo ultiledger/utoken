@@ -47,7 +47,7 @@
     "ethereumjs-wallet": "^0.6.2",
     "lodash": "^4.17.13",
     "md5": "^2.2.1",
-    "moment": "^2.22.2",
+    "moment": "^2.24.0",
     "node-sass": "^4.9.4",
     "sass-loader": "^7.1.0",
     "vue-i18n": "^8.15.0",
