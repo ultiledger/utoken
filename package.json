@@ -43,7 +43,7 @@
     "coinselect": "^3.1.11",
     "ed25519-hd-key": "^1.0.0",
     "eslint-friendly-formatter": "^4.0.1",
-    "ethereumjs-wallet": "^0.6.2",
+    "ethereumjs-wallet": "^0.6.3",
     "lodash": "^4.17.13",
     "md5": "^2.2.1",
     "moment": "^2.24.0",
