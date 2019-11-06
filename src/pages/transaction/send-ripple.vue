@@ -33,7 +33,7 @@
         <small class="text-danger" v-show="!trustAsset" v-html="$t('transaction.notTrustAssetMsg', {code: asset.code})"></small>
       </receive-address>
 
-      <div class="item-block">
+      <div class="item-block" v-show="!XAddress">
         <pl-block>
           <div style="padding: 0 0 10px;overflow: hidden;">
             <div class="pull-left normal-font">Tag</div>
@@ -69,15 +69,15 @@
               </van-cell>
               <van-cell>
                 <span slot="title" class="text-muted" v-text="$t('common.receivablesAddress')"></span>
-                <div>{{receiveAddress}}</div>
+                <div>{{form.receiveAddress}}</div>
               </van-cell>
               <van-cell>
                 <span slot="title" class="text-muted" v-text="$t('common.paymentAddress')"></span>
                 <div>{{$store.state.account.address}}</div>
               </van-cell>
-              <van-cell>
+              <van-cell v-show="!XAddress">
                 <span slot="title" class="text-muted">Tag</span>
-                <div>{{tagAddress?tag:form.tag}}</div>
+                <div>{{form.tag}}</div>
               </van-cell>
             </van-cell-group>
           </div>
@@ -103,6 +103,7 @@
   import Big from 'big.js';
   import cryptor from 'core/utils/cryptor';
   import {AccountType} from '../../wallet/constants';
+  import {isValidXAddress} from 'ripple-address-codec';
 
   export default{
     components: {receiveAddress},
@@ -132,9 +133,7 @@
         addressValid: true,
         addressActivated: true,
         trustAsset: true,
-        tagAddress: false,
-        receiveAddress: '',
-        tag:'',
+        XAddress: false,
         requireDestinationTag:false,
         ripple: AccountType.ripple
       };
@@ -142,17 +141,8 @@
     watch: {
       'form.receiveAddress' () {
         if (this.form.receiveAddress) {
-          if (this.$wallet.isTagAddress(this.form.receiveAddress)){
-            let decode=this.$wallet.decodeTagAddress(this.form.receiveAddress);
-            this.receiveAddress=decode.account;
-            this.tag=decode.tag;
-            this.tagAddress=true;
-          }else{
-            this.receiveAddress=this.form.receiveAddress;
-            this.tag=this.form.tag;
-            this.tagAddress=false;
-          }
-          if (!this.$wallet.isValidAddress(this.receiveAddress)) {
+          this.XAddress=isValidXAddress(this.form.receiveAddress);
+          if (!this.$wallet.isValidAddress(this.form.receiveAddress)) {
             this.addressValid = false;
             this.addressActivated = true;
             this.trustAsset = true;
@@ -160,13 +150,13 @@
           } else {
             this.addressValid = true;
           }
-          this.$wallet.isActivated(this.receiveAddress).then(ret => {
+          this.$wallet.isActivated(this.form.receiveAddress).then(ret => {
             this.addressActivated = ret;
             if (this.addressActivated) {
-              this.$wallet.isTrustAsset(this.receiveAddress, this.asset.code, this.asset.issuer).then(ret => {
+              this.$wallet.isTrustAsset(this.form.receiveAddress, this.asset.code, this.asset.issuer).then(ret => {
                 this.trustAsset = ret;
               });
-              this.$wallet.getAccountSettings(this.receiveAddress).then(ret => {
+              this.$wallet.getAccountSettings(this.form.receiveAddress).then(ret => {
                 this.requireDestinationTag = ret.requireDestinationTag;
               });
             } else {
@@ -216,7 +206,7 @@
            if (this.asset.issuer && !this.addressActivated) {
              return true;
            }
-           if (this.isNeedTag && !this.form.tag) {
+           if (this.isNeedTag && !this.form.tag  && !this.XAddress) {
              return true;
            }
            return false;
@@ -269,17 +259,17 @@
           return;
         }
 
-        if (!this.$wallet.isValidAddress(this.receiveAddress)) {
+        if (!this.$wallet.isValidAddress(this.form.receiveAddress)) {
           this.$toast(this.$t('address.invalidAddressTip'));
           return;
         }
 
-        if (this.isNeedTag && !this.form.tag) {
+        if (this.isNeedTag && !this.form.tag && !this.XAddress) {
           this.$toast(this.$t('transaction.requiredTag'));
           return;
         }
 
-        if (this.requireDestinationTag && !this.form.tag && !this.tag) {
+        if (this.requireDestinationTag && !this.form.tag && !this.XAddress) {
           this.$toast(this.$t('transaction.requiredTag'));
           return;
         } else {
@@ -318,7 +308,7 @@
         });
 
         let options = {
-          tag: this.tagAddress ? this.tag : this.form.tag
+          tag: this.XAddress?'':this.form.tag
         };
 
         if (this.asset && this.asset.code && this.asset.issuer) {
@@ -326,7 +316,7 @@
           options.assetIssuer = this.asset.issuer;
         }
 
-        this.$wallet.sendTransaction(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.receiveAddress, this.form.amt, options)
+        this.$wallet.sendTransaction(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.form.receiveAddress, this.form.amt, options)
           .then(ret => {
             if (ret && ret.resultCode === 'tesSUCCESS') {
               console.info(ret);
