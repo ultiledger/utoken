@@ -5976,10 +5976,10 @@ loki-cordova-fs-adapter@^1.0.2:
   resolved "https://registry.yarnpkg.com/loki-cordova-fs-adapter/-/loki-cordova-fs-adapter-1.0.2.tgz#a6f23bcafe327d0f1fb724dd65b727dab42f1814"
   integrity sha1-pvI7yv4yfQ8ftyTdZbcn2rQvGBQ=
 
-lokijs@^1.5.5:
-  version "1.5.7"
-  resolved "https://registry.yarnpkg.com/lokijs/-/lokijs-1.5.7.tgz#3bbeb5c2dbffebd78d035bac82c7c4e6055870f0"
-  integrity sha512-2SqUV6JH4f15Z5/7LVsyadSUwHhZppxhujgy/VhVqiRYMGt5oaocb7fV/3JGjHJ6rTuEIajnpTLGRz9cJW/c3g==
+lokijs@^1.5.8:
+  version "1.5.8"
+  resolved "https://registry.yarnpkg.com/lokijs/-/lokijs-1.5.8.tgz#9296f288edb2147389ec692fc972c428c59179d1"
+  integrity sha512-D8E3TBrY35o1ELnonp2MF8b3wKu2tVNl2TqRjvS+95oPMMe7OoIAxNY1qr+5BEZwnWn2V4ErAjVt000DonM+FA==
 
 long@^2.2.3:
   version "2.4.0"
