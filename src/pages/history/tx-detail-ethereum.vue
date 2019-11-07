@@ -84,7 +84,7 @@
         </van-row>
       </div>
       <div class="qrcode-parent">
-        <qrcode class="qrcode" :value="`https://etherscan.io/tx/${item.txHash}`" :options="{ size: 80 }"></qrcode>
+        <qrcode class="qrcode" :value="`https://cn.etherscan.com/tx/${item.txHash}`" :options="{ size: 80 }"></qrcode>
       </div>
     </pl-block>
     <br>

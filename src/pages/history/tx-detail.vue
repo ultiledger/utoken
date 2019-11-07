@@ -63,7 +63,7 @@
         let link = '';
         let title = '';
         if (this.type === AccountType.ethereum) {
-          link = `https://etherscan.io/tx/${this.item.txHash}`;
+          link = `https://cn.etherscan.com/tx/${this.item.txHash}`;
           title = 'Etherscan';
         } else if (this.type === AccountType.ripple) {
           link = `https://xrpscan.com/tx/${this.item.txHash}`;

@@ -55,7 +55,7 @@
             title: 'Etherscan',
             subTitle: this.$t('find.ethBlockBrowser'),
             desc: this.$t('find.ethDeveloped'),
-            link: 'https://etherscan.io',
+            link: 'https://cn.etherscan.com',
             imgUrl: 'static/img/app/Etherscan.png'
           },
           {
@@ -108,7 +108,7 @@
             title: 'Etherscan',
             subTitle: this.$t('find.ethBlockBrowser'),
             desc: this.$t('find.ethDeveloped'),
-            link: 'https://etherscan.io',
+            link: 'https://cn.etherscan.com',
             imgUrl: 'static/img/app/Etherscan.png'
           },
           {
