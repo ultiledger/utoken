@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",
-    "@vue/cli-plugin-eslint": "^3.0.5",
+    "@vue/cli-plugin-eslint": "^3.12.1",
     "@vue/cli-service": "^3.0.5",
     "babel-plugin-import": "^1.12.2",
     "bip39": "^2.5.0",
