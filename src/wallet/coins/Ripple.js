@@ -1,6 +1,5 @@
 import {RippleAPI} from 'ripple-lib';
-import RippleAddress from 'ripple-address-codec';
-import {Decode} from 'xrpl-tagged-address-codec';
+import {isValidXAddress,xAddressToClassicAddress} from 'ripple-address-codec';
 import {AccountType, CoinType} from '../constants';
 import tradingPlatformConfig from '../config/trading-platform';
 import rippleKeypairs from 'ripple-keypairs';
@@ -64,7 +63,8 @@ class RippleWallet{
       await this.server.connect();
     }
     return new Promise((resolve)=>{
-      this.server.getAccountInfo(address)
+      let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
+      this.server.getAccountInfo(classicAddress)
         .then(() => {
           resolve(true);
         }).catch(e => {
@@ -107,7 +107,8 @@ class RippleWallet{
       await this.server.connect();
     }
     try {
-      let ret = await this.server.getBalances(address);
+      let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
+      let ret = await this.server.getBalances(classicAddress);
       let balances = [];
       let native;
       ret.forEach(item => {
@@ -124,7 +125,7 @@ class RippleWallet{
           });
         }
       });
-      let accountInfo = await this.server.getAccountInfo(address);
+      let accountInfo = await this.server.getAccountInfo(classicAddress);
       native.frozenNative = 20 + 5 * accountInfo.ownerCount;
       balances.unshift(native);
       return balances;
@@ -139,7 +140,8 @@ class RippleWallet{
 
   async getAccountSettings(address) {
     return new Promise(async (resolve) => {
-      let settings = await this.server.getSettings(address);
+      let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
+      let settings = await this.server.getSettings(classicAddress);
       resolve(settings);
     });
   }
@@ -148,10 +150,14 @@ class RippleWallet{
     if (CoinType.XRP === assetCode && !assetIssuer) {
       return true;
     }
+    let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
     if (address && assetIssuer && address === assetIssuer) {
       return true;
     }
-    let trustlines = await this.server.getTrustlines(address);
+    if (address && assetIssuer && classicAddress === assetIssuer) {
+      return true;
+    }
+    let trustlines = await this.server.getTrustlines(classicAddress);
     // //console.info(trustlines);
     if (!trustlines && trustlines.length === 0) {
       return false;
@@ -169,8 +175,9 @@ class RippleWallet{
   getTransactions (address, option = {}) {
     return new Promise(async (resolve, reject)=>{
       try {
+        let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
         const options = {
-          account: address,
+          account: classicAddress,
           limit: 50
         };
         const command = 'account_tx';
@@ -286,21 +293,8 @@ class RippleWallet{
     });
   }
 
-  isTagAddress (address) {
-    try{
-      Decode(address);
-    }catch (e) {return false;}
-    return true;
-  }
-
-  decodeTagAddress (address) {
-    try{
-      return Decode(address);
-    }catch (e) {return {error: e.message};}
-  }
-
   isValidAddress (address) {
-    return RippleAddress.isValidAddress(address);
+    return this.server.isValidAddress(address);
   }
 
   isTradingPlatformAddress (address) {

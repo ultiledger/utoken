@@ -93,11 +93,11 @@
                 <vue-slider
                   style="position: relative;top: -12px;"
                   v-model="form.amount"
-                  :debug="false"
+                  :min="0"
+                  :max="maxVal"
+                  :interval="step"
                   :height="2"
-                  :tooltip="false"
-                  :interval.sync="step"
-                  :max.sync="maxVal"
+                  tooltip="none"
                 ></vue-slider>
               </van-col>
             </van-row>
@@ -172,6 +172,7 @@ import passwordDialog from "../ui/password-dialog";
 import Big from "big.js";
 import cryptor from "core/utils/cryptor";
 import vueSlider from "vue-slider-component";
+import 'vue-slider-component/theme/default.css';
 import coins from "src/wallet/coins";
 import { AccountType } from "src/wallet/constants";
 export default {
@@ -254,7 +255,7 @@ export default {
     },
     step() {
       if (this.maxVal > 0) {
-        return Number(new Big(this.maxVal).div(10).toFixed(8));
+        return Number(new Big(this.maxVal).div(10));
       }
       return 1;
     }
