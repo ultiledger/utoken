@@ -35,7 +35,7 @@
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-service": "^3.0.5",
-    "babel-plugin-import": "^1.10.0",
+    "babel-plugin-import": "^1.12.2",
     "bip39": "^2.5.0",
     "bitcoinjs-lib": "^4.0.2",
     "blockchain.info": "^2.12.1",
