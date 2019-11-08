@@ -1,7 +1,6 @@
 // http://vee-validate.logaretm.com/ 验证组件文档
 import Vue from 'vue';
-import * as VeeValidate from 'vee-validate';
-import { extend,localize } from 'vee-validate';
+import VeeValidate, { Validator } from 'vee-validate';
 Vue.use(VeeValidate);
 const locale = {
   name: 'zh_CN',
@@ -91,10 +90,10 @@ const valisators = {
   }
 };
 
-localize({[locale.name]: locale});
+Validator.localize({[locale.name]: locale});
 
 Object.keys(valisators).map(key => {
-  extend(key, valisators[key]);
+  Validator.extend(key, valisators[key]);
 });
 
 const config = {
