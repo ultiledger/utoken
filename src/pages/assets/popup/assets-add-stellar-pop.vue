@@ -57,8 +57,9 @@
   import tokenConfigHepler from 'src/core/utils/tokenConfigHepler';
   import cryptor from 'core/utils/cryptor';
   import Big from 'big.js';
+  import Vue2Filters from 'vue2-filters';
   export default {
-    mixins: [asset],
+    mixins: [asset,Vue2Filters.mixin],
     components: {passwordDialog},
     data () {
       return {
