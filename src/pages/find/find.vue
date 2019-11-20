@@ -45,17 +45,24 @@
       all () {
         return [
           {
+            title: 'Ultiledger BBS',
+            subTitle: 'https://ultbbs.com',
+            desc: 'ULT论坛会员来自全球各地区Ultiledger支持者,具有共享、自治、非盈利性质。',
+            link: 'https://ultbbs.com',
+            imgUrl: 'static/img/ULT@3x.png'
+          },
+          {
             title: 'Etherscan',
             subTitle: this.$t('find.ethBlockBrowser'),
             desc: this.$t('find.ethDeveloped'),
-            link: 'https://etherscan.io',
+            link: 'https://cn.etherscan.com',
             imgUrl: 'static/img/app/Etherscan.png'
           },
           {
             title: this.$t('find.xrpTitle'),
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
-            link: 'https://wipple.devnull.network/live/accounts',
+            link: 'https://xrp1ntel.com/accounts',
             imgUrl: 'static/img/XRP-1@3x.png'
           },
           {
@@ -101,14 +108,14 @@
             title: 'Etherscan',
             subTitle: this.$t('find.ethBlockBrowser'),
             desc: this.$t('find.ethDeveloped'),
-            link: 'https://etherscan.io',
+            link: 'https://cn.etherscan.com',
             imgUrl: 'static/img/app/Etherscan.png'
           },
           {
             title: this.$t('find.xrpTitle'),
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
-            link: 'https://wipple.devnull.network/live/accounts',
+            link: 'https://xrp1ntel.com/accounts',
             imgUrl: 'static/img/XRP-1@3x.png'
           },
           {
@@ -131,13 +138,6 @@
             desc: this.$t('find.u919Desc'),
             link: 'http://xlmyun.com:666/#!/track',
             imgUrl: 'static/img/app/u919.png'
-          },
-          {
-            title: '唤醒测试',
-            subTitle: '唤醒测试',
-            desc: '唤醒测试',
-            link: 'http://120.78.128.36:84/txt.html',
-            imgUrl: 'static/img/unknown.png'
           }
         ];
       },

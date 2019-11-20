@@ -84,7 +84,7 @@
         </van-row>
       </div>
       <div class="qrcode-parent">
-        <qrcode class="qrcode" :value="`https://wipple.devnull.network/live/transactions/${item.txHash}`" :options="{ size: 85 }"></qrcode>
+        <qrcode class="qrcode" :value="`https://xrpscan.com/tx/${item.txHash}`" :options="{ width: 85 }"></qrcode>
       </div>
     </pl-block>
     <br>
@@ -92,7 +92,7 @@
   </div>
 </template>
 <script>
-  import qrcode from '@xkeshi/vue-qrcode';
+  import qrcode from '@chenfengyuan/vue-qrcode';
   export default{
     components: {qrcode},
     props: {

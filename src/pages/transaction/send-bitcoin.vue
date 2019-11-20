@@ -312,14 +312,14 @@
             setTimeout(() => {
               toast.clear();
               this.$emit('done');
-            }, 1000);
+            }, 2000);
           })
           .catch(err => {
             console.error(err);
             this.$toast(this.getErrMsg(err));
             setTimeout(() => {
               toast.clear();
-            }, 2000);
+            }, 4000);
           });
       }
     }

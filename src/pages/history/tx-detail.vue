@@ -63,11 +63,11 @@
         let link = '';
         let title = '';
         if (this.type === AccountType.ethereum) {
-          link = `https://etherscan.io/tx/${this.item.txHash}`;
+          link = `https://cn.etherscan.com/tx/${this.item.txHash}`;
           title = 'Etherscan';
         } else if (this.type === AccountType.ripple) {
-          link = `https://wipple.devnull.network/live/transactions/${this.item.txHash}`;
-          title = 'Wipple';
+          link = `https://xrpscan.com/tx/${this.item.txHash}`;
+          title = 'XrpScan';
         } else if (this.type === AccountType.stellar) {
           link = `https://steexp.com/tx/${this.item.txHash}`;
           title = 'Steexp';

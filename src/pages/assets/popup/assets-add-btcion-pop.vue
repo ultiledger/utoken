@@ -49,8 +49,9 @@
 <script>
 import coins from "src/wallet/coins";
 import asset from "../mixns/asset";
+import Vue2Filters from 'vue2-filters';
 export default {
-  mixins: [asset],
+  mixins: [asset,Vue2Filters.mixin],
   data() {
     return {
       searchValue: "",

@@ -93,11 +93,11 @@
                 <vue-slider
                   style="position: relative;top: -12px;"
                   v-model="form.amount"
-                  :debug="false"
+                  :min="0"
+                  :max="maxVal"
+                  :interval="step"
                   :height="2"
-                  :tooltip="false"
-                  :interval.sync="step"
-                  :max.sync="maxVal"
+                  tooltip="none"
                 ></vue-slider>
               </van-col>
             </van-row>
@@ -172,6 +172,7 @@ import passwordDialog from "../ui/password-dialog";
 import Big from "big.js";
 import cryptor from "core/utils/cryptor";
 import vueSlider from "vue-slider-component";
+import 'vue-slider-component/theme/default.css';
 import coins from "src/wallet/coins";
 import { AccountType } from "src/wallet/constants";
 export default {
@@ -217,7 +218,6 @@ export default {
           bs.forEach(item => {
             let issuer = item.issuer ? item.issuer : "";
             result[item.code + issuer] = new Big(item.value)
-              .toFixed(6)
               .toString();
           });
           return result;
@@ -255,7 +255,7 @@ export default {
     },
     step() {
       if (this.maxVal > 0) {
-        return Number(new Big(this.maxVal).div(10).toFixed(8));
+        return Number(new Big(this.maxVal).div(10));
       }
       return 1;
     }
@@ -276,9 +276,9 @@ export default {
       }
     },
     "form.amount"() {
-      if (this.form.amount) {
+      if (this.form.amount && this.currentAccount.type === AccountType.stellar) {
         this.form.amount =
-          this.form.amount.toString().match(/^\d*(\.?\d{0,6})/g)[0] || null;
+          this.form.amount.toString().match(/^\d*(\.?\d{0,7})/g)[0] || null;
       }
     }
   },
@@ -501,11 +501,15 @@ export default {
         .then(ret => {
           if (ret) {
             toast.message = this.$t("trade.offerSuccess");
-            toast.clear();
-            this.$refs.myOffers.clearTimer();
+            setTimeout(() => {
+              toast.clear();
+            }, 3000);
+            if (this.$refs.myOffers) {
+              this.$refs.myOffers.clearTimer();
+              this.$refs.myOffers.getOffers();
+            }
             this.$refs.marketDept.clearTimer();
             this.$refs.marketDept.getBooks();
-            this.$refs.myOffers.getOffers();
           }
           this.loading = false;
           this.onRefreshBalances();
@@ -520,7 +524,7 @@ export default {
           }
           setTimeout(() => {
             toast.clear();
-          }, 3000);
+          }, 4000);
           this.loading = false;
         });
     },

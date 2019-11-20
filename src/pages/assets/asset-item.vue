@@ -122,7 +122,7 @@
                         class="text-main small-font"
                         v-if="isShowMarket(item.value, item.code, item.issuer)"
                       >
-                        <div v-if="item.code !== 'XLM'">
+                        <div v-if="item.issuer || item.code === 'ETH' || item.code === 'BTC'">
                           &#8776;&nbsp;
                           <pl-privacy
                             :suffix="$store.state.setting.currencyUnit"

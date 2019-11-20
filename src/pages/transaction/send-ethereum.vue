@@ -278,7 +278,7 @@
               setTimeout(() => {
                 toast.clear();
                 this.$emit('done');
-              }, 1000);
+              }, 2000);
             });
             // this.$wallet.getTransaction(ret).then(tx => {
             //   console.info('tx:', tx);
@@ -316,7 +316,7 @@
             this.$toast(this.getErrMsg(err));
             setTimeout(() => {
               toast.clear();
-            }, 2000);
+            }, 5000);
           });
       },
       async setTempHistory (txHash, to, amount, options, callback) {
@@ -331,7 +331,7 @@
               callback();
               return;
             }
-            setTimeout(done, 2000);
+            setTimeout(done, 3000);
             return;
           }
           let account = this.$store.state.account;

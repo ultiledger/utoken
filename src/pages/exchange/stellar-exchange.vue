@@ -304,7 +304,7 @@
               toast.clear();
               this.close();
               this.$emit('done');
-            }, 1000);
+            }, 2000);
           }
           this.loading = false;
         }).catch(err => {
@@ -317,7 +317,7 @@
           }
           setTimeout(() => {
             toast.clear();
-          }, 2000);
+          }, 4000);
           this.loading = false;
         });
       }

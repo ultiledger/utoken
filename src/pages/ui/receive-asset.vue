@@ -18,7 +18,7 @@
       <div class="qrcode-container text-center">
         <div class="small-font" style="padding: 15px 0 10px;">{{$t('scan.scanQrCode')}}<b class="normal-font text-primary">&nbsp;{{assetCode}}</b></div>
         <div v-if="transferAmt" style="margin-bottom: 5px;">{{transferAmt}}&nbsp;&nbsp;{{shortCode}}</div>
-        <qrcode @click.native="toCopyAddress" class="qrcode" :value="qrCodeText" :options="{ size: 200 }"></qrcode>
+        <qrcode @click.native="toCopyAddress" class="qrcode" :value="qrCodeText" :options="{ width: 200 }"></qrcode>
         <p class="small-font" v-text="$t('scan.copyQrCodeAddress')"></p>
       </div>
       <div class="footer van-hairline--top">
@@ -54,7 +54,7 @@
   </van-popup>
 </template>
 <script>
-  import qrcode from '@xkeshi/vue-qrcode';
+  import qrcode from '@chenfengyuan/vue-qrcode';
   import setAmount from './set-amount';
   // import coins from 'src/wallet/coins';
   export default {

@@ -48,7 +48,7 @@
         <pl-block class="margin-top item-block margin-bottom">
           <!--<p class="normal-font" style="padding-left: 15px;" v-text="$t('acct.acctAddress')"></p>-->
           <div class="text-center qrcode-container">
-            <qrcode class="qrcode" :value="currentAccount.address" :options="{ size: 200 }"></qrcode>
+            <qrcode class="qrcode" :value="currentAccount.address" :options="{ width: 200 }"></qrcode>
             <!--<img src="./qrcode.jpeg" style="max-width: 50%;" alt="二维码"/>-->
           </div>
           <div class="addr text-center">
@@ -91,7 +91,7 @@
   import backupsMemorizingWords from '../wallet/backups-memorizing-words-pop';
   import acctRippleSettings from './popup/acct-ripple-settings';
   // import encryptor from 'core/utils/encryptor';
-  import qrcode from '@xkeshi/vue-qrcode';
+  import qrcode from '@chenfengyuan/vue-qrcode';
   import cryptor from 'core/utils/cryptor';
   import {SourceType} from 'core/constants';
   import {AccountType} from 'src/wallet/constants';

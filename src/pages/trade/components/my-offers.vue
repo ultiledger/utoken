@@ -264,7 +264,7 @@
           }
           setTimeout(() => {
             toast.clear();
-          }, 2000);
+          }, 4000);
         });
       },
       getErrMsg (err) {
