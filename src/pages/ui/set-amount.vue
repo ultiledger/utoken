@@ -22,7 +22,7 @@
         <span slot="icon" class="text-main large-font">{{coinType}}</span>
       </van-field>
       <div class="btn">
-        <van-button size="large" round type="primary" @click="sure()" v-text="$t('common.sure')"></van-button>
+        <van-button size="large" round type="primary" @click="sure()" :text="$t('common.sure')"></van-button>
       </div>
     </div>
     <van-number-keyboard

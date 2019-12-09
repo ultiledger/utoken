@@ -24,7 +24,7 @@
          <div class="text-primary text-center" style="padding-bottom:10px;">
            <van-icon name="idcard" style="vertical-align: middle" class="text-primary"/>&nbsp;&nbsp;<span @click="viewHelp" style="vertical-align: middle" v-text="$t('wallet.oneSecUnderstandMnemonicCode')"></span>
          </div>
-         <van-button size="large" round type="primary" @click="recoveryWallet" v-text="$t('wallet.immediatelyRecover')"></van-button>
+         <van-button size="large" round type="primary" @click="recoveryWallet" :text="$t('wallet.immediatelyRecover')"></van-button>
        </button-bottom>
      </pl-content-block>
      <!-- <pl-stick>

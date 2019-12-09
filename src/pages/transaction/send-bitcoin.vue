@@ -60,7 +60,7 @@
       </div>
       </pl-content-block>
       <pl-stick :offset-bottom="0">
-        <van-button size="large" :loading="loading" :disabled="firstBthDisabled" class="plat-btn" @click="firstStep" type="primary" v-text="$t('common.next')"></van-button>
+        <van-button size="large" :loading="loading" :disabled="firstBthDisabled" class="plat-btn" @click="firstStep" type="primary" :text="$t('common.next')"></van-button>
       </pl-stick>
     </div>
     <van-actionsheet v-model="showFirstStep"  :close-on-click-overlay="false">
@@ -93,7 +93,7 @@
             </van-cell-group>
           </div>
           <pl-stick :offset-bottom="0">
-            <van-button size="large" :loading="loading" class="plat-btn" @click="secondStep()" type="primary" v-text="$t('common.next')"></van-button>
+            <van-button size="large" :loading="loading" class="plat-btn" @click="secondStep()" type="primary" :text="$t('common.next')"></van-button>
           </pl-stick>
         </div>
         <div v-show="showSecondStep">
@@ -102,7 +102,7 @@
             <van-field v-model="form.password" ref="password" type="password" @click-icon="displayPassword = true" :placeholder="$t('transaction.walletPwdPlaceholder')" icon="password-not-view" v-show="!displayPassword"/>
             <van-field v-model="form.password" ref="visualPassword" type="text" @click-icon="displayPassword = false" :placeholder="$t('transaction.walletPwdPlaceholder')" icon="password-view" v-show="displayPassword"/>          </van-cell-group>
           <pl-stick :offset-bottom="0">
-            <van-button size="large" :loading="loading" :disabled="!form.password" class="plat-btn"  @click="submit" type="primary" v-text="$t('transaction.submit')"></van-button>
+            <van-button size="large" :loading="loading" :disabled="!form.password" class="plat-btn"  @click="submit" type="primary" :text="$t('transaction.submit')"></van-button>
           </pl-stick>
         </div>
       </div>

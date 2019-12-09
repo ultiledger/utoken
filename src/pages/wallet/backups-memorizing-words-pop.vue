@@ -51,7 +51,7 @@
         <div class="text-muted small-font item text-tip-color"  v-text="$t('wallet.backMnemonicCodeSubTip')"></div>
         <!--按钮部分-->
         <button-bottom>
-          <van-button size="large" round type="primary" @click="next()" v-text="$t('wallet.backMnemonicNext')"></van-button>
+          <van-button size="large" round type="primary" @click="next()" :text="$t('wallet.backMnemonicNext')"></van-button>
         </button-bottom>
       </pl-content-block>
     </van-popup>

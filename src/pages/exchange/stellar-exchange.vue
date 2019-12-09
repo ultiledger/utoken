@@ -86,7 +86,7 @@
           class="plat-btn"
           @click="showPasswordDialog"
           type="primary"
-          v-text="$t('common.exchange')"></van-button>
+          :text="$t('common.exchange')"></van-button>
       </pl-stick>
     </van-popup>
     <van-popup
