@@ -26,11 +26,11 @@ const state = {
       {value: 'https://horizon-testnet.stellar.org', type: 'test'}
     ],
     [AccountType.ripple]: [
+      {value: 'wss://xrpl.ws', type: 'public'},
       {value: 'wss://s1.ripple.com', type: 'public'},
       {value: 'wss://s-east.ripple.com', type: 'public'},
       {value: 'wss://s-west.ripple.com', type: 'public'},
-      {value: 'wss://s2.ripple.com', type: 'public'},
-      {value: 'wss://rippled.xrptipbot.com', type: 'public'},
+      {value: 'wss://s2.ripple.com', type: 'public'},      
       {value: 'wss://s.altnet.rippletest.net:51233', type: 'test'}
     ],
     [AccountType.ethereum]: [
@@ -61,7 +61,7 @@ const state = {
     mytokenApi: 'https://api.mytokenapi.com', // mytoken-api获取行情
     network: {
       [AccountType.stellar]: 'https://horizon.stellar.org',
-      [AccountType.ripple]: 'wss://s1.ripple.com',
+      [AccountType.ripple]: 'wss://xrpl.ws',
       [AccountType.ethereum]: 'wss://mainnet.infura.io/ws',
       [AccountType.bitcoin]: 'https://blockchain.info'
     }
