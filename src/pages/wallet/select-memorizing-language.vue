@@ -28,7 +28,7 @@
         <!--按钮部分-->
         <button-bottom>
           <div style="margin-bottom: 10px;margin-top: 18rem;" class="text-center"></div>
-          <van-button size="large" round type="primary" @click="checkPassword" v-text="$t('common.next')"></van-button>
+          <van-button size="large" round type="primary" @click="checkPassword" :text="$t('common.next')"></van-button>
         </button-bottom>
       </pl-content-block>
     </van-popup>

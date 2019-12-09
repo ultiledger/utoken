@@ -29,7 +29,7 @@
             <span><van-icon name="info-o" class="vertical-align-middle text-primary"/></span>
             <span class="small-font">&nbsp;{{$t('wallet.backWalletTip2')}}</span>
           </div>
-          <van-button size="large" round type="primary" @click="checkPassword" v-text="$t('wallet.backWallet')"></van-button>
+          <van-button size="large" round type="primary" @click="checkPassword" :text="$t('wallet.backWallet')"></van-button>
         </button-bottom>
       </pl-content-block>
     </van-popup>

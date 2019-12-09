@@ -28,7 +28,7 @@
 
       <div style="position: fixed;bottom: 0;width: 100%;">
         <div class="single-btn margin-top margin-bottom">
-          <van-button size="large" round type="primary" @click="toLogout()" v-text="$t('setting.logout')"></van-button>
+          <van-button size="large" round type="primary" @click="toLogout()" :text="$t('setting.logout')"></van-button>
         </div>
       </div>
     </van-popup>

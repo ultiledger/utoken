@@ -99,7 +99,7 @@
       </div>
 
       <div class="single-btn">
-        <van-button size="large" round  @click="saveAddress" type="primary" v-text="$t('address.save')"></van-button>
+        <van-button size="large" round  @click="saveAddress" type="primary" :text="$t('address.save')"></van-button>
       </div>
       <coin-type-select ref="coinTypeSelect" @done="setType"></coin-type-select>
     </van-popup>
