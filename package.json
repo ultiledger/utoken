@@ -34,7 +34,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-plugin-eslint": "^3.12.1",
-    "@vue/cli-service": "^3.0.5",
+    "@vue/cli-service": "^3.12.1",
     "babel-plugin-import": "^1.12.2",
     "bip39": "^2.5.0",
     "bitcoinjs-lib": "^4.0.2",
@@ -48,7 +48,7 @@
     "md5": "^2.2.1",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
-    "sass-loader": "^7.1.0",
+    "sass-loader": "^7.3.1",
     "vue-i18n": "^8.15.0",
     "vue-template-compiler": "^2.6.10"
   }
