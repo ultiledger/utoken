@@ -56,10 +56,10 @@
                 &nbsp;
                 <van-icon
                   v-if="!$store.state.setting.privacyMode"
-                  name="password-view"
+                  name="eye-o"
                   @click="setMode(true)"
                 />
-                <van-icon v-else name="password-not-view" @click="setMode(false)" />
+                <van-icon v-else name="closed-eye" @click="setMode(false)" />
               </span>
             </div>
             <span
