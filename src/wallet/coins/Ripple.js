@@ -25,7 +25,7 @@ class RippleWallet{
     this.url = url;
     if (!this.server || !this.server.isConnected()) {
       this.server = new RippleAPI({
-        server: url, maxFeeXRP: '0.05',timeout:6000
+        server: url, maxFeeXRP: '0.05',timeout:16000
       });
       this.server.on('error', (errorCode, errorMessage) => {
         console.log(errorCode + ': ' + errorMessage);
@@ -39,9 +39,6 @@ class RippleWallet{
         } else {
           console.log('Connection is closed normally.');
         }
-      });
-      this.server.on('ledger', ledger => {
-        console.log('Rippleledger',JSON.stringify(ledger.ledgerHash, null, 2));
       });
     }
   }

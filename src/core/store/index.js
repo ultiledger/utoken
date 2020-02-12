@@ -30,13 +30,14 @@ const state = {
       {value: 'wss://s1.ripple.com', type: 'public'},
       {value: 'wss://s-east.ripple.com', type: 'public'},
       {value: 'wss://s-west.ripple.com', type: 'public'},
-      {value: 'wss://s2.ripple.com', type: 'public'},      
+      {value: 'wss://s2.ripple.com', type: 'public'},
+      {value: 'wss://ws.foxcny.com', type: 'public'},     
       {value: 'wss://s.altnet.rippletest.net:51233', type: 'test'}
     ],
     [AccountType.ethereum]: [
       // {value: 'https://mainnet.infura.io/', type: 'public'},
       // {value: 'https://rinkeby.infura.io/', type: 'test'}
-      {value: 'wss://mainnet.infura.io/ws', type: 'public'},
+      {value: 'wss://mainnet.infura.io/ws/v3/508b5431b89041d18256f8d7d91558d1', type: 'public'},
       //{value: 'https://mainnet-eth.token.im/', type: 'public'},
       {value: 'wss://rinkeby.infura.io/ws', type: 'test'} 
     ],
@@ -62,7 +63,7 @@ const state = {
     network: {
       [AccountType.stellar]: 'https://horizon.stellar.org',
       [AccountType.ripple]: 'wss://xrpl.ws',
-      [AccountType.ethereum]: 'wss://mainnet.infura.io/ws',
+      [AccountType.ethereum]: 'wss://mainnet.infura.io/ws/v3/508b5431b89041d18256f8d7d91558d1',
       [AccountType.bitcoin]: 'https://blockchain.info'
     }
   }

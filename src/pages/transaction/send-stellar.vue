@@ -87,7 +87,7 @@
             </van-cell-group>
           </div>
           <pl-stick :offset-bottom="0">
-            <van-button size="large" :loading="loading" class="plat-btn" @click="secondStep()" type="primary" v-text="$t('common.next')"></van-button>
+            <van-button size="large" :loading="loading" class="plat-btn" @click="secondStep()" type="primary" :text="$t('common.next')"></van-button>
           </pl-stick>
         </div>
         <div v-show="showSecondStep">
