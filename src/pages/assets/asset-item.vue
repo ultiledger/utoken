@@ -176,11 +176,10 @@ export default {
   components: {
     accountActivated
   },
-  // created() {
-  //   aa(){
-  //     conosle.log(this.assets())
-  //   }
-  // },
+  created() {
+    console.log(this.data);
+  },
+
   computed: {
     showAddBtn() {
       if (this.data && this.data.type === AccountType.bitcoin) {
@@ -281,6 +280,8 @@ export default {
       this.$store.dispatch("setPrivacyMode", val);
     },
     setActive() {
+      console.log(this.balances, this.loading);
+
       if (!this.balances || this.balances.length === 0) {
         this.loading = true;
       }
@@ -290,6 +291,8 @@ export default {
         .dispatch("setBalances", this.data)
         .then(() => {
           this.$emit("setSwipeHeight");
+          console.log(111);
+
           this.loading = false;
         })
         .catch(err => {
@@ -317,7 +320,8 @@ export default {
       this.$emit("addAssets");
     },
     toTrade() {
-      if (this.balances.length > 1 || this.data.type === AccountType.ripple) { // fix#86
+      if (this.balances.length > 1 || this.data.type === AccountType.ripple) {
+        // fix#86
         this.$emit("toTrade");
       } else {
         this.$dialog
