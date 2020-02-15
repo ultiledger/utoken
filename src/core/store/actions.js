@@ -112,6 +112,7 @@ export const setBalances =  ({commit, state, dispatch}, params) => {
       // }
       resolve();
     }).catch(err => {
+      console.log(err);
       reject(err);
     });
   });

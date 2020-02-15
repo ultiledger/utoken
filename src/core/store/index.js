@@ -27,11 +27,12 @@ const state = {
     ],
     [AccountType.ripple]: [
       {value: 'wss://xrpl.ws', type: 'public'},
+      {value: 'wss://ws.foxcny.com', type: 'public'},
+      {value: 'wss://ws2.foxcny.com', type: 'public'},
       {value: 'wss://s1.ripple.com', type: 'public'},
       {value: 'wss://s-east.ripple.com', type: 'public'},
       {value: 'wss://s-west.ripple.com', type: 'public'},
-      {value: 'wss://s2.ripple.com', type: 'public'},
-      {value: 'wss://ws.foxcny.com', type: 'public'},     
+      {value: 'wss://s2.ripple.com', type: 'public'},    
       {value: 'wss://s.altnet.rippletest.net:51233', type: 'test'}
     ],
     [AccountType.ethereum]: [

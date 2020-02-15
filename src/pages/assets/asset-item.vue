@@ -262,6 +262,7 @@ export default {
       } else if (result > 0 && result < 1) {
         result = result.toFixed(4);
       }
+
       return Number(result);
     },
     setStatAmtClass() {
@@ -279,27 +280,29 @@ export default {
     setMode(val) {
       this.$store.dispatch("setPrivacyMode", val);
     },
-    setActive() {
-      console.log(this.balances, this.loading);
-
+    async setActive() {
       if (!this.balances || this.balances.length === 0) {
         this.loading = true;
       }
       let params = { ...this.data, setBalance: false };
-      this.$store.dispatch("setAccount", params);
-      this.$store
-        .dispatch("setBalances", this.data)
+      await this.$store.dispatch("setAccount", params);
+      this.$store.dispatch("setBalances", this.data)
         .then(() => {
-          this.$emit("setSwipeHeight");
-          console.log(111);
-
           this.loading = false;
+          this.$emit("setSwipeHeight");
         })
-        .catch(err => {
-          console.info(err);
-          this.$emit("setSwipeHeight");
+        .catch(() => {
           this.loading = false;
+          this.$emit("setSwipeHeight");
         });
+         
+      if(this.data.type === AccountType.ripple){
+        setTimeout(()=>{
+         this.loading = false;
+         this.$emit("setSwipeHeight");
+        },2000);
+     
+       }
       // this.$wallet.getInstance().getTrustlines('rDDJqnFgTNnR4c4u8EAAskpet4LUYUZm4A').then(ret => {
       //   console.info(ret);
       // });
