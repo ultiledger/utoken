@@ -7,7 +7,7 @@ const PATHS = {
 };
 module.exports = {
   // transpileDependencies: ['bitcoinjs-lib', 'bip32', 'ripple-lib', 'ethereumjs-tx', 'rlp', 'eth-lib', 'agent-base', 'tiny-secp256k1'],
-  baseUrl:  process.env.NODE_ENV === 'production'?'': '/',
+  publicPath:  process.env.NODE_ENV === 'production'?'': '/',
   chainWebpack: vwconfig => { // 主要修改一些公共配置
     // 指定输出目录及文件命名方式
     vwconfig.output

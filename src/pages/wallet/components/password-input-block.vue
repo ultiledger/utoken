@@ -47,22 +47,22 @@
       return {
         form: this.value,
         inputType: 'password',
-        inputIcon: 'password-not-view',
+        inputIcon: 'closed-eye',
       };
     },
     methods: {
       transferPwdMode () {
         if (this.inputType === 'password') {
           this.inputType = 'text';
-          this.inputIcon = 'password-view';
+          this.inputIcon = 'eye-o';
         } else {
           this.inputType = 'password';
-          this.inputIcon = 'password-not-view';
+          this.inputIcon = 'closed-eye';
         }
       },
       resetForm () {
         this.inputType = 'password';
-        this.inputIcon = 'password-not-view';
+        this.inputIcon = 'closed-eye';
         this.form.walletPwd = '';
         this.form.confirmWalletPwd = '';
       }
