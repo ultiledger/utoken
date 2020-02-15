@@ -155,13 +155,10 @@ class EthereumWallet {
   // }
 
   getTransactions(address, option = {}) {
-    let mode = 'test';
-    if (this.url && this.url.indexOf('mainnet.infura') != -1) {
-      mode = 'public';
-    }
-    let url = `${etherscanApiUrl[mode]}?module=account&apikey=${
+    let url = `${etherscanApiUrl['public']}?module=account&apikey=${
       apiKeys[0]
     }&address=${address}`;
+   // console.log(url);
     let tokenConfig = tokens.get(AccountType.ethereum);
     if (
       option &&

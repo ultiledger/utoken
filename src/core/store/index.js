@@ -38,6 +38,7 @@ const state = {
     [AccountType.ethereum]: [
       // {value: 'https://mainnet.infura.io/', type: 'public'},
       // {value: 'https://rinkeby.infura.io/', type: 'test'}
+      {value: 'wss://ethapi.foxcny.com/ws/v3/508b5431b89041d18256f8d7d91558d1', type: 'public'},
       {value: 'wss://mainnet.infura.io/ws/v3/508b5431b89041d18256f8d7d91558d1', type: 'public'},
       //{value: 'https://mainnet-eth.token.im/', type: 'public'},
       {value: 'wss://rinkeby.infura.io/ws', type: 'test'} 
