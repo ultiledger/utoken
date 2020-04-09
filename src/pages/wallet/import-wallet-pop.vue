@@ -47,7 +47,7 @@
           <div class="text-primary text-center" style="padding-bottom:10px;">
             <van-icon name="idcard" style="vertical-align: middle" class="text-primary"/>&nbsp;&nbsp;<span @click="viewHelp" style="vertical-align: middle">{{bottomTip}}</span>
           </div>
-          <van-button size="large" round type="primary"  @click="importWallet" v-text="$t('wallet.immediatelyImport')"></van-button>
+          <van-button size="large" round type="primary"  @click="importWallet" :text="$t('wallet.immediatelyImport')"></van-button>
         </button-bottom>
       </pl-content-block>
     </van-popup>

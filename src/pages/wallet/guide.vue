@@ -36,7 +36,7 @@
         @click="createWallet"
         :loading="loading"
         type="primary"
-        v-text="$t('wallet.createWallet')"
+        :text="$t('wallet.createWallet')"
       ></van-button>
       <br />
       <br />
@@ -46,7 +46,7 @@
         @click="toRecoveryWallet"
         class="border-color text-primary"
         :loading="loading"
-        v-text="$t('wallet.recoverWallet')"
+        :text="$t('wallet.recoverWallet')"
       ></van-button>
     </div>
     <div class="text-center text-tip-color guide-protocol-text">

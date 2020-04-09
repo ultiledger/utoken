@@ -129,10 +129,13 @@ export default {
         this.$refs["assetItem"] &&
         this.$refs["assetItem"][this.index]
       ) {
+        console.log(this.$refs["assetItem"]);
+
         this.$refs["assetItem"][this.index].setActive();
       }
     }
   },
+
   methods: {
     shortType(type) {
       return coins[type].symbol || type;
@@ -259,11 +262,15 @@ export default {
     }
   },
   mounted() {
-    // this.$refs['assetItem'][this.index].setActive();
+    //jimjay
+    // this.$refs["assetItem"][this.index].setActive();
   },
   created() {
-    // this.wallets = [];
+    console.log(this.index);
     this.setWallets();
+    // this.wallets = [];
+
+    console.log(this.index);
   }
 };
 </script>

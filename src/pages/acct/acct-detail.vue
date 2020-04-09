@@ -59,7 +59,7 @@
           </div>
         </pl-block>
         <div class="single-btn margin-bottom margin-top" v-if="delFlag!=='0'">
-          <van-button size="large" round type="primary" @click="toCheckPassword('3')" v-text="$t('acct.deleteWallet')"></van-button>
+          <van-button size="large" round type="primary" @click="toCheckPassword('3')" :text="$t('acct.deleteWallet')"></van-button>
         </div>
       </pl-content-block>
 

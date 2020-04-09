@@ -40,7 +40,7 @@
             :key="index">{{item.name}}</span>
           </div>
           <button-bottom style="margin-top: 2.5rem;">
-            <van-button size="large" round type="primary" @click="submit()" v-text="$t('wallet.back')"></van-button>
+            <van-button size="large" round type="primary" @click="submit()" :text="$t('wallet.back')"></van-button>
           </button-bottom>
         </content-block>
       </pl-content-block>

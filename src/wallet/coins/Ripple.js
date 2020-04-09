@@ -17,6 +17,7 @@ class RippleWallet{
   constructor(url, option = {}) {
     if (url) {
       this.setServer(url);
+      this.server.connect();
     }
     this.option = option;
   }
@@ -25,7 +26,7 @@ class RippleWallet{
     this.url = url;
     if (!this.server || !this.server.isConnected()) {
       this.server = new RippleAPI({
-        server: url, maxFeeXRP: '0.05',timeout:6000
+        server: url, maxFeeXRP: '0.05',timeout:16000
       });
       this.server.on('error', (errorCode, errorMessage) => {
         console.log(errorCode + ': ' + errorMessage);
@@ -39,9 +40,6 @@ class RippleWallet{
         } else {
           console.log('Connection is closed normally.');
         }
-      });
-      this.server.on('ledger', ledger => {
-        console.log('Rippleledger',JSON.stringify(ledger.ledgerHash, null, 2));
       });
     }
   }
@@ -106,11 +104,12 @@ class RippleWallet{
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
+   // console.log("in ripple getBalance");
     try {
       let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
       let ret = await this.server.getBalances(classicAddress);
       let balances = [];
-      let native;
+      let native={};
       ret.forEach(item => {
         if (item.currency === CoinType.XRP) {
           native = {
@@ -128,9 +127,10 @@ class RippleWallet{
       let accountInfo = await this.server.getAccountInfo(classicAddress);
       native.frozenNative = 20 + 5 * accountInfo.ownerCount;
       balances.unshift(native);
+      console.log("ripple balance",balances);
       return balances;
     } catch (e) {
-      ////console.error(e);
+      console.error(e);
       return [{
           value: '0',
           code: CoinType.XRP

@@ -54,7 +54,7 @@
             round
             type="primary"
             @click="sure()"
-            v-text="$t('common.sure')"></van-button>
+            :text="$t('common.sure')"></van-button>
         </div>
       </div>
     </van-popup>

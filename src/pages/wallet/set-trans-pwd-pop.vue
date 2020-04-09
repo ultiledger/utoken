@@ -21,7 +21,7 @@
         <password-block v-model="form" ref="passwordBlock"></password-block>
 
         <div class="single-btn"  style="margin-top: 8rem;padding-bottom: 10px;">
-          <van-button size="large" round type="primary" :loading="loading"  @click="next()" v-text="$t('common.sure')"></van-button>
+          <van-button size="large" round type="primary" :loading="loading"  @click="next()" :text="$t('common.sure')"></van-button>
         </div>
       </pl-content-block>
 

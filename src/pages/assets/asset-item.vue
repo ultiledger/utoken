@@ -56,10 +56,10 @@
                 &nbsp;
                 <van-icon
                   v-if="!$store.state.setting.privacyMode"
-                  name="password-view"
+                  name="eye-o"
                   @click="setMode(true)"
                 />
-                <van-icon v-else name="password-not-view" @click="setMode(false)" />
+                <van-icon v-else name="closed-eye" @click="setMode(false)" />
               </span>
             </div>
             <span
@@ -176,11 +176,10 @@ export default {
   components: {
     accountActivated
   },
-  // created() {
-  //   aa(){
-  //     conosle.log(this.assets())
-  //   }
-  // },
+  created() {
+    console.log(this.data);
+  },
+
   computed: {
     showAddBtn() {
       if (this.data && this.data.type === AccountType.bitcoin) {
@@ -263,6 +262,7 @@ export default {
       } else if (result > 0 && result < 1) {
         result = result.toFixed(4);
       }
+
       return Number(result);
     },
     setStatAmtClass() {
@@ -280,23 +280,29 @@ export default {
     setMode(val) {
       this.$store.dispatch("setPrivacyMode", val);
     },
-    setActive() {
+    async setActive() {
       if (!this.balances || this.balances.length === 0) {
         this.loading = true;
       }
       let params = { ...this.data, setBalance: false };
-      this.$store.dispatch("setAccount", params);
-      this.$store
-        .dispatch("setBalances", this.data)
+      await this.$store.dispatch("setAccount", params);
+      this.$store.dispatch("setBalances", this.data)
         .then(() => {
-          this.$emit("setSwipeHeight");
           this.loading = false;
+          this.$emit("setSwipeHeight");
         })
-        .catch(err => {
-          console.info(err);
-          this.$emit("setSwipeHeight");
+        .catch(() => {
           this.loading = false;
+          this.$emit("setSwipeHeight");
         });
+         
+      if(this.data.type === AccountType.ripple){
+        setTimeout(()=>{
+         this.loading = false;
+         this.$emit("setSwipeHeight");
+        },2000);
+     
+       }
       // this.$wallet.getInstance().getTrustlines('rDDJqnFgTNnR4c4u8EAAskpet4LUYUZm4A').then(ret => {
       //   console.info(ret);
       // });
@@ -317,7 +323,8 @@ export default {
       this.$emit("addAssets");
     },
     toTrade() {
-      if (this.balances.length > 1 || this.data.type === AccountType.ripple) { // fix#86
+      if (this.balances.length > 1 || this.data.type === AccountType.ripple) {
+        // fix#86
         this.$emit("toTrade");
       } else {
         this.$dialog
