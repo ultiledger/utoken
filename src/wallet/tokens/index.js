@@ -36,7 +36,7 @@ let tokensCofing = {
     eCell: {
       symbol: 'eCell',
       name: 'eCell',
-      displayName: 'eCell',
+      displayName: 'Ethereum Cell Network',
       decimals: 2,
       address: '0x9b62ec1453cea5dde760aaf662048ca6eeb66e7f'.toLocaleLowerCase(),
       abi: require('./CellToken_abi.json')
