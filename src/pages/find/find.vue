@@ -90,7 +90,7 @@
             title: this.$t('find.u919Title'),
             subTitle: this.$t('find.u919SubTitle'),
             desc: this.$t('find.u919Desc'),
-            link: 'http://xlmyun.com:666/#!/track',
+            link: 'https://9.ultiledger.io/',
             imgUrl: 'static/img/app/u919.png'
           },
           {

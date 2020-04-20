@@ -18,7 +18,7 @@
             />
             <span style="vertical-align: middle">&nbsp;&nbsp;{{data.name}}</span>
           </div>
-          <div class="content" :class="setStatAmtClass">
+         <div class="content" :class="setStatAmtClass">
             <span class="normal-font">&nbsp;&#8776;&nbsp;</span>
             <pl-privacy>{{statAmt | currency('', '4') | cutTail}}&nbsp;</pl-privacy>
             <span class="small-font">&nbsp;{{$store.state.setting.currencyUnit}}</span>

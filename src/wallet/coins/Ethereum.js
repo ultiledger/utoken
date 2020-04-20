@@ -104,14 +104,6 @@ class EthereumWallet {
       let contract = new this.server.eth.Contract(token.abi, token.address);
       let tokenBalance = await contract.methods.balanceOf(address).call();
       let value = tokenBalance / Math.pow(10, decimal);
-      //判断 如果是ustd就调整单位
-      // if(tokenCode === 'USDT') {
-      //   return {
-      //     value: Web3.utils.fromWei(tokenBalance, 'mwei'),
-      //     code: tokenCode,
-      //     issuer: token.address
-      //   };
-      // } else {
       return {
         value: value,
         code: tokenCode,

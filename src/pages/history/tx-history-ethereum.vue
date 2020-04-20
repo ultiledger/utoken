@@ -164,14 +164,6 @@ export default {
       }
 
       if (data.confirmations <= 6) {
-        // let amount1 = data.value / (10 ^ data.tokenDecimal);
-
-        // ustd 单位伪emwei
-        // if (this.asset.code === "USDT") {
-        //   amount1 = this.$wallet
-        //     .getInstance()
-        //     .utils.fromWei(data.value, "mwei");
-        // } else {
 
         let tempHistory = {
           address: this.$store.state.account.address,
@@ -213,13 +205,6 @@ export default {
       if (data.gasUsed && data.gasPrice) {
         fee = new Big(data.gasUsed).times(data.gasPrice).toFixed();
       }
-      // let amount;
-      // ustd 单位伪emwei
-      // if (this.asset.code === "USDT") {
-      //   amount = this.$wallet.getInstance().utils.fromWei(data.value, "mwei");
-      // } else {
-      // amount = this.$wallet.getInstance().utils.fromWei(data.value, "ether");
-      // }
 
       let history = {
         address: this.$store.state.account.address,
