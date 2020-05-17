@@ -251,16 +251,23 @@ class RippleWallet{
     }
 
     return new Promise((resolve, reject)=> {
-      this.server.preparePayment(fromAddress, payment).then(prepared => {
-        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction, true)
-          .then(result => {
-            // console.info(result);
-            ////console.info(result);
-            resolve(result);
-          }).catch (err => {
-          ////console.info(err);
-          reject(err);
+      this.getAccountSettings(option.assetIssuer).then(accountSetting =>{
+        if (Object.keys(accountSetting).length > 0) {
+          if (accountSetting.transferRate) {
+            payment.source.maxAmount.value = (Number(amount) * accountSetting.transferRate).toString();
+          }
+        }
+        this.server.preparePayment(fromAddress, payment).then(prepared => {
+          const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+          this.server.submit(signedTransaction, true)
+            .then(result => {
+              // console.info(result);
+              ////console.info(result);
+              resolve(result);
+            }).catch (err => {
+            ////console.info(err);
+            reject(err);
+          });
         });
       });
     });
