@@ -253,7 +253,7 @@ class RippleWallet{
     return new Promise((resolve, reject)=> {
       this.server.preparePayment(fromAddress, payment).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             // console.info(result);
             ////console.info(result);
@@ -281,7 +281,7 @@ class RippleWallet{
     return new Promise((resolve, reject)=> {
       this.server.prepareTrustline(fromAddress, trustline).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             resolve(result);
@@ -478,7 +478,7 @@ class RippleWallet{
         order.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrder(address, order);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
@@ -510,7 +510,7 @@ class RippleWallet{
         orderCancellation.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrderCancellation(address, orderCancellation);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
@@ -570,7 +570,7 @@ class RippleWallet{
         settings.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         this.server.prepareSettings(address, settings).then(prepared => {
           const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-          this.server.submit(signedTransaction).then(ret => {
+          this.server.submit(signedTransaction, true).then(ret => {
             resolve(ret);
           }).catch (err => {
             reject(err);
