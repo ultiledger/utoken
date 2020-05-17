@@ -266,6 +266,47 @@ class RippleWallet{
     });
   }
 
+  acctDel (fromSecret, to, option = {}) {
+    const keypair = rippleKeypairs.deriveKeypair(fromSecret);
+    const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
+    const localInstructions = { maxFee: '5.0'};
+    let classicAddress = isValidXAddress(to)? xAddressToClassicAddress(to).classicAddress:to;
+
+    let tx = {
+      TransactionType: 'AccountDelete',
+      Account: fromAddress,
+      Destination: classicAddress,
+      Fee: '5000000',
+    };
+    if (option.tag !== '') {
+      let tag = new Number(option.tag);
+      tx.DestinationTag = tag.valueOf();
+    }
+    if (isValidXAddress(to)) {
+      tx.DestinationTag = xAddressToClassicAddress(to).tag;
+    }
+    console.log(tx);
+    // acctdel.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
+    // if (option.memos) {
+    //   acctdel.memos.push({data: encodeURIComponent(option.memos), type: 'memo', format: 'plain/text'});
+    // }
+    return new Promise((resolve, reject)=> {
+      this.server.prepareTransaction(tx, localInstructions).then(prepared => {
+        console.log(prepared);
+        const {signedTransaction} =new RippleAPI({maxFeeXRP: '5.0'}).sign(prepared.txJSON, fromSecret);
+        this.server.submit(signedTransaction, true)
+          .then(result => {
+            // console.info(result);
+            ////console.info(result);
+            resolve(result);
+          }).catch (err => {
+          ////console.info(err);
+          reject(err);
+        });
+      });
+    });
+  }
+ 
   async changeTrust(fromSecret, code, issuer, limit) {
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);

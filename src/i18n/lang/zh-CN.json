@@ -310,6 +310,7 @@
     "acctNotexist": "该钱包不存在",
     "delAcctTip": "删除该账户后，您可以重新添加",
     "gatewaySetting": "网关设置",
+    "acctdel": "账户删除",
     "domainPh": "请输入domain"
   },
   "history": {

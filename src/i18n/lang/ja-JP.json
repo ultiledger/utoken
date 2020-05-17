@@ -311,6 +311,7 @@
     "acctNotexist": "ウォレットは存在しません",
     "delAcctTip": "アカウントを削除した後、再度追加することができます",
     "gatewaySetting": "ゲートウェイ設定",
+    "acctdel": "アカウント削除",
     "domainPh": "ドメインを入力してください"
   },
   "history": {
