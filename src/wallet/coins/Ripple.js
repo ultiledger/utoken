@@ -127,10 +127,10 @@ class RippleWallet{
       let accountInfo = await this.server.getAccountInfo(classicAddress);
       native.frozenNative = 20 + 5 * accountInfo.ownerCount;
       balances.unshift(native);
-      console.log("ripple balance",balances);
+      // console.log("ripple balance",balances);
       return balances;
     } catch (e) {
-      console.error(e);
+      // console.error(e);
       return [{
           value: '0',
           code: CoinType.XRP
@@ -172,7 +172,7 @@ class RippleWallet{
     return flag;
   }
 
-  getTransactions (address, option = {}) {
+  async getTransactions (address, option = {}) {
     return new Promise(async (resolve, reject)=>{
       try {
         let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;

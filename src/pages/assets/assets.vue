@@ -186,6 +186,9 @@ export default {
           console.info(err);
           this.isLoading = false;
         });
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 3000);
     },
     onSelect(item) {
       // 点击选项时默认不会关闭菜单，可以手动关闭
