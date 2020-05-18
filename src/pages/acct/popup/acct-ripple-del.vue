@@ -176,12 +176,6 @@
         }
         return true;
       },
-      errMsg () {
-        return  {
-          'tecUNFUNDED_PAYMENT': this.$t('transaction.tecUnfundedPayment'), // Insufficient XRP balance to send
-          'tecNO_DST_INSUF_XRP': this.$t('transaction.tecNoDstInsufXrp') // Destination does not exist. Too little XRP sent to create it.
-        };
-      }
     },
     created () {
     },
@@ -240,13 +234,6 @@
       changeReceiveAddress (address) {
         this.form.tag = address.labelValue;
       },
-      getErrMsg (err) {
-        let retMsg = this.$t('common.transactionFail');
-        if (err && err.resultCode && this.errMsg[err.resultCode]) {
-          return this.errMsg[err.resultCode];
-        }
-        return retMsg;
-      },
       submit () {
         let paswordMd5 = cryptor.encryptMD5(this.form.password);
         if (paswordMd5 !== this.$store.state.account.password) {
@@ -276,7 +263,7 @@
               }, 3000);
             } else {
               console.error(ret);
-              this.$toast(this.getErrMsg(ret));
+              this.$toast(ret.resultMessage);
               setTimeout(() => {
                 toast.clear();
               }, 3500);
@@ -284,7 +271,7 @@
           })
           .catch(err => {
             console.error(err);
-            toast.message = this.$t('common.transactionFail');
+            toast.message = err;
             setTimeout(() => {
               toast.clear();
             }, 3500);
