@@ -43,6 +43,11 @@
             :title="$t('acct.gatewaySetting')"
             is-link
             @click="toCheckPassword('4')"></van-cell>
+           <van-cell
+            v-if="isRipple"
+            :title="$t('acct.acctdel')"
+            is-link
+            @click="toAcctDel"></van-cell>
         </van-cell-group>
 
         <pl-block class="margin-top item-block margin-bottom">
@@ -82,6 +87,7 @@
     <export-secret ref="exportSecret"></export-secret>
     <backups-memorizing-words ref="backupsMemorizing"></backups-memorizing-words>
     <acct-ripple-settings ref="acctRippleSettings"></acct-ripple-settings>
+    <acct-ripple-del ref="acctRippleDel"></acct-ripple-del>
   </div>
 </template>
 <script>
@@ -90,13 +96,14 @@
   import exportSecret from './popup/export-secret-dialog';
   import backupsMemorizingWords from '../wallet/backups-memorizing-words-pop';
   import acctRippleSettings from './popup/acct-ripple-settings';
+  import acctRippleDel from './popup/acct-ripple-del';
   // import encryptor from 'core/utils/encryptor';
   import qrcode from '@chenfengyuan/vue-qrcode';
   import cryptor from 'core/utils/cryptor';
   import {SourceType} from 'core/constants';
   import {AccountType} from 'src/wallet/constants';
   export default{
-    components: {modifyPassword, passwordDialog, exportSecret, backupsMemorizingWords, qrcode, acctRippleSettings},
+    components: {modifyPassword, passwordDialog, exportSecret, backupsMemorizingWords, qrcode, acctRippleSettings, acctRippleDel},
     data () {
       return {
         showPop: false,
@@ -154,6 +161,9 @@
       },
       toModifyPassword () {
         this.$refs.modifyPassword.show();
+      },
+      toAcctDel () {
+        this.$refs.acctRippleDel.show();
       },
       toCheckPassword(checkType) {
         this.checkType = checkType;

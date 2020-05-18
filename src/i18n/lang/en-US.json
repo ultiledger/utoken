@@ -310,6 +310,7 @@
     "acctNotexist": "Wallet does not exist",
     "delAcctTip": "After deleting the account, you can add it again",
     "gatewaySetting": "Gateway Settings",
+    "acctdel": "Account Delete",
     "domainPh": "Please input domain"
   },
   "history": {
