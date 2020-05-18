@@ -32,6 +32,14 @@ let tokensCofing = {
       decimals: 18,
       address: '0xeC79E0eFA4ae3d8B3C9fbCEe21683c7f2e507b66'.toLocaleLowerCase(),
       abi: require('./HolyFire_abi.json')
+    },
+    eCell: {
+      symbol: 'eCell',
+      name: 'eCell',
+      displayName: 'Ethereum Cell Network',
+      decimals: 2,
+      address: '0x9b62ec1453cea5dde760aaf662048ca6eeb66e7f'.toLocaleLowerCase(),
+      abi: require('./CellToken_abi.json')
     }
   },
   [AccountType.stellar]: {

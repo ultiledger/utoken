@@ -23,9 +23,17 @@ class HDWallet {
    * @throws {Error} Invalid Mnemonic
    */
   static fromMnemonic(mnemonic, password = undefined, language = 'english') {
+    mnemonic = mnemonic.trim();
     if (!HDWallet.validateMnemonic(mnemonic, language)) {
       throw new Error(INVALID_MNEMONIC);
     }
+    return new HDWallet(bip39.mnemonicToSeedHex(mnemonic, password));
+  }
+  
+  static fromMnemonicV3(mnemonic, password = undefined, language = 'english') {
+    mnemonic = mnemonic.trim();
+    const entropy = bip39.mnemonicToEntropy(mnemonic, bip39.wordlists[language]);
+    mnemonic = bip39.entropyToMnemonic(entropy);
     return new HDWallet(bip39.mnemonicToSeedHex(mnemonic, password));
   }
 
@@ -65,7 +73,21 @@ class HDWallet {
         `Language ${language} does not have a wordlist in the bip39 module`
       );
     const wordlist = bip39.wordlists[language];
-    return bip39.generateMnemonic(entropyBits, rngFn, wordlist);
+    let mnemonic = bip39.generateMnemonic(entropyBits, rngFn, wordlist);
+    //console.log(mnemonic);
+    return mnemonic;
+  }
+  static generateMnemonicV3({
+    entropyBits = ENTROPY_BITS,
+    language = 'english',
+    rngFn = undefined,
+  } = {}) {
+    let mnemonic = bip39.generateMnemonic(entropyBits,rngFn);
+    const wordlist = bip39.wordlists[language];
+    const entropy = bip39.mnemonicToEntropy(mnemonic);
+     mnemonic = bip39.entropyToMnemonic(entropy, wordlist);
+    //console.log(mnemonic);
+    return mnemonic;
   }
 
   /**

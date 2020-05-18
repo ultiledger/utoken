@@ -82,6 +82,7 @@ export default {
         this.firstHistory = null;
       }
     },
+  
     updateConfirmations() {
       let confirmations = 6;
       this.clearTimers();
@@ -164,22 +165,17 @@ export default {
       }
 
       if (data.confirmations <= 6) {
-        // let amount1 = data.value / (10 ^ data.tokenDecimal);
-
-        // ustd 单位伪emwei
-        // if (this.asset.code === "USDT") {
-        //   amount1 = this.$wallet
-        //     .getInstance()
-        //     .utils.fromWei(data.value, "mwei");
-        // } else {
-
+       let amount = this.$wallet.getInstance().utils.fromWei(data.value, "ether");
+       if(this.asset.code === 'eCell') {
+         amount = amount * 10000000000000000;
+       }
         let tempHistory = {
           address: this.$store.state.account.address,
           acctType: this.$store.state.account.type,
           assetCode: this.asset.code,
           assetIssuer: this.asset.issuer,
           txHash: data.hash,
-          amount: this.$wallet.getInstance().utils.fromWei(data.value, "ether"),
+          amount: amount,
           blockNumber: data.blockNumber,
           to: data.to,
           from: data.from,
@@ -213,21 +209,17 @@ export default {
       if (data.gasUsed && data.gasPrice) {
         fee = new Big(data.gasUsed).times(data.gasPrice).toFixed();
       }
-      // let amount;
-      // ustd 单位伪emwei
-      // if (this.asset.code === "USDT") {
-      //   amount = this.$wallet.getInstance().utils.fromWei(data.value, "mwei");
-      // } else {
-      // amount = this.$wallet.getInstance().utils.fromWei(data.value, "ether");
-      // }
-
+      let amount = this.$wallet.getInstance().utils.fromWei(data.value, "ether");
+      if(this.asset.code === 'eCell') {
+         amount = amount * 10000000000000000;
+       }
       let history = {
         address: this.$store.state.account.address,
         acctType: this.$store.state.account.type,
         assetCode: this.asset.code,
         assetIssuer: this.asset.issuer || "",
         txHash: data.hash,
-        amount: this.$wallet.getInstance().utils.fromWei(data.value, "ether"),
+        amount: amount,
         blockNumber: data.blockNumber,
         to: data.to,
         from: data.from,

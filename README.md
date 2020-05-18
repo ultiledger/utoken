@@ -51,7 +51,7 @@ cordova plugin add cordova-plugin-file-transfer
 cordova plugin add cordova-plugin-statusbar
 cordova build android
 ```
-
+cordova build android  --release  --buildConfig=build.json  
 # Utoken(首款支持Ripple，Stellar及其他主流区块链网络的移动钱包)
 
 支持Ripple/Stellar/BTC/ETH等多链资产, 一套助记词，轻松管理

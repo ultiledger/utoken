@@ -135,7 +135,7 @@
         }else {
           this.tagSelect = '2';
         } */
-        this.form.memorizingWords = hdWallet.generateMnemonic({entropyBits: 128, language: this.memorizingCodeLanguage});
+        this.form.memorizingWords = hdWallet.generateMnemonicV3({entropyBits: 128, language: this.memorizingCodeLanguage});
         this.memorizingCodes = this.form.memorizingWords.split(' ');
       },
       /* onchangeTag (type) {
@@ -144,7 +144,7 @@
         if (type === '1') {
           this.memorizingCodeLanguage = 'chinese_simplified';
         }
-        this.form.memorizingWords = hdWallet.generateMnemonic({entropyBits: 128, language: this.memorizingCodeLanguage});
+        this.form.memorizingWords = hdWallet.generateMnemonicV3({entropyBits: 128, language: this.memorizingCodeLanguage});
         this.memorizingCodes = this.form.memorizingWords.split(' ');
       }, */
       closeDialog () {

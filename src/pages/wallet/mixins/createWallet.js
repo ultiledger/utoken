@@ -20,14 +20,22 @@ export default {
       walletPwd,
       source,
       backFlag = true,
-      state = 'N'
+      state = 'N',
+      v2
     ) {
       let memorizingCodeLanguage = this.getMemorizingCodeLanguage(mnemonicCode);
-      let wallet = hdWallet.fromMnemonic(
+      let wallet = hdWallet.fromMnemonicV3(
         mnemonicCode,
         null,
         memorizingCodeLanguage
       );
+      if(v2) {
+        wallet = hdWallet.fromMnemonic(
+          mnemonicCode,
+          null,
+          memorizingCodeLanguage
+        );
+      }
       if (wallet) {
         mnemonicCode = cryptor.encryptAES(mnemonicCode, walletPwd);
         let identity = this.genIdentity(
@@ -123,7 +131,7 @@ export default {
         if (privateKey) {
           return hdWallet.getAccountFromSecret(coin[accountType], privateKey);
         } else if (mnemonicCode) {
-          let wallet = hdWallet.fromMnemonic(
+          let wallet = hdWallet.fromMnemonicV3(
             mnemonicCode,
             null,
             this.getMemorizingCodeLanguage(mnemonicCode)
@@ -184,6 +192,7 @@ export default {
           this.saveDefaultToken(tokens['USDT'], account.address);
           this.saveDefaultToken(tokens['ULT'], account.address);
           this.saveDefaultToken(tokens['DBT'], account.address);
+          this.saveDefaultToken(tokens['eCell'], account.address);
         }
       }
     },

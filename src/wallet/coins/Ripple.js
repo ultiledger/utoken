@@ -127,10 +127,10 @@ class RippleWallet{
       let accountInfo = await this.server.getAccountInfo(classicAddress);
       native.frozenNative = 20 + 5 * accountInfo.ownerCount;
       balances.unshift(native);
-      console.log("ripple balance",balances);
+      // console.log("ripple balance",balances);
       return balances;
     } catch (e) {
-      console.error(e);
+      // console.error(e);
       return [{
           value: '0',
           code: CoinType.XRP
@@ -172,7 +172,7 @@ class RippleWallet{
     return flag;
   }
 
-  getTransactions (address, option = {}) {
+  async getTransactions (address, option = {}) {
     return new Promise(async (resolve, reject)=>{
       try {
         let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
@@ -217,7 +217,7 @@ class RippleWallet{
     });
   }
 
-  sendTransaction (fromSecret, to, amount, option = {}) {
+  async sendTransaction (fromSecret, to, amount, option = {}) {
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
     let currency = option.assetCode || CoinType.XRP;
@@ -240,6 +240,12 @@ class RippleWallet{
     if (option.assetIssuer) {
       payment.destination.amount.counterparty = option.assetIssuer;
       payment.source.maxAmount.counterparty = option.assetIssuer;
+      let accountSetting = await this.getAccountSettings(option.assetIssuer);
+      if (Object.keys(accountSetting).length > 0) {
+        if (accountSetting.transferRate) {
+          payment.source.maxAmount.value = (Number(amount) * accountSetting.transferRate).toString();
+        }
+      }
     }
     if (option.tag !== '') {
       let tag = new Number(option.tag);
@@ -249,11 +255,10 @@ class RippleWallet{
     if (option.memos) {
       payment.memos.push({data: encodeURIComponent(option.memos), type: 'memo', format: 'plain/text'});
     }
-
     return new Promise((resolve, reject)=> {
       this.server.preparePayment(fromAddress, payment).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             // console.info(result);
             ////console.info(result);
@@ -262,10 +267,57 @@ class RippleWallet{
           ////console.info(err);
           reject(err);
         });
+      }).catch (err => {
+        ////console.info(err);
+        reject(err);
       });
     });
   }
 
+  async acctDel (fromSecret, to, option = {}) {
+    const keypair = rippleKeypairs.deriveKeypair(fromSecret);
+    const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
+    const localInstructions = { maxFee: '5.0'};
+    let classicAddress = isValidXAddress(to)? xAddressToClassicAddress(to).classicAddress:to;
+
+    let tx = {
+      TransactionType: 'AccountDelete',
+      Account: fromAddress,
+      Destination: classicAddress,
+      Fee: '5000000',
+    };
+    if (option.tag !== '') {
+      let tag = new Number(option.tag);
+      tx.DestinationTag = tag.valueOf();
+    }
+    if (isValidXAddress(to)) {
+      tx.DestinationTag = xAddressToClassicAddress(to).tag;
+    }
+    // console.log(tx);
+    // acctdel.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
+    // if (option.memos) {
+    //   acctdel.memos.push({data: encodeURIComponent(option.memos), type: 'memo', format: 'plain/text'});
+    // }
+    return new Promise((resolve, reject)=> {
+      this.server.prepareTransaction(tx, localInstructions).then(prepared => {
+        // console.log(prepared);
+        const {signedTransaction} =new RippleAPI({maxFeeXRP: '5.0'}).sign(prepared.txJSON, fromSecret);
+        this.server.submit(signedTransaction, true)
+          .then(result => {
+            // console.info(result);
+            ////console.info(result);
+            resolve(result);
+          }).catch (err => {
+          ////console.info(err);
+          reject(err);
+        });
+      }).catch (err => {
+        ////console.info(err);
+        reject(err);
+      });
+    });
+  }
+ 
   async changeTrust(fromSecret, code, issuer, limit) {
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
@@ -281,7 +333,7 @@ class RippleWallet{
     return new Promise((resolve, reject)=> {
       this.server.prepareTrustline(fromAddress, trustline).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             resolve(result);
@@ -289,6 +341,9 @@ class RippleWallet{
           //console.info(err);
           reject(err);
         });
+      }).catch (err => {
+        ////console.info(err);
+        reject(err);
       });
     });
   }
@@ -478,7 +533,7 @@ class RippleWallet{
         order.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrder(address, order);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
@@ -510,7 +565,7 @@ class RippleWallet{
         orderCancellation.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         let prepared = await this.server.prepareOrderCancellation(address, orderCancellation);
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
@@ -570,7 +625,7 @@ class RippleWallet{
         settings.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
         this.server.prepareSettings(address, settings).then(prepared => {
           const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-          this.server.submit(signedTransaction).then(ret => {
+          this.server.submit(signedTransaction, true).then(ret => {
             resolve(ret);
           }).catch (err => {
             reject(err);
