@@ -271,7 +271,7 @@
           })
           .catch(err => {
             console.error(err);
-            toast.message = err;
+            toast.message = this.$t('common.transactionFail');
             setTimeout(() => {
               toast.clear();
             }, 3500);
