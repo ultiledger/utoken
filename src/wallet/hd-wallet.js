@@ -23,13 +23,15 @@ class HDWallet {
    * @throws {Error} Invalid Mnemonic
    */
   static fromMnemonic(mnemonic, password = undefined, language = 'english') {
+    mnemonic = mnemonic.trim();
     if (!HDWallet.validateMnemonic(mnemonic, language)) {
       throw new Error(INVALID_MNEMONIC);
     }
     return new HDWallet(bip39.mnemonicToSeedHex(mnemonic, password));
   }
-
+  
   static fromMnemonicV3(mnemonic, password = undefined, language = 'english') {
+    mnemonic = mnemonic.trim();
     const entropy = bip39.mnemonicToEntropy(mnemonic, bip39.wordlists[language]);
     mnemonic = bip39.entropyToMnemonic(entropy);
     return new HDWallet(bip39.mnemonicToSeedHex(mnemonic, password));
@@ -72,7 +74,7 @@ class HDWallet {
       );
     const wordlist = bip39.wordlists[language];
     let mnemonic = bip39.generateMnemonic(entropyBits, rngFn, wordlist);
-    console.log(mnemonic);
+    //console.log(mnemonic);
     return mnemonic;
   }
   static generateMnemonicV3({
@@ -84,7 +86,7 @@ class HDWallet {
     const wordlist = bip39.wordlists[language];
     const entropy = bip39.mnemonicToEntropy(mnemonic);
      mnemonic = bip39.entropyToMnemonic(entropy, wordlist);
-    console.log(mnemonic);
+    //console.log(mnemonic);
     return mnemonic;
   }
 

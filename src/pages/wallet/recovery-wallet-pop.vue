@@ -25,7 +25,7 @@
            <van-icon name="idcard" style="vertical-align: middle" class="text-primary"/>&nbsp;&nbsp;<span @click="viewHelp" style="vertical-align: middle" v-text="$t('wallet.oneSecUnderstandMnemonicCode')"></span>
          </div>
          <van-button size="large" round type="primary" @click="recoveryWallet(false)" :text="$t('wallet.immediatelyRecover')"></van-button>
-         <van-button size="large" round type="primary" @click="recoveryWallet(true)" :text="$t('wallet.immediatelyRecover')+'<V3'"></van-button>
+         <van-button size="large" round type="primary" @click="recoveryWallet(true)" :text="$t('wallet.immediatelyRecover')+'<V3(中文老版本)'"></van-button>
        </button-bottom>
      </pl-content-block>
      <!-- <pl-stick>
