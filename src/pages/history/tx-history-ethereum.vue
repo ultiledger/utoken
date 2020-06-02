@@ -166,6 +166,10 @@ export default {
 
       if (data.confirmations <= 6) {
        let amount = this.$wallet.getInstance().utils.fromWei(data.value, "ether");
+        //ustd 单位伪emwei
+       if (this.asset.code === "USDT") {
+             amount = this.$wallet.getInstance().utils.fromWei(data.value, "mwei");
+        } 
        if(this.asset.code === 'eCell') {
          amount = amount * 10000000000000000;
        }
@@ -210,6 +214,10 @@ export default {
         fee = new Big(data.gasUsed).times(data.gasPrice).toFixed();
       }
       let amount = this.$wallet.getInstance().utils.fromWei(data.value, "ether");
+       //ustd 单位伪emwei
+       if (this.asset.code === "USDT") {
+          amount = this.$wallet.getInstance().utils.fromWei(data.value, "mwei");
+        }
       if(this.asset.code === 'eCell') {
          amount = amount * 10000000000000000;
        }
