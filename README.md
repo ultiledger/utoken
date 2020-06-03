@@ -1,5 +1,7 @@
+Ripple Wallet, Stellar Wallet, ETH wallet, BTC wallet
+
 # 官网地址(下载)：https://utoken.cash
-# Utoken (The first mobile wallet to support Ripple, Stellar and other popular blockchain networks)
+# Utoken (The first mobile wallet to support Ripple, Stellar,ETH and other popular blockchain networks)
 
 Supporting Ripple/Stellar/BTC/ETH multi-chain assets
 No background server, no personal information, no centralization
@@ -52,6 +54,8 @@ cordova plugin add cordova-plugin-statusbar
 cordova build android
 ```
 cordova build android  --release  --buildConfig=build.json  
+
+瑞波钱包，恒星钱包，以太坊钱包
 # Utoken(首款支持Ripple，Stellar及其他主流区块链网络的移动钱包)
 
 支持Ripple/Stellar/BTC/ETH等多链资产, 一套助记词，轻松管理
