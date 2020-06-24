@@ -49,6 +49,10 @@
     "middle": "中",
     "strong": "強い",
     "best": "ベスト",
+    "check": "小切手",
+    "checkcreate": "発行",
+    "checkmng": "管理",
+    "checkcash": "サインする",
     "exchange": "両替"
   },
   "wallet": {
