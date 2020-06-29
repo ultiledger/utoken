@@ -41,7 +41,18 @@
       </pull-refresh>
     </pl-content-block>
     <pl-stick :offset-bottom="0">
-      <van-row class="van-hairline--top" v-if="isStellar">
+      <van-row class="van-hairline--top" v-if="isRipple">
+        <van-col span="8">
+          <van-button  size="large" class="plat-btn" type="import" @click.native="receiveAsset" :text="$t('common.receivables')"></van-button>
+        </van-col>
+        <van-col span="8">
+          <van-button  size="large" class="plat-btn" type="gray" @click.native="check" :text="$t('common.check')"></van-button>
+        </van-col>
+        <van-col span="8">
+          <van-button  size="large" class="plat-btn" type="export" @click.native="transfer" :text="$t('common.transferAccounts')"></van-button>
+        </van-col>
+      </van-row>
+      <van-row class="van-hairline--top" v-else-if="isStellar">
         <van-col span="8">
           <van-button  size="large" class="plat-btn" type="import" @click.native="receiveAsset" :text="$t('common.receivables')"></van-button>
         </van-col>
@@ -66,6 +77,7 @@
     <tx-detail ref="txDetail"></tx-detail>
     <address-add ref="addressAdd"></address-add>
     <stellar-exchange ref="stellarExchange"></stellar-exchange>
+    <ripple-checks ref="rippleChecks"></ripple-checks>
   </van-popup>
 </template>
 <script>
@@ -74,6 +86,7 @@
   import txHistory from '../history/tx-history';
   import txDetail from '../history/tx-detail';
   import stellarExchange from '../exchange/stellar-exchange';
+  import rippleChecks from '../check/checks';
   import addressAdd from '../address/address-add';
   import QRCodeScanner from 'core/utils/QRCodeScanner.js';
   import pullRefresh from './mixns/pull-refresh.js';
@@ -84,6 +97,7 @@
     components: {
       receiveAsset,
       sendTransaction,
+      rippleChecks,
       txHistory,
       txDetail,
       pullRefresh,
@@ -108,6 +122,12 @@
       },
       isStellar () { // 是否是恒星账户
         if (this.$store.state.account.type === AccountType.stellar) {
+          return true;
+        }
+        return false;
+      },
+      isRipple () { // 是否是瑞波账户
+        if (this.$store.state.account.type === AccountType.ripple) {
           return true;
         }
         return false;
@@ -151,18 +171,18 @@
         }, 800);
       },
       onRefresh () {
-        setTimeout(() => {
-                 if (this.$refs['rxHistory']) {
-                    this.$refs['rxHistory'].getHistory();
-                  }
-                  this.$store.dispatch('setBalances', this.$store.state.account.address).then(() => {
-                    this.isLoading = false;
-                  }).catch(err => {
-                    console.info(err);
-                    this.isLoading = false;
-                  });
-                
-              }, 5000);
+        if (this.$refs['rxHistory']) {
+          this.$refs['rxHistory'].getHistory();
+        }
+        this.$store.dispatch('setBalances', this.$store.state.account.address).then(() => {
+          this.isLoading = false;
+        }).catch(err => {
+          console.info(err);
+          this.isLoading = false;
+        });
+        setTimeout(() => {                 
+          this.isLoading = false;
+        }, 2000);
       },
       removeStyle () {
         if (this.$refs['pullRefresh']) {
@@ -174,6 +194,9 @@
       },
       transfer () {
         this.$refs.sendTransaction.show(this.asset);
+      },
+      check () {
+        this.$refs.rippleChecks.show(this.asset);
       },
       exchange () {
         this.$refs.stellarExchange.show(this.asset);

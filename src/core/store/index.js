@@ -32,8 +32,9 @@ const state = {
       {value: 'wss://s1.ripple.com', type: 'public'},
       {value: 'wss://s-east.ripple.com', type: 'public'},
       {value: 'wss://s-west.ripple.com', type: 'public'},
-      {value: 'wss://s2.ripple.com', type: 'public'},    
-      {value: 'wss://s.altnet.rippletest.net:51233', type: 'test'}
+      {value: 'wss://s2.ripple.com', type: 'public'},
+      {value: 'wss://s.altnet.rippletest.net:51233', type: 'test'},
+      {value: 'wss://s.devnet.rippletest.net:51233', type: 'test'}
     ],
     [AccountType.ethereum]: [
       // {value: 'https://mainnet.infura.io/', type: 'public'},

@@ -274,6 +274,115 @@ class RippleWallet{
     });
   }
 
+  async sendCheck (fromSecret, to, amount, option = {}) {
+    const keypair = rippleKeypairs.deriveKeypair(fromSecret);
+    const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
+    let currency = option.assetCode || CoinType.XRP;
+    let checkcreate = {      
+      destination: to,
+      sendMax: {
+          value: amount,
+          currency: currency
+        }      
+    };
+    if (option.assetIssuer) {
+      checkcreate.sendMax.counterparty = option.assetIssuer;
+    }
+    if (option.tag !== '') {
+      let tag = new Number(option.tag);
+      checkcreate.destinationTag = tag.valueOf();
+    }
+    return new Promise((resolve, reject)=> {
+      this.server.prepareCheckCreate(fromAddress, checkcreate).then(prepared => {
+        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+        this.server.submit(signedTransaction, false)
+          .then(result => {
+            //console.info(result);
+            resolve(result);
+          }).catch (err => {
+          //console.info(err);
+          reject(err);
+        });
+      }).catch (err => {
+        //console.info(err);
+        reject(err);
+      });
+    });
+  }
+  async cancelCheck (check , address, fromSecret) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const checkCancellation = {checkID: check.id};
+        let prepared = await this.server.prepareCheckCancel(address, checkCancellation);
+        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+        this.server.submit(signedTransaction, true)
+          .then(result => {
+            //console.info(result);
+            if (result && result.resultCode === 'tesSUCCESS') {
+              resolve(result);
+            } else {
+              reject(result.resultMessage);
+            }
+          }).catch (err => {
+          //console.info(err);
+          reject(err);
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+  async checkCash (check , address, fromSecret) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const cash = {
+          checkID: check.id,
+          amount:{
+            currency: check.code,
+            value: check.amount
+          }
+        };
+        if (check.issuer) {
+          cash.amount.counterparty = check.issuer;
+        }
+        let prepared = await this.server.prepareCheckCash(address, cash);
+        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+        this.server.submit(signedTransaction, true)
+          .then(result => {
+            //console.info(result);
+            if (result && result.resultCode === 'tesSUCCESS') {
+              resolve(result);
+            } else {
+              reject(result.resultMessage);
+            }
+          }).catch (err => {
+          //console.info(err);
+          reject(err);
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+  async queryChecks (address, optional = {}) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        let options = {
+          type:"check"
+        };
+        if (!optional.limit) {
+          options.limit = 200;
+        } else {
+          options.limit = optional.limit;
+        }
+        let page = await this.server.getAccountObjects(address, options);
+        ////console.info(page);
+        resolve(page);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
   async acctDel (fromSecret, to, option = {}) {
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);

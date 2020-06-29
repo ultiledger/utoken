@@ -503,7 +503,7 @@ export default {
             toast.message = this.$t("trade.offerSuccess");
             setTimeout(() => {
               toast.clear();
-            }, 3000);
+            }, 2000);
             if (this.$refs.myOffers) {
               this.$refs.myOffers.clearTimer();
               this.$refs.myOffers.getOffers();
@@ -524,7 +524,7 @@ export default {
           }
           setTimeout(() => {
             toast.clear();
-          }, 4000);
+          }, 2000);
           this.loading = false;
         });
     },
