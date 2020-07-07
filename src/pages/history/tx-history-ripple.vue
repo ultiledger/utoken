@@ -99,7 +99,7 @@
                 this.rsp = ret.data;
               }
               ret.data.transactions.forEach(item => {
-                if (item.tx && item.tx.TransactionType === 'Payment' && item.validated && item.meta.TransactionResult === 'tesSUCCESS') {
+                if (item.tx && (item.tx.TransactionType === 'Payment' || item.tx.TransactionType === 'AccountDelete' || item.tx.TransactionType === 'CheckCash') && item.validated && item.meta.TransactionResult === 'tesSUCCESS') {
                   let history = this.toHistory(item);
                   if (history) {
                     this.normalHistory.push(history);
@@ -127,7 +127,16 @@
       },
       toHistory (data) {
         let tx = data.tx;
-        let toAddress = tx.Destination;
+        let toAddress = '';
+        if (tx.TransactionType === 'CheckCash') {
+          data.meta.AffectedNodes.forEach(item => {
+                if (item.DeletedNode) {
+                  toAddress =  item.DeletedNode.FinalFields.Destination;
+                }
+              });
+        }else{
+          toAddress =  tx.Destination;
+        }
         /* let deliveredAmount = data.outcome.deliveredAmount || {};
         let assetIssuer = deliveredAmount.counterparty;
         if (deliveredAmount.currency && deliveredAmount.currency !== 'XRP') {
@@ -141,7 +150,16 @@
         } */
         let assetCode = '';
         let assetIssuer = '';
-        let fromAddress = tx.Account;
+        let fromAddress = '';
+        if (tx.TransactionType === 'CheckCash') {
+          data.meta.AffectedNodes.forEach(item => {
+                if (item.DeletedNode) {
+                  fromAddress =  item.DeletedNode.FinalFields.Account;
+                }
+              });
+        }else{
+          fromAddress =  tx.Account;
+        }
         let amount = data.meta.delivered_amount;
         if (data.meta.delivered_amount instanceof Object) {
           amount = data.meta.delivered_amount.value;

@@ -49,6 +49,10 @@
     "middle": "中",
     "strong": "强",
     "best": "最好",
+    "check": "支票",
+    "checkcreate": "签发",
+    "checkmng": "管理",
+    "checkcash": "签收",
     "exchange": "兑换"
   },
   "wallet": {

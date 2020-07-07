@@ -49,6 +49,10 @@
     "middle": "Middle",
     "strong": "Strong",
     "best": "Best",
+    "check": "Check",
+    "checkcreate": "Check Create",
+    "checkmng": "Check Manage",
+    "checkcash": "Cash",
     "exchange": "Exchange"
   },
   "wallet": {
