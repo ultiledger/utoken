@@ -4,8 +4,8 @@
       <div :class="{'van-hairline--bottom':index!==(checks.length - 1)}" v-for="(item, index) in checks" :key="index">
         <van-row class="margin-bottom">
           <van-col span="3"><span v-if="item.isSending" class="text-danger" v-text="$t('common.pullOut')"></span><span v-else class="text-primary" v-text="$t('common.pullIn')"></span></van-col>
-          <van-col span="5" class="text-left "><span class="normal-font" :style="{color:item.isSending?'#ed4f78': '#00ac94'}" v-text="item.amount"></span></van-col>         
-          <van-col span="8" class="text-left "><div class="detail-card-line small-font" >{{item.acct | longStrAbbr(8)}}</div></van-col>         
+          <van-col span="5" ><span class="normal-font" :style="{color:item.isSending?'#ed4f78': '#00ac94'}" v-text="item.amount"></span></van-col>
+          <van-col span="8" ><div class="detail-card-line small-font" >{{item.acct | longStrAbbr(6)}}</div></van-col>
           <van-col span="4" class="text-right" @click.native="toCheckPassword('2',item)"><span v-if="!item.isSending" class="normal-font text-primary" v-text="$t('common.checkcash')"></span></van-col>
           <van-col span="4" class="text-right" @click.native="toCheckPassword('1',item)"><span class="normal-font text-danger" v-text="$t('common.cancelText')"></span></van-col>
         </van-row>

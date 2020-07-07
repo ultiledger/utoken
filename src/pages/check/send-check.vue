@@ -306,14 +306,14 @@
         this.$wallet.sendCheck(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.form.receiveAddress, this.form.amt, options)
           .then(ret => {
             if (ret && ret.resultCode === 'tesSUCCESS') {
-              console.info(ret);
+              // console.info(ret);
               toast.message = this.$t('transaction.transactionBroadcastSuccess');
               setTimeout(() => {
                 toast.clear();
                 this.$emit('done');
               }, 3000);
             } else {
-              console.error(ret);
+              // console.error(ret);
               this.$toast(ret.resultMessage);
               setTimeout(() => {
                 toast.clear();

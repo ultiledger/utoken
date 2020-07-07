@@ -295,7 +295,7 @@ class RippleWallet{
     return new Promise((resolve, reject)=> {
       this.server.prepareCheckCreate(fromAddress, checkcreate).then(prepared => {
         const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
-        this.server.submit(signedTransaction, false)
+        this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             resolve(result);
