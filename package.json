@@ -44,7 +44,7 @@
     "ed25519-hd-key": "^1.0.0",
     "eslint-friendly-formatter": "^4.0.1",
     "ethereumjs-wallet": "^0.6.3",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "md5": "^2.2.1",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
