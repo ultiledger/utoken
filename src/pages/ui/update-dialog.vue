@@ -86,6 +86,10 @@ export default {
         if (errorMsg) {
           this.$toast(errorMsg);
         }
+      }).catch((err) => {
+        if (err) {
+          this.$toast(err);
+        }
       });
     }
   },

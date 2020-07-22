@@ -177,7 +177,7 @@ export default {
     accountActivated
   },
   created() {
-    console.log(this.data);
+    //console.log(this.data);
   },
 
   computed: {
