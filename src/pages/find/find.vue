@@ -62,7 +62,7 @@
             title: this.$t('find.xrpTitle'),
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
-            link: 'https://xrp1ntel.com/accounts',
+            link: 'https://xrpintel.com/accounts',
             imgUrl: 'static/img/XRP-1@3x.png'
           },
           {
