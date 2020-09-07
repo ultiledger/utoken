@@ -129,7 +129,7 @@ export default {
         this.$refs["assetItem"] &&
         this.$refs["assetItem"][this.index]
       ) {
-        console.log(this.$refs["assetItem"]);
+        //console.log(this.$refs["assetItem"]);
 
         this.$refs["assetItem"][this.index].setActive();
       }
@@ -269,11 +269,11 @@ export default {
     // this.$refs["assetItem"][this.index].setActive();
   },
   created() {
-    console.log(this.index);
+    //console.log(this.index);
     this.setWallets();
     // this.wallets = [];
 
-    console.log(this.index);
+    //console.log(this.index);
   }
 };
 </script>

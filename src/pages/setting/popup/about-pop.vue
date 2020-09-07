@@ -68,6 +68,10 @@
     created () {
       this.$api.checkUpdate(this.updateUrl).then((newVersionInfo) => {
         this.versionCode = newVersionInfo.tag_name.toString();
+      }).catch((err) => {
+        if (err) {
+          this.$toast(err);
+        }
       });
       if (!(window.cordova && window.cordova.getAppVersion)) {
         return;
