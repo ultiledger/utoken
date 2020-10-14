@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import config from '../config';
   export default {
     name: config.prefix + 'DatePicker',
@@ -63,7 +63,7 @@
       show () {
         if (this.show) {
           if (this.value) {
-            this.curDate = moment(this.value, this.valueFormatterStr).toDate();
+            this.curDate = dayjs(this.value, this.valueFormatterStr).toDate();
           } else {
             this.curDate = new Date();
           }
@@ -72,7 +72,7 @@
       },
       value () {
         // if (this.value) {
-        //   this.curDate = moment(this.value, this.valueFormatterStr).toDate();
+        //   this.curDate = dayjs(this.value, this.valueFormatterStr).toDate();
         // } else {
         //   this.curDate = new Date();
         // }
@@ -93,15 +93,15 @@
       },
       minDateTemp () {
         if (this.minDate) {
-          return moment(this.minDate, 'YYYYMMDD').toDate();
+          return dayjs(this.minDate, 'YYYYMMDD').toDate();
         }
-        return moment().subtract(10, 'y').toDate(); // 默认10年前
+        return dayjs().subtract(10, 'y').toDate(); // 默认10年前
       },
       maxDateTemp () {
         if (this.maxDate) {
-          return moment(this.maxDate, 'YYYYMMDD').toDate();
+          return dayjs(this.maxDate, 'YYYYMMDD').toDate();
         }
-        return moment().add(10, 'y').toDate(); // 默认10年后
+        return dayjs().add(10, 'y').toDate(); // 默认10年后
       }
     },
     methods: {
@@ -111,14 +111,14 @@
       },
       up () {
         if (this.value) {
-          this.curDate = moment(this.value, this.valueFormatterStr).toDate();
+          this.curDate = dayjs(this.value, this.valueFormatterStr).toDate();
         } else {
           this.curDate = new Date();
         }
         this.actionsheetShow = true;
       },
       confirm () {
-        let val = moment(this.curDate).format(this.valueFormatterStr);
+        let val = dayjs(this.curDate).format(this.valueFormatterStr);
         this.$emit('input', val);
         this.close();
       },

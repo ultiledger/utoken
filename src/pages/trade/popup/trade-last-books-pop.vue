@@ -46,7 +46,7 @@
 </template>
 <script>
   import mathUtils from 'core/utils/mathUtils';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import {AccountType} from "src/wallet/constants";
   export default {
     props: {
@@ -110,11 +110,11 @@
       },
       processStellarLastBooks (item) {
         let price = mathUtils.round(item.counter_amount / item.base_amount, 6);
-        let now = moment().format('YYYY-MM-DD');
-        let ledgerCloseDate = moment(item.ledger_close_time).format('YYYY-MM-DD');
-        let ledgerCloseTime = moment(item.ledger_close_time).format('HH:mm:SS');
-        if (!moment(ledgerCloseDate).isSame(now)) {
-          ledgerCloseTime = moment(item.ledger_close_time).format('MM-DD HH:mm:SS');
+        let now = dayjs().format('YYYY-MM-DD');
+        let ledgerCloseDate = dayjs(item.ledger_close_time).format('YYYY-MM-DD');
+        let ledgerCloseTime = dayjs(item.ledger_close_time).format('HH:mm:SS');
+        if (!dayjs(ledgerCloseDate).isSame(now)) {
+          ledgerCloseTime = dayjs(item.ledger_close_time).format('MM-DD HH:mm:SS');
         }
         let result = {
           baseCode: item.base_asset_type === 'native' ? 'XLM' : item.base_asset_code,
@@ -179,11 +179,11 @@
       },
       processRippleLastBooks (item) {
         let price = mathUtils.round(item.counter_amount / item.base_amount, 6);
-        let now = moment().format('YYYY-MM-DD');
-        let ledgerCloseDate = moment(item.executed_time).format('YYYY-MM-DD');
-        let ledgerCloseTime = moment(item.executed_time).format('HH:mm:SS');
-        if (!moment(ledgerCloseDate).isSame(now)) {
-          ledgerCloseTime = moment(item.executed_time).format('MM-DD HH:mm:SS');
+        let now = dayjs().format('YYYY-MM-DD');
+        let ledgerCloseDate = dayjs(item.executed_time).format('YYYY-MM-DD');
+        let ledgerCloseTime = dayjs(item.executed_time).format('HH:mm:SS');
+        if (!dayjs(ledgerCloseDate).isSame(now)) {
+          ledgerCloseTime = dayjs(item.executed_time).format('MM-DD HH:mm:SS');
         }
         let baseIsSeller ;
         if (item.taker === item.buyer){

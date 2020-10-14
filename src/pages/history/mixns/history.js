@@ -1,5 +1,5 @@
 // import Big from 'big.js';
-// import moment from 'moment';
+// import dayjs from 'dayjs';
 import txHistoryItem from '../tx-history-item';
 import loadMoreBtn from '../load-more-btn';
 export default{

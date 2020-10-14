@@ -35,7 +35,7 @@
   </div>
 </template>
 <script>
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import history from './mixns/history';
   export default{
     mixins: [history],
@@ -154,7 +154,7 @@
             blockNumber: data.block_height,
             to: data.out[0].addr,
             from: data.inputs[0].prev_out.addr,
-            txTime: moment.unix(data.time).format('YYYYMMDD HH:mm:ss'),
+            txTime: dayjs.unix(data.time).format('YYYYMMDD HH:mm:ss'),
             fee: fee,
             txType: data.out[0].addr.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0',
             data: data,
@@ -182,7 +182,7 @@
             blockNumber: data.block_height,
             to: data.out[0].addr,
             from: data.inputs[0].prev_out.addr,
-            txTime: moment.unix(data.time).format('YYYYMMDD HH:mm:ss'),
+            txTime: dayjs.unix(data.time).format('YYYYMMDD HH:mm:ss'),
             fee: fee,
             txType: data.out[0].addr.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0',
             data: data

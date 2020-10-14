@@ -35,7 +35,7 @@
   </div>
 </template>
 <script>
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import history from './mixns/history';
   import coins from 'src/wallet/coins';
   export default{
@@ -185,7 +185,7 @@
           to: toAddress,
           toTag: tx.DestinationTag,
           from: fromAddress,
-          txTime: moment((tx.date + 0x386D4380) * 1000).format('YYYYMMDD HH:mm:ss'),
+          txTime: dayjs((tx.date + 0x386D4380) * 1000).format('YYYYMMDD HH:mm:ss'),
           fee:  tx.Fee / 1000000,
           txType: toAddress.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0',
           data: tx

@@ -40,7 +40,7 @@
 </template>
 <script>
   import cryptor from 'core/utils/cryptor';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import passwordDialog from '../../ui/password-dialog';
   import offerHistory from '../popup/offer-history-pop';
   import Big from 'big.js';
@@ -117,7 +117,7 @@
                 amount,
                 price,
                 volume,
-                tradeTime: moment(item.last_modified_time).format('HH:mm MM/DD')
+                tradeTime: dayjs(item.last_modified_time).format('HH:mm MM/DD')
               }
             );
           } else if (this.isSameAsset(sellCode, sellIssuer, this.tradePair.counterCode, this.tradePair.counterIssuer) && this.isSameAsset(buyCode, buyIssuer, this.tradePair.baseCode, this.tradePair.baseIssuer)) {
@@ -135,7 +135,7 @@
                 amount,
                 price,
                 volume,
-                tradeTime: moment(item.last_modified_time).format('HH:mm MM/DD')
+                tradeTime: dayjs(item.last_modified_time).format('HH:mm MM/DD')
               }
             );
           }

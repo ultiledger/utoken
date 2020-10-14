@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import history from './mixns/history';
   import historyPathItem from './tx-history-path-item';
   export default{
@@ -105,7 +105,7 @@
           blockNumber: data.paging_token,
           to: toAddress,
           from: fromAddress,
-          txTime: moment(data.created_at).format('YYYYMMDD HH:mm:ss'),
+          txTime: dayjs(data.created_at).format('YYYYMMDD HH:mm:ss'),
           fee:  fee,
           txType: data.type === 'path_payment'? '3' : toAddress.toLowerCase() === this.$store.state.account.address.toLowerCase() ? '1' : '0', /*3表示兑换-入*/
           data: data
@@ -125,7 +125,7 @@
             blockNumber: data.paging_token,
             to: data.to,
             from: data.from,
-            txTime: moment(data.created_at).format('YYYYMMDD HH:mm:ss'),
+            txTime: dayjs(data.created_at).format('YYYYMMDD HH:mm:ss'),
             fee:  null,
             txType: '4', /*4表示兑换-出*/
             data: data

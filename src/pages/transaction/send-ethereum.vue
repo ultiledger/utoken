@@ -109,7 +109,7 @@
   import {AccountType, CoinType} from '../../wallet/constants';
   import receiveAddress from '../ui/receive-address';
   import cryptor from 'core/utils/cryptor';
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   export default{
     components: {receiveAddress},
     props: {
@@ -299,7 +299,7 @@
             //     from: tx.from,
             //     fee:  this.$wallet.getInstance().utils.fromWei(fee, 'ether'),
             //     txType: '0',
-            //     txTime: new moment().format('YYYYMMDD HH:mm:ss'),
+            //     txTime: new dayjs().format('YYYYMMDD HH:mm:ss'),
             //     data: tx,
             //     confirmations: 0
             //   };
@@ -351,7 +351,7 @@
             from: tx.from,
             fee:  this.$wallet.getInstance().utils.fromWei(fee, 'ether'),
             txType: '0',
-            txTime: new moment().format('YYYYMMDD HH:mm:ss'),
+            txTime: new dayjs().format('YYYYMMDD HH:mm:ss'),
             data: tx,
             confirmations: 0
           };
@@ -384,7 +384,7 @@
         //     from: tx.from,
         //     fee:  this.$wallet.getInstance().utils.fromWei(fee, 'ether'),
         //     txType: '0',
-        //     txTime: new moment().format('YYYYMMDD HH:mm:ss'),
+        //     txTime: new dayjs().format('YYYYMMDD HH:mm:ss'),
         //     data: tx,
         //     confirmations: 0
         //   };

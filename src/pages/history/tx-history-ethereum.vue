@@ -66,7 +66,7 @@
 </template>
 <script>
 import Big from "big.js";
-import moment from "moment";
+import dayjs from "dayjs";
 import history from "./mixns/history";
 import { CoinType } from "../../wallet/constants";
 
@@ -190,7 +190,7 @@ export default {
               this.$store.state.account.address.toLowerCase()
             ? "1"
             : "0",
-          txTime: new moment().format("YYYYMMDD HH:mm:ss"),
+          txTime: new dayjs().format("YYYYMMDD HH:mm:ss"),
           data: data,
           confirmations: data.confirmations
         };
@@ -231,7 +231,7 @@ export default {
         blockNumber: data.blockNumber,
         to: data.to,
         from: data.from,
-        txTime: moment(data.timeStamp * 1000).format("YYYYMMDD HH:mm:ss"),
+        txTime: dayjs(data.timeStamp * 1000).format("YYYYMMDD HH:mm:ss"),
         fee: this.$wallet.getInstance().utils.fromWei(fee, "ether"),
         txType: isContract
           ? "2"

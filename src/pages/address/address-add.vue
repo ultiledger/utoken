@@ -108,7 +108,7 @@
 <script>
   import coinTypeSelect from '../ui/coin-type-select';
   import {AccountType} from "src/wallet/constants";
-  import moment from 'moment';
+  import dayjs from 'dayjs';
   import QRCodeScanner from 'core/utils/QRCodeScanner.js';
   import coins from 'src/wallet/coins';
   import StellarSdk from 'stellar-sdk';
@@ -301,7 +301,7 @@
         this.$validator.validateAll().then((result) => {
           if (result) {
             let addObj = this.form;
-            addObj.addTime = moment().format('YYYY-MM-DD HH:mm:ss');
+            addObj.addTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
             addObj.type = this.form.acctType;
             this.$collecitons.address.insertAddress(addObj);
             this.$emit('done');
