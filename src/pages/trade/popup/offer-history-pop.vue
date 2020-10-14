@@ -84,9 +84,9 @@
         let price = mathUtils.round(item.counter_amount / item.base_amount, 2);
         let now = dayjs().format('YYYY-MM-DD');
         let ledgerCloseDate = dayjs(item.ledger_close_time).format('YYYY-MM-DD');
-        let ledgerCloseTime = dayjs(item.ledger_close_time).format('HH:mm:SS');
+        let ledgerCloseTime = dayjs(item.ledger_close_time).format('HH:mm:ss');
         if (!dayjs(ledgerCloseDate).isSame(now)) {
-          ledgerCloseTime = dayjs(item.ledger_close_time).format('MM-DD HH:mm:SS');
+          ledgerCloseTime = dayjs(item.ledger_close_time).format('MM-DD HH:mm:ss');
         }
         let result = {
           baseCode: item.base_asset_type === 'native' ? 'XLM' : item.base_asset_code,
