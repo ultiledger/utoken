@@ -10,7 +10,7 @@
     :v-validate="vValidate"
     :name="name"
     @click-right-icon="clickIcon">
-    <div slot="icon" class="strength-wrapper" v-if="rankText">
+    <div slot="right-icon" class="strength-wrapper" v-if="rankText">
       <div class="rule-item-text text-right small-font">{{rankText}}</div>
       <div class="rule-item"
            v-for="(item, index) in rules"

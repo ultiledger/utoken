@@ -13,7 +13,7 @@
         autosize
         name="receiveAddress"
       >
-        <span slot="icon"  >
+        <span slot="right-icon"  >
           <!--<i class="ultfont ult-contacts"></i>-->
           <img :src="dprImg(`book.png`)" style="width: 20px; height: 20px;" @click="toSelectAddress">
         </span>

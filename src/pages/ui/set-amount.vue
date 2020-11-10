@@ -19,7 +19,7 @@
         style="padding-left: 20px;"
         v-model="amount"
         :placeholder="$t('scan.transferAmtPlaceholder')">
-        <span slot="icon" class="text-main large-font">{{coinType}}</span>
+        <span slot="right-icon" class="text-main large-font">{{coinType}}</span>
       </van-field>
       <div class="btn">
         <van-button size="large" round type="primary" @click="sure()" :text="$t('common.sure')"></van-button>
