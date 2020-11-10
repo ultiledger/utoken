@@ -19,8 +19,8 @@
               <van-cell  :key="index" v-for="(item, index) in $store.state.network.stellar" @click="stellar = item.value">
                 <van-row>
                   <van-col span="20">{{item.value}}<span v-if="item.type === 'public'">&nbsp;<van-tag round class="tag">public</van-tag></span></van-col>
-                  <van-col span="4" class="text-right"> <van-radio :name="item.value" /></van-col>
                 </van-row>
+                <template #right-icon> <van-radio :name="item.value" /></template>
               </van-cell>
             </van-cell-group>
           </van-radio-group>
@@ -32,8 +32,8 @@
               <van-cell  :key="index" v-for="(item, index) in $store.state.network.ripple" @click="ripple = item.value">
                 <van-row>
                   <van-col span="20">{{item.value}}<span v-if="item.type === 'public'">&nbsp;<van-tag round class="tag">public</van-tag></span></van-col>
-                  <van-col span="4" class="text-right"> <van-radio :name="item.value" /></van-col>
                 </van-row>
+                <template #right-icon> <van-radio :name="item.value" /></template>
               </van-cell>
             </van-cell-group>
           </van-radio-group>
@@ -45,8 +45,8 @@
               <van-cell  :key="index" v-for="(item, index) in $store.state.network.ethereum" @click="ethereum = item.value">
                 <van-row>
                   <van-col span="20">{{item.value}}<span v-if="item.type === 'public'">&nbsp;<van-tag round class="tag">public</van-tag></span></van-col>
-                  <van-col span="4" class="text-right"> <van-radio :name="item.value" /></van-col>
                 </van-row>
+                <template #right-icon> <van-radio :name="item.value" /></template>
               </van-cell>
             </van-cell-group>
           </van-radio-group>
@@ -58,8 +58,8 @@
               <van-cell :key="index" v-for="(item, index) in $store.state.network.bitcoin" @click="bitcoin = item.value">
                 <van-row>
                   <van-col span="20">{{item.value}}<span v-if="item.type === 'public'">&nbsp;<van-tag round class="tag">public</van-tag></span></van-col>
-                  <van-col span="4" class="text-right"> <van-radio :name="item.value" /></van-col>
                 </van-row>
+                <template #right-icon> <van-radio :name="item.value" /></template>
               </van-cell>
             </van-cell-group>
           </van-radio-group>
