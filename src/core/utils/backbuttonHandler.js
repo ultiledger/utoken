@@ -22,7 +22,7 @@ Vue.mixin({
   watch: {
     value (val) {
       let componentTag = this.$options._componentTag;
-      let components = ['van-popup', 'van-actionsheet'];
+      let components = ['van-popup', 'van-action-sheet'];
       if (components.indexOf(componentTag) !== -1) {
         if (val) {
           this.addLayer({type: componentTag, target: this, close: this.close});

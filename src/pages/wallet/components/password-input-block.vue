@@ -15,9 +15,9 @@
         :data-vv-as="$t('wallet.setTranPwdPlaceholder2')"
         :placeholder="$t('wallet.setTranPwdPlaceholder2')"
         v-validate="'required|min:6'"
-        :icon="inputIcon"
+        :right-icon="inputIcon"
         name="confirmWalletPwd"
-        @click-icon="transferPwdMode">
+        @click-right-icon="transferPwdMode">
       </van-field>
     </van-cell-group>
   </div>

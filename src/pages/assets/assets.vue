@@ -62,7 +62,7 @@
     <address-add ref="addressAdd"></address-add>
     <trade ref="trade"></trade>
 
-    <van-actionsheet
+    <van-action-sheet
       v-model="showActions"
       :cancel-text="$t('common.cancelText')"
       :actions="actions"
@@ -261,7 +261,7 @@ export default {
       // this.$refs['assetItem'][this.index].setActive();
     }
     if (this.$refs["swipe"]) {
-      this.$refs["swipe"].onResize();
+      this.$refs["swipe"].resize();
     }
   },
   mounted() {

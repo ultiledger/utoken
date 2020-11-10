@@ -29,9 +29,8 @@ import {
   Search,
   Checkbox,
   Area,
-  SwitchCell,
   PasswordInput,
-  Actionsheet,
+  ActionSheet,
   Picker,
   Uploader,
   Radio,
@@ -40,7 +39,7 @@ import {
   Collapse,
   CollapseItem,
   Switch,
-  Badge,
+  SidebarItem,
   Slider,
   Card,
   SwipeCell
@@ -78,10 +77,9 @@ Vue.use(SwipeItem);
 Vue.use(Search);
 Vue.use(Checkbox);
 Vue.use(Area);
-Vue.use(SwitchCell);
 Vue.use(PasswordInput);
 Vue.use(NumberKeyboard);
-Vue.use(Actionsheet);
+Vue.use(ActionSheet);
 Vue.use(Picker);
 Vue.use(Uploader);
 Vue.use(CheckboxGroup);
@@ -90,7 +88,7 @@ Vue.use(RadioGroup);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(Switch);
-Vue.use(Badge);
+Vue.use(SidebarItem);
 Vue.use(Slider);
 Vue.use(Card);
 Vue.use(SwipeCell);

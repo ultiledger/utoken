@@ -39,7 +39,7 @@
           :placeholder="$t('address.coinTypePlaceholder')"
           :data-vv-as="$t('address.coinType')"
           name="type"
-          icon="arrow"
+          right-icon="arrow"
           readonly>
         </van-field>
       </div>

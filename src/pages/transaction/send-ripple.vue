@@ -52,7 +52,7 @@
         <van-button size="large" :loading="loading" :disabled="firstBthDisabled" class="plat-btn" @click="firstStep" type="primary" :text="$t('common.next')"></van-button>
       </pl-stick>
     </div>
-    <van-actionsheet v-model="showFirstStep"  :close-on-click-overlay="false">
+    <van-action-sheet v-model="showFirstStep"  :close-on-click-overlay="false">
       <div class="transfer-sub-warpper">
         <div v-show="!showSecondStep">
           <van-nav-bar :title="$t('transaction.confirmTransferAcctMsg')"  @click-left="showFirstStep = false">
@@ -88,14 +88,14 @@
         <div v-show="showSecondStep">
           <van-nav-bar :title="$t('common.inputPwd')"  left-arrow @click-left="showSecondStep = false" />
           <van-cell-group>
-            <van-field v-model="form.password" ref="password" type="password" @click-icon="displayPassword = true" :placeholder="$t('transaction.walletPwdPlaceholder')" icon="closed-eye" v-show="!displayPassword"/>
-            <van-field v-model="form.password" ref="visualPassword" type="text" @click-icon="displayPassword = false" :placeholder="$t('transaction.walletPwdPlaceholder')" icon="eye-o" v-show="displayPassword"/>          </van-cell-group>
+            <van-field v-model="form.password" ref="password" type="password" @click-right-icon="displayPassword = true" :placeholder="$t('transaction.walletPwdPlaceholder')" right-icon="closed-eye" v-show="!displayPassword"/>
+            <van-field v-model="form.password" ref="visualPassword" type="text" @click-right-icon="displayPassword = false" :placeholder="$t('transaction.walletPwdPlaceholder')" right-icon="eye-o" v-show="displayPassword"/>          </van-cell-group>
           <pl-stick :offset-bottom="0">
             <van-button size="large" :loading="loading" :disabled="!form.password" class="plat-btn"  @click="submit" type="primary" :text="$t('transaction.submit')"></van-button>
           </pl-stick>
         </div>
       </div>
-    </van-actionsheet>
+    </van-action-sheet>
   </div>
 </template>
 <script>

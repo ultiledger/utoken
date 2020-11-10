@@ -22,7 +22,9 @@
             :title="key"
             clickable
             @click="onItemSelect(key)">
-            <van-radio :name="key" />
+            <template #right-icon>
+              <van-radio :name="key" />
+            </template>
           </van-cell>
         </van-cell-group>
       </van-radio-group>

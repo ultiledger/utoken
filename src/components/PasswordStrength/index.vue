@@ -9,7 +9,7 @@
     :placeholder="placeholder"
     :v-validate="vValidate"
     :name="name"
-    @click-icon="clickIcon">
+    @click-right-icon="clickIcon">
     <div slot="icon" class="strength-wrapper" v-if="rankText">
       <div class="rule-item-text text-right small-font">{{rankText}}</div>
       <div class="rule-item"

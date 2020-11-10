@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-actionsheet v-model="actionsheetShow" @click-overlay="cancel" :get-container="getContainer">
+    <van-action-sheet v-model="actionsheetShow" @click-overlay="cancel" :get-container="getContainer">
       <van-datetime-picker
         v-model="curDate"
         :title="title"
@@ -13,7 +13,7 @@
         :max-minute="maxMinute"
         @confirm="confirm"
         @cancel="cancel"/>
-    </van-actionsheet>
+    </van-action-sheet>
   </div>
 </template>
 <script>

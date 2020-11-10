@@ -58,11 +58,18 @@
         </div>
       </div>
     </van-popup>
-    <van-actionsheet v-model="showPicker">
-      <div class="van-hairline--top-bottom van-picker__toolbar b-white">
+    <van-action-sheet v-model="showPicker">
+      <!-- <div class="van-hairline--top-bottom van-picker__toolbar b-white">
         <div class="van-picker__cancel" @click="onCancel" v-text="$t('common.cancelText')"></div>
         <div class="van-picker__confirm" @click="onConfirm" v-text="$t('common.sure')"></div>
-      </div>
+      </div> -->
+      <van-picker
+        show-toolbar
+        toolbar-position = bottom
+        visible-item-count = 0
+        @cancel="onCancel"
+        @confirm="onConfirm"
+      />
       <van-radio-group v-model="pickerPair">
         <van-cell-group>
           <van-cell
@@ -97,16 +104,18 @@
                           :address="item.issuer" :length="4" :show-copy="false"></pl-wallet-addr>
                       </span>
                   </td>
-                  <td class="text-right">
-                    <van-radio :name="item.code+item.issuer" />
+                  <td style="text-right">
                   </td>
                 </tr>
               </table>
             </div>
+            <template #right-icon>
+              <van-radio :name="item.code+item.issuer" />
+            </template>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
-    </van-actionsheet>
+    </van-action-sheet>
   </div>
 </template>
 <script>

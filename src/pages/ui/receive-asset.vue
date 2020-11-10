@@ -43,7 +43,7 @@
     </div>
     <div class="share text-center text-primary" @click="showShareActions = true" v-if="!canChangeAsset">{{$t('scan.shareReceiptCode')}}</div>
 
-    <van-actionsheet
+    <van-action-sheet
       :overlay="true"
       v-model="showShareActions"
       :cancel-text="$t('common.cancelText')"
