@@ -65,7 +65,7 @@
       </div> -->
       <van-picker
         show-toolbar
-        :visible-item-count = 0
+        visible-item-count = 1
         @cancel="onCancel"
         @confirm="onConfirm"
       />
