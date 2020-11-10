@@ -14,19 +14,29 @@
       </van-nav-bar>
       <div class="item-block">
         <van-cell-group :border="false">
-          <van-switch-cell
+          <!-- <van-switch-cell
             v-model="form.defaultRipple"
             title="DefaultRipple"
             size="25px"
             :loading="defaultRippleLoading"
-            :disabled="!defaultRippleLoading && disabled" @input="toSettings('1')"/>
+            :disabled="!defaultRippleLoading && disabled" @input="toSettings('1')"/> -->
+            <van-cell center title="DefaultRipple">
+              <template #right-icon>
+                <van-switch v-model="form.defaultRipple" size="25" :loading="defaultRippleLoading" :disabled="!defaultRippleLoading && disabled" @input="toSettings('1')"  />
+              </template>
+            </van-cell>
         </van-cell-group>
         <van-cell-group :border="false" class="van-hairline--top">
-          <van-switch-cell
+          <!-- <van-switch-cell
             v-model="form.requireDestinationTag"
             title="RequireDestTag"
             :loading="requireDestTagLoading"
-            :disabled="!requireDestTagLoading && disabled" @input="toSettings('2')"/>
+            :disabled="!requireDestTagLoading && disabled" @input="toSettings('2')"/> -->
+            <van-cell center title="RequireDestTag">
+              <template #right-icon>
+                <van-switch v-model="form.requireDestinationTag" size="25" :loading="requireDestTagLoading" :disabled="!requireDestTagLoading && disabled" @input="toSettings('2')"  />
+              </template>
+            </van-cell>
         </van-cell-group>
         <van-cell-group :border="false" class="van-hairline--top">
           <van-field

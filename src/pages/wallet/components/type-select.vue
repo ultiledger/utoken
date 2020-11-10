@@ -1,8 +1,9 @@
 <template>
-  <div class="type-select__main">
+  <div class="item-block  type-select__main">
     <van-checkbox-group v-model="accountTypes">
-      <div
-        class="item-block type-select__cell"
+       <van-cell-group>
+      <van-cell
+        class="type-select__cell"
         :key="index"
         @click="clickOpt(item, index)"
         v-show="canSelected(item.type)"
@@ -10,14 +11,14 @@
               <span class="content-left__icon type-select__icon">
                 <img :src="`static/img/${item.code}@3x.png`">
               </span>
-        <div class="type-select__title">
-          <span>{{item.name}}</span>
-        </div>
-        <div class="type-select__value">
-          <van-checkbox :name="item.type" ref="checkboxes" v-if="isCheck"/>
-          <van-icon name="arrow" v-else></van-icon>
-        </div>
-      </div>
+        <span class="type-select__title">
+          {{item.name}}
+        </span>
+        <template #right-icon>
+          <van-checkbox :name="item.type" ref="checkboxes"/>         
+        </template>
+      </van-cell>
+      </van-cell-group>
     </van-checkbox-group>
   </div>
 </template>
