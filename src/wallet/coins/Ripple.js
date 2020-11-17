@@ -28,19 +28,19 @@ class RippleWallet{
       this.server = new RippleAPI({
         server: url, maxFeeXRP: '0.05',timeout:16000
       });
-      this.server.on('error', (errorCode, errorMessage) => {
-        console.log(errorCode + ': ' + errorMessage);
-      });
-      this.server.on('connected', () => {
-        console.log('RippleApi connected');
-      });
-      this.server.on('disconnected', (code) => {
-        if (code !== 1000) {
-          console.log('Connection is closed due to error.');
-        } else {
-          console.log('Connection is closed normally.');
-        }
-      });
+      // this.server.on('error', (errorCode, errorMessage) => {
+      //   //console.log(errorCode + ': ' + errorMessage);
+      // });
+      // this.server.on('connected', () => {
+      //   //console.log('RippleApi connected');
+      // });
+      // this.server.on('disconnected', (code) => {
+      //   if (code !== 1000) {
+      //     //console.log('Connection is closed due to error.');
+      //   } else {
+      //     //console.log('Connection is closed normally.');
+      //   }
+      // });
     }
   }
 

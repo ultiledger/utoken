@@ -110,7 +110,7 @@ class BitcoinWallet{
             if (!bodyObj) throw new Error('no utxos back or error');
             let utxos = bodyObj.unspent_outputs;
             if (utxos.length <= 0) {
-              console.error('no utxo');
+              //console.error('no utxo');
               throw new Error('no utxo');
             }
             let { inputs, outputs, fee } = coinSelect(utxos, targets, feeRate);
@@ -118,10 +118,10 @@ class BitcoinWallet{
               throw new Error('fee too low');
             }
             if (!inputs || !outputs) {
-              console.error('.inputs and .outputs are undefined because no solution was found');
+              //.error('.inputs and .outputs are undefined because no solution was found');
               throw new Error('inputs and outputs are undefined because no solution was found');
             }
-            console.log('transaction stat:');
+            //console.log('transaction stat:');
             const txb = new bitcoin.TransactionBuilder(NETWORK);
             inputs.forEach(input => txb.addInput(input.tx_hash_big_endian, input.tx_output_n));
             outputs.forEach(output => {
@@ -135,7 +135,7 @@ class BitcoinWallet{
             for (let index in inputs) {
               txb.sign(parseInt(index), fromPair);
             }
-            console.log('transaction end:');
+            //console.log('transaction end:');
             // 广播(广播成功之后返回transition submitted)
             if (func) {
               func(this.url, txb.build().toHex());
@@ -192,7 +192,7 @@ class BitcoinWallet{
       }
       return item.blockNumber === null ? 0 : lastBlock.data.height - item.blockNumber + 1;
     }catch (error) {
-      console.log(error);
+      //console.log(error);
       return error;
     }
 
