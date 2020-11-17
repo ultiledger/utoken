@@ -139,11 +139,11 @@ class RippleWallet{
   }
 
   async getAccountSettings(address) {
-    return new Promise(async (resolve) => {
+    //return new Promise(async (resolve) => {
       let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
       let settings = await this.server.getSettings(classicAddress);
-      resolve(settings);
-    });
+      return settings;
+    //});
   }
 
   async isTrustAsset(address, assetCode, assetIssuer) {
@@ -173,7 +173,7 @@ class RippleWallet{
   }
 
   async getTransactions (address, option = {}) {
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
         const options = {
@@ -197,7 +197,7 @@ class RippleWallet{
             result = {'hashMore': false, 'data': rsp};
           }
         }
-        resolve(result);
+        return result;
         /* const serverInfo = await this.server.getServerInfo();
         const ledgers = serverInfo.completeLedgers.split('-');
         const minLedgerVersion = Number(ledgers[0]);
@@ -212,9 +212,9 @@ class RippleWallet{
         resolve(transactions); */
       } catch (err) {
         ////console.error(err);
-        reject(err);
+        throw new Error(err);
       }
-    });
+  //  });
   }
 
   async sendTransaction (fromSecret, to, amount, option = {}) {
@@ -310,7 +310,7 @@ class RippleWallet{
     });
   }
   async cancelCheck (check , address, fromSecret) {
-    return new Promise(async (resolve, reject) => {
+   // return new Promise(async (resolve, reject) => {
       try {
         const checkCancellation = {checkID: check.id};
         let prepared = await this.server.prepareCheckCancel(address, checkCancellation);
@@ -319,21 +319,21 @@ class RippleWallet{
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
-              resolve(result);
+              return result;
             } else {
-              reject(result.resultMessage);
+              throw new Error(result.resultMessage);
             }
           }).catch (err => {
           //console.info(err);
-          reject(err);
+          throw new Error(err);
         });
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+  //  });
   }
   async checkCash (check , address, fromSecret) {
-    return new Promise(async (resolve, reject) => {
+   // return new Promise(async (resolve, reject) => {
       try {
         const cash = {
           checkID: check.id,
@@ -351,21 +351,21 @@ class RippleWallet{
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
-              resolve(result);
+              return result;
             } else {
-              reject(result.resultMessage);
+              throw new Error(result.resultMessage);
             }
           }).catch (err => {
           //console.info(err);
-          reject(err);
+          throw new Error(err);
         });
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+   // });
   }
   async queryChecks (address, optional = {}) {
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         let options = {
           type:"check"
@@ -377,11 +377,11 @@ class RippleWallet{
         }
         let page = await this.server.getAccountObjects(address, options);
         ////console.info(page);
-        resolve(page);
+        return page;
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+   // });
   }
   async acctDel (fromSecret, to, option = {}) {
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
@@ -487,7 +487,7 @@ class RippleWallet{
    * @returns {Promise<any>}
    */
   async queryBook (baseBuy, counterSelling) {
-    return new Promise(async (resolve, reject)=>{
+  //  return new Promise(async (resolve, reject)=>{
       try {
         const orderbook = {
           base: {
@@ -565,15 +565,15 @@ class RippleWallet{
               }
             }
           });
-          resolve(result);
+          return result;
         }).catch((err) => {
           //console.error(err);
-          reject(err);
+          throw new Error(err);
         });
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+   // });
   }
 
   /**
@@ -584,7 +584,7 @@ class RippleWallet{
    */
   async queryOffers (address, optional = {}) {
     ////console.debug('offers', address);
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         let options = {};
         if (!optional.limit) {
@@ -594,11 +594,11 @@ class RippleWallet{
         }
         let page = await this.server.getOrders(address, options);
         ////console.info(page);
-        resolve(page);
+        return page;
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+  //  });
   }
 
   /**
@@ -613,7 +613,7 @@ class RippleWallet{
    * @returns {Promise<any>}
    */
   async sendOffer(selling, buying, amount, price , address, fromSecret, direction) {
-    return new Promise(async (resolve, reject) => {
+   // return new Promise(async (resolve, reject) => {
       try {
         let totalPrice = Number(new Big(amount).times(price).toString());
         const order = {
@@ -646,18 +646,18 @@ class RippleWallet{
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
-              resolve(result);
+              return result;
             } else {
-              reject(result.resultMessage);
+              throw new Error(result.resultMessage);
             }
           }).catch (err => {
           //console.info(err);
-          reject(err);
+          throw new Error(err);
         });
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+   // });
   }
 
   /**
@@ -668,7 +668,7 @@ class RippleWallet{
    * @returns {Promise<any>}
    */
   async cancelOffer (offer , address, fromSecret) {
-    return new Promise(async (resolve, reject) => {
+   // return new Promise(async (resolve, reject) => {
       try {
         const orderCancellation = {orderSequence: offer.id};
         orderCancellation.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
@@ -678,18 +678,18 @@ class RippleWallet{
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
-              resolve(result);
+              return result;
             } else {
-              reject(result.resultMessage);
+              throw new Error(result.resultMessage);
             }
           }).catch (err => {
           //console.info(err);
-          reject(err);
+          throw new Error(err);
         });
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+   // });
   }
 
   async queryLastBook (baseBuy, counterSelling, optional = {}) {

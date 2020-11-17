@@ -139,7 +139,7 @@ class StellarWallet {
   // }
 
   async getTransactions (address, option = {}) {
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         let action =  this.server.payments().forAccount(address).order(option.order || 'desc');
         if (option.limit) {
@@ -149,11 +149,11 @@ class StellarWallet {
           action = action.cursor(option.cursor);
         }
         let page = await action.call();
-        resolve(page.records);
+        return page.records;
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+   // });
   }
 
   async getTransaction (txHash) {
@@ -301,18 +301,18 @@ class StellarWallet {
    * @returns {Promise<any>}
    */
   async getExchangePath (src, dest, code, issuer, amount) {
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         await this.server.paths(src, dest, this.getAsset(code, issuer), amount).call().then((data) => {
-          resolve(data);
+          return data;
         }).catch((err) => {
           //console.info(err);
-          reject(this.getErrMsg(err));
+          throw new Error(this.getErrMsg(err));
         });
       } catch (err) {
-        reject(this.getErrMsg(err));
+        throw new Error(this.getErrMsg(err));
       }
-    });
+  //  });
   }
 
   /**
@@ -323,7 +323,7 @@ class StellarWallet {
    * @returns {Promise<any>}
    */
   async pathPayment (alt, address, fromSecret) {
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         const path = alt.origin.path.map((item) => {
           if (item.asset_type == 'native') {
@@ -351,14 +351,14 @@ class StellarWallet {
         }).then(transaction => {
           return this.server.submitTransaction(transaction);
         }).then(txResult => {
-          resolve(txResult.hash);
+          return txResult.hash;
         }).catch((err) => {
-          reject(this.getErrMsg(err));
+          throw new Error(this.getErrMsg(err));
         });
       } catch (err) {
-        reject(this.getErrMsg(err));
+        throw new Error(this.getErrMsg(err));
       }
-    });
+   // });
   }
 
   /**
@@ -369,18 +369,18 @@ class StellarWallet {
    */
   async queryBook (baseBuy, counterSelling) {
     //console.debug('orderbook', `${baseBuy.code}/${counterSelling.code}`);
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         await this.server.orderbook(this.getAsset(baseBuy), this.getAsset(counterSelling)).call().then((data) => {
-          resolve(data);
+          return data;
         }).catch((err) => {
           //console.error(err, `${baseBuy.code}/${counterSelling.code}`);
-          reject(this.getErrMsg(err));
+          throw new Error(this.getErrMsg(err));
         });
       } catch (err) {
-        reject(this.getErrMsg(err));
+        throw new Error(this.getErrMsg(err));
       }
-    });
+    //});
 
   }
 
@@ -392,7 +392,7 @@ class StellarWallet {
    * @returns {Promise<any>}
    */
   async queryLastBook (baseBuy, counterSelling, optional = {}) {
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       //my last book
       if (optional.forAccount) {
         try {
@@ -420,9 +420,9 @@ class StellarWallet {
               }
             });
           }
-          resolve(records);
+          return records;
         } catch (err) {
-          reject(err);
+          throw new Error(err);
         }
       }else {
         try {
@@ -434,12 +434,12 @@ class StellarWallet {
             action = action.cursor(optional.cursor);
           }
           let page = await action.call();
-          resolve(page.records);
+          return page.records;
         } catch (err) {
-          reject(err);
+          throw new Error(err);
         }
       }
-    });
+  //  });
   }
 
   /**
@@ -453,7 +453,7 @@ class StellarWallet {
    * @returns {Promise<any>}
    */
   async sendOffer(selling, buying, amount, price , address, fromSecret) {
-    return new Promise(async (resolve, reject) => {
+   // return new Promise(async (resolve, reject) => {
       try {
         this.server.loadAccount(address).then((account) => {
           const op = StellarSdk.Operation.manageOffer({
@@ -465,18 +465,18 @@ class StellarWallet {
           const transaction = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
           let keypair = StellarSdk.Keypair.fromSecret(fromSecret);
           transaction.sign(keypair);
-          return transaction;
+          //return transaction;
         }).then(transaction => {
-          return this.server.submitTransaction(transaction);
+          this.server.submitTransaction(transaction);
         }).then(txResult => {
-          resolve(txResult.hash);
+          return txResult.hash;
         }).catch((err) => {
-          reject(this.getErrMsg(err));
+          throw new Error(this.getErrMsg(err));
         });
       } catch (err) {
-        reject(this.getErrMsg(err));
+        throw new Error(this.getErrMsg(err));
       }
-    });
+   // });
   }
 
   /**
@@ -487,7 +487,7 @@ class StellarWallet {
    */
   async queryOffers (address, optional = {}) {
     //console.debug('offers', address);
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         let action =  this.server.offers('accounts', address);
         if (optional.limit) {
@@ -496,11 +496,11 @@ class StellarWallet {
           action = action.limit(200);
         }
         let page = await action.call();
-        resolve(page.records);
+        return page.records;
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+   // });
   }
 
   _updateSeq(account) {
@@ -524,7 +524,7 @@ class StellarWallet {
    * @returns {Promise<any>}
    */
   async cancelOffer (offer , address, fromSecret) {
-    return new Promise(async (resolve, reject) => {
+    //return new Promise(async (resolve, reject) => {
       try {
         this.server.loadAccount(address).then((account) => {
           this._updateSeq(account);
@@ -538,22 +538,22 @@ class StellarWallet {
           const transaction = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
           let keypair = StellarSdk.Keypair.fromSecret(fromSecret);
           transaction.sign(keypair);
-          return transaction;
+          //return transaction;
         }).then(transaction => {
-          return this.server.submitTransaction(transaction);
+          this.server.submitTransaction(transaction);
         }).then(txResult => {
-          resolve(txResult.hash);
+          return txResult.hash;
         }).catch((err) => {
-          reject(this.getErrMsg(err));
+          throw new Error(this.getErrMsg(err));
         });
       } catch (err) {
-        reject(this.getErrMsg(err));
+        throw new Error(this.getErrMsg(err));
       }
-    });
+    //});
   }
 
   async queryOfferHistorys (address, optional = {}) {
-    return new Promise(async (resolve, reject)=>{
+   // return new Promise(async (resolve, reject)=>{
       try {
         let action = await this.server.transactions().forAccount(address).order(optional.order || 'desc');
         if (optional.limit) {
@@ -568,7 +568,7 @@ class StellarWallet {
           let tx = new StellarSdk.Transaction(record.envelope_xdr);
           result.push(tx.operations[0]);
         }
-        resolve(result);
+        return result;
 
         /*let action =  this.server.trades().forAccount(address).order(optional.order || 'desc');
         if (optional.limit) {
@@ -580,9 +580,9 @@ class StellarWallet {
         let page = await action.call();
         resolve(page.records);*/
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+   // });
   }
 
   /**

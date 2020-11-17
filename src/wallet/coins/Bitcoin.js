@@ -85,7 +85,7 @@ class BitcoinWallet{
     const w = wif.decode(fromSecret);
     const fromPair = bitcoin.ECPair.fromPrivateKey(w.privateKey, {network:NETWORK});
     let { address } = bitcoin.payments.p2pkh({ pubkey: fromPair.publicKey,network:NETWORK});
-    return new Promise(async (resolve, reject)=>{
+    //return new Promise(async (resolve, reject)=>{
       try {
         await axios.get(`${this.url}/unspent?active=${address}&cors=true`).then((response) => {
           if (response.status === 200) {
@@ -107,22 +107,19 @@ class BitcoinWallet{
             if (typeof response.data !== 'object') {
               bodyObj = JSON.parse(response.data);
             }
-            if (!bodyObj) reject(new Error('no utxos back or error'));
+            if (!bodyObj) throw new Error('no utxos back or error');
             let utxos = bodyObj.unspent_outputs;
             if (utxos.length <= 0) {
               console.error('no utxo');
-              reject(new Error('no utxo'));
-              return;
+              throw new Error('no utxo');
             }
             let { inputs, outputs, fee } = coinSelect(utxos, targets, feeRate);
             if (!fee) {
-              reject(new Error('fee too low'));
-              return;
+              throw new Error('fee too low');
             }
             if (!inputs || !outputs) {
               console.error('.inputs and .outputs are undefined because no solution was found');
-              reject(new Error('inputs and outputs are undefined because no solution was found'));
-              return;
+              throw new Error('inputs and outputs are undefined because no solution was found');
             }
             console.log('transaction stat:');
             const txb = new bitcoin.TransactionBuilder(NETWORK);
@@ -141,26 +138,26 @@ class BitcoinWallet{
             console.log('transaction end:');
             // 广播(广播成功之后返回transition submitted)
             if (func) {
-              func(this.url, txb.build().toHex(), resolve, reject);
+              func(this.url, txb.build().toHex());
             } else {
               pushtx.pushtx(txb.build().toHex()).then((ret) => {
-                resolve(ret);
+                return ret;
               }).catch(err => {
-                reject(err);
+                throw new Error(err);
               });
             }
           }
         }).catch(function (error) {
-          reject(error);
+          throw new Error(error);
         });
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+    //});
   }
 
   async getTransactions (address, option = {}) {
-    return new Promise(async (resolve, reject)=>{
+    //return new Promise(async (resolve, reject)=>{
       try {
         if (!option.limit) {
           option.limit = 50;
@@ -170,12 +167,12 @@ class BitcoinWallet{
         }
         let page = await axios.get(`${this.url}/multiaddr?active=${address}&offset=${option.offset}&n=${option.limit}&cors=true`);
         if (page) {
-          resolve(page.data);
+          return page.data;
         }
       } catch (err) {
-        reject(err);
+        throw new Error(err);
       }
-    });
+  //  });
   }
 
   isValidAddress (address) {

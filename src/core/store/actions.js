@@ -81,7 +81,7 @@ export const setActivated =  async ({commit, state}, {type, address}) => {
  * @param commit
  * @param adress
  */
-export const setBalances =  ({commit, state, dispatch}, params) => {
+export const setBalances = async ({commit, state, dispatch}, params) => {
   // console.info(params);
   let address, type;
   if (typeof params === 'string') {
@@ -91,7 +91,7 @@ export const setBalances =  ({commit, state, dispatch}, params) => {
     address = params.address;
     type = params.type;
   }
-  return new Promise(async (resolve, reject) => {
+  //return new Promise(async (resolve, reject) => {
     let assets = Vue.collecitons.asset.findByAddress(address);
     let assetCodes = assets.map(item => {
       return item.code;
@@ -110,12 +110,12 @@ export const setBalances =  ({commit, state, dispatch}, params) => {
       // if (!state.activatedMap[account.address]) {
       //   await dispatch('setActivated', account);
       // }
-      resolve();
+      //resolve();
     }).catch(err => {
-      console.log(err);
-      reject(err);
+      throw new Error(err);
+      //reject(err);
     });
-  });
+  //});
 };
 
 
