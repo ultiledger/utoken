@@ -28,19 +28,19 @@ class RippleWallet{
       this.server = new RippleAPI({
         server: url, maxFeeXRP: '0.05',timeout:16000
       });
-      // this.server.on('error', (errorCode, errorMessage) => {
-      //   //console.log(errorCode + ': ' + errorMessage);
-      // });
-      // this.server.on('connected', () => {
-      //   //console.log('RippleApi connected');
-      // });
-      // this.server.on('disconnected', (code) => {
-      //   if (code !== 1000) {
-      //     //console.log('Connection is closed due to error.');
-      //   } else {
-      //     //console.log('Connection is closed normally.');
-      //   }
-      // });
+      this.server.on('error', (errorCode, errorMessage) => {
+        throw new Error(errorCode + ': ' + errorMessage);
+      });
+      this.server.on('connected', () => {
+        //console.log('RippleApi connected');
+      });
+      this.server.on('disconnected', (code) => {
+        if (code !== 1000) {
+          throw new Error('Connection is closed due to error.');
+        } else {
+          throw new Error('Connection is closed normally.');
+        }
+      });
     }
   }
 
@@ -139,6 +139,9 @@ class RippleWallet{
   }
 
   async getAccountSettings(address) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
     //return new Promise(async (resolve) => {
       let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
       let settings = await this.server.getSettings(classicAddress);
@@ -147,6 +150,9 @@ class RippleWallet{
   }
 
   async isTrustAsset(address, assetCode, assetIssuer) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
     if (CoinType.XRP === assetCode && !assetIssuer) {
       return true;
     }
@@ -173,6 +179,9 @@ class RippleWallet{
   }
 
   async getTransactions (address, option = {}) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
    // return new Promise(async (resolve, reject)=>{
       try {
         let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
@@ -218,6 +227,9 @@ class RippleWallet{
   }
 
   async sendTransaction (fromSecret, to, amount, option = {}) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
     let currency = option.assetCode || CoinType.XRP;
@@ -275,6 +287,9 @@ class RippleWallet{
   }
 
   async sendCheck (fromSecret, to, amount, option = {}) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
     let currency = option.assetCode || CoinType.XRP;
@@ -310,6 +325,9 @@ class RippleWallet{
     });
   }
   async cancelCheck (check , address, fromSecret) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
    // return new Promise(async (resolve, reject) => {
       try {
         const checkCancellation = {checkID: check.id};
@@ -333,6 +351,9 @@ class RippleWallet{
   //  });
   }
   async checkCash (check , address, fromSecret) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
    // return new Promise(async (resolve, reject) => {
       try {
         const cash = {
@@ -365,6 +386,9 @@ class RippleWallet{
    // });
   }
   async queryChecks (address, optional = {}) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
    // return new Promise(async (resolve, reject)=>{
       try {
         let options = {
@@ -384,6 +408,9 @@ class RippleWallet{
    // });
   }
   async acctDel (fromSecret, to, option = {}) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
     const localInstructions = { maxFee: '5.0'};
@@ -428,6 +455,9 @@ class RippleWallet{
   }
  
   async changeTrust(fromSecret, code, issuer, limit) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
     const trustline = {
@@ -613,6 +643,9 @@ class RippleWallet{
    * @returns {Promise<any>}
    */
   async sendOffer(selling, buying, amount, price , address, fromSecret, direction) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
    // return new Promise(async (resolve, reject) => {
       try {
         let totalPrice = Number(new Big(amount).times(price).toString());
@@ -668,6 +701,9 @@ class RippleWallet{
    * @returns {Promise<any>}
    */
   async cancelOffer (offer , address, fromSecret) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
    // return new Promise(async (resolve, reject) => {
       try {
         const orderCancellation = {orderSequence: offer.id};
@@ -729,6 +765,9 @@ class RippleWallet{
    * @returns {Promise<void>}
    */
   async accountSettings (address, fromSecret, settings) {
+    if (!this.server.isConnected()) {
+      await this.server.connect();
+    }
     return new Promise((resolve, reject)=> {
       try {
         settings.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
