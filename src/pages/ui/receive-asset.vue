@@ -107,7 +107,7 @@
       },
       qrCodeText () {
         if (this.transferAmt && this.transferAmt !== '') {
-          console.info(`address=${this.address}&transferAmt=${this.transferAmt}`);
+          //console.info(`address=${this.address}&transferAmt=${this.transferAmt}`);
           return `address=${this.address}&transferAmt=${this.transferAmt}`;
         } else {
           return this.address;
@@ -161,7 +161,7 @@
                 window.sharesdk.share(window.ShareSDK.PlatformType.WechatSession,
                                       window.ShareSDK.ShareType.Text, shareInfo,
                                       (success) => {
-                                        console.log('分享成功：' + success);
+                                        this.$toast('分享成功：' + success);
                                       },
                                       (fail) => {
                                         if (fail.state != window.ShareSDK.ResponseState.Cancel) {
@@ -180,7 +180,7 @@
                 window.sharesdk.share(window.ShareSDK.PlatformType.QQFriend,
                                   window.ShareSDK.ShareType.Text, shareInfo,
                                   (success) => {
-                                    console.log('分享成功：' + success);
+                                    this.$toast('分享成功：' + success);
                                   },
                                   (fail) => {
                                     if (fail.state != window.ShareSDK.ResponseState.Cancel) {

@@ -14,7 +14,7 @@
         <span class="type-select__title">
           {{item.name}}
         </span>
-        <template #right-icon>
+        <template #right-icon v-if="isCheck">
           <van-checkbox :name="item.type" ref="checkboxes"/>         
         </template>
       </van-cell>
@@ -27,9 +27,9 @@
   export default {
     mixins: [accounts],
     props: {
-      value: String|Array,
+      value: Array,
       clickable: Boolean,
-      filterTypes: String|Array,
+      filterTypes: Array,
       isCheck: {
         type: Boolean,
         default: true

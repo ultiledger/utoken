@@ -194,7 +194,7 @@ export default {
           data: data,
           confirmations: data.confirmations
         };
-        console.log(tempHistory);
+        //console.log(tempHistory);
         this.$collecitons.tempHistory.insertHistory(tempHistory);
         return true;
       }

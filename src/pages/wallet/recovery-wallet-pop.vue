@@ -127,7 +127,7 @@
             this.$toast(this.$t('wallet.recoverFail'));
           }
         } catch (e) {
-          console.error(e);
+          //console.error(e);
           if (e.toString().indexOf('Invalid mnemonic') >= 0) {
             this.$toast(this.$t('wallet.invalidMnemonic'));
           } else if (e.toString().indexOf('Invalid derivation path') >= 0 ){

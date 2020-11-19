@@ -515,7 +515,7 @@ export default {
           this.onRefreshBalances();
         })
         .catch(err => {
-          console.info(err);
+          //console.info(err);
           let errMsg = this.getErrMsg(err);
           if (errMsg) {
             this.$toast(errMsg);
@@ -555,7 +555,7 @@ export default {
         .dispatch("setBalances", this.$store.state.account.address)
         .then(() => {})
         .catch(err => {
-          console.info(err);
+          throw new Error(err);
         });
     },
     close() {

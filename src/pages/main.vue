@@ -30,6 +30,7 @@ export default {
       } else if (this.direction === 'reverse') {
         return 'vux-pop-out';
       }
+      return '';
     }
   },
   created () {

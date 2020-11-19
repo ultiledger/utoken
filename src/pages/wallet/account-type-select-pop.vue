@@ -117,9 +117,10 @@
             }, 1000);
           }
         }catch (e) {
-          console.error(e);
+          //console.error(e);
           toast.clear();
           this.$toast(this.$t('wallet.createAcctFail'));
+          throw new Error(e);
         }
       },
       deleteAccounts (identityId) {

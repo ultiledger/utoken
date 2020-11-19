@@ -70,14 +70,15 @@
         // let base = {code: this.tradepair.baseCode, issuer: this.tradepair.baseIssuer};
         // let counter = {code: this.tradepair.counterCode, issuer: this.tradepair.counterIssuer};
         this.$wallet.queryOfferHistorys(this.$store.state.account.address).then((data) => {
-          console.info(data);
+          //console.info(data);
           data.forEach((item) => {
             this.historyOffers.push(this.processHistoryOffers(item));
           });
         }).catch((err) => {
-          console.info(err);
+          //console.info(err);
           this.$toast('网络请求失败');
           this.historyOffers = [];
+          throw new Error(err);
         });
       },
       processHistoryOffers (item) {

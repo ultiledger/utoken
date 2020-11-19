@@ -86,7 +86,7 @@
             this.nextLoading = false;
           }).catch(err => {
           this.nextLoading = false;
-          console.info(err);
+          throw new Error(err);
         });
       },
       setRegion () {
@@ -109,7 +109,7 @@
         this.tempHistory.forEach(item => {
           let timer = setInterval(async () => {
             const trxConfirmations = await this.$wallet.getConfirmations(item);
-            console.log('trxConfirmations:', trxConfirmations);
+            //console.log('trxConfirmations:', trxConfirmations);
             if (trxConfirmations === -1) {
               this.$collecitons.tempHistory.removeHistory({txHash: item.txHash});
               this.getRemoteHistory();

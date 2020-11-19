@@ -177,12 +177,12 @@
         this.$store.dispatch('setBalances', this.$store.state.account.address).then(() => {
           this.isLoading = false;
         }).catch(err => {
-          console.info(err);
           this.isLoading = false;
+          throw new Error(err);        
         });
         setTimeout(() => {                 
           this.isLoading = false;
-        }, 2000);
+        }, 4000);
       },
       removeStyle () {
         if (this.$refs['pullRefresh']) {

@@ -110,7 +110,7 @@
               this.nextLoading = false;
             }).catch(err => {
           this.nextLoading = false;
-          console.info(err);
+          throw new Error(err);
         });
       },
       shortType (type) {

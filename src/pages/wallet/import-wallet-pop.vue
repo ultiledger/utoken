@@ -135,7 +135,7 @@
             this.$toast(this.$t('assets.scanFailTip'));
           }
         }, (errorMsg) => {
-          console.error(errorMsg);
+          //console.error(errorMsg);
           this.$toast(errorMsg);
         });
       },
@@ -234,7 +234,7 @@
             if (e.toString().indexOf('Invalid mnemonic') >= 0) {
               this.$toast(this.$t('wallet.invalidMnemonicCodeTip'));
             }
-            console.error(e);
+            throw new Error(e);
           }
         } else if (this.tagSelect === '2') {
           if (!this.form.privateKey) {
@@ -250,7 +250,7 @@
             }, 1000);
           }catch (e) {
             this.$toast(this.$t('wallet.invalidPrivateKeyTip'));
-            console.error(e);
+            throw new Error(e);
           }
         }
       }

@@ -178,8 +178,8 @@
         asset.loading = true;
         this.disabled = true;
         window.canBack = false;
-        return this.$wallet.changeTrust(secret,  asset.code, asset.issuer, amount).then(ret => {
-          console.info(ret);
+        return this.$wallet.changeTrust(secret,  asset.code, asset.issuer, amount).then(() => {
+          //console.info(ret);
           asset.selected = !asset.selected;
           this.$store.dispatch('setBalances', this.curreAcctountAddress);
           if (!asset.selected) {
@@ -189,7 +189,7 @@
           this.disabled = false;
           window.canBack = true;
         }).catch(err => {
-          console.info(err);
+          //console.info(err);
           this.$toast(this.getErrMsg(err));
           asset.loading = false;
           this.disabled = false;

@@ -216,7 +216,7 @@
         if (this.form.memo) {
           let msg =  this.$wallet.isValidMemo(this.form.memoType, this.form.memo);
           if (msg) {
-            console.log(msg);
+            //console.log(msg);
             return this.memoErrMsg[this.form.memoType];
           } else {
             return '';
@@ -356,8 +356,8 @@
         }
 
         this.$wallet.sendTransaction(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.form.receiveAddress, this.form.amt, options)
-          .then(ret => {
-            console.info(ret);
+          .then(() => {
+            //console.info(ret);
             toast.message = this.$t('transaction.transactionBroadcastSuccess');
             setTimeout(() => {
               toast.clear();
@@ -365,7 +365,7 @@
             }, 2000);
           })
           .catch(err => {
-            console.error(err);
+            //console.error(err);
             this.$toast(this.getErrMsg(err));
             setTimeout(() => {
               toast.clear();

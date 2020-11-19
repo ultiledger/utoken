@@ -308,7 +308,7 @@
           }
           this.loading = false;
         }).catch(err => {
-          console.info(err);
+          //console.info(err);
           let errMsg = this.getErrMsg(err);
           if (errMsg) {
             this.$toast(errMsg);

@@ -37,11 +37,11 @@
 </template>
 <script>
   import backupsMemoringWords from './backups-memorizing-words-pop';
-  import topBlock from './components/top-block';
-  import contentBlock from './components/content-block';
+  //import topBlock from './components/top-block';
+  //import contentBlock from './components/content-block';
   import buttonBottom from './components/button-bottom';
   export default {
-    components: {backupsMemoringWords, topBlock, contentBlock, buttonBottom},
+    components: {backupsMemoringWords, buttonBottom},
     data () {
       return {
         showVpop: false,

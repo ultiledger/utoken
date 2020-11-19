@@ -255,22 +255,23 @@
             }, 1000);
           }
         }).catch(err => {
-          console.info(err);
-          let errMsg = this.getErrMsg(err);
-          if (errMsg) {
-            this.$toast(errMsg);
-          } else {
-            this.$toast(this.$t('trade.cancelFail'));
-          }
+          //console.info(err);
+          // let errMsg = this.getErrMsg(err);
+          // if (errMsg) {
+          //   this.$toast(errMsg);
+          // } else {
+          this.$toast(this.$t('trade.cancelFail'));
+          //}
           setTimeout(() => {
             toast.clear();
           }, 3000);
+          throw new Error(err);
         });
       },
-      getErrMsg (err) {
-        console.info(err);
-        return null;
-      },
+      // getErrMsg (err) {
+      //   console.info(err);
+      //   return null;
+      // },
       viewOfferHistory () {
         this.$refs.offerHistory.show(this.tradePair);
       }

@@ -272,7 +272,7 @@
 
         this.$wallet.sendTransaction(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.form.receiveAddress, this.form.amt, options)
           .then(ret => {
-            console.info(ret);
+            //console.info(ret);
             this.setTempHistory(ret, this.form.receiveAddress, this.form.amt, options, () => {
               toast.message = this.$t('transaction.transactionBroadcastSuccess');
               setTimeout(() => {
@@ -312,7 +312,7 @@
             // });
           })
           .catch(err => {
-            console.info(err);
+            //console.info(err);
             this.$toast(this.getErrMsg(err));
             setTimeout(() => {
               toast.clear();
@@ -325,7 +325,7 @@
         const done = async () => {
           let tx = await this.$wallet.getTransaction(txHash);
           count++;
-          console.info(`tx(${count}):`, tx);
+          //console.info(`tx(${count}):`, tx);
           if (!tx) {
             if (count === 20) {
               callback();

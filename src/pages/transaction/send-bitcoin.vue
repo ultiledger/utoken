@@ -306,8 +306,8 @@
         };
 
         this.$wallet.sendTransaction(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.form.receiveAddress,options, this.sendTransaction)
-          .then(ret => {
-            console.info(ret);
+          .then(() => {
+            //console.info(ret);
             toast.message = this.$t('transaction.transactionBroadcastSuccess');
             setTimeout(() => {
               toast.clear();
@@ -315,11 +315,11 @@
             }, 2000);
           })
           .catch(err => {
-            console.error(err);
             this.$toast(this.getErrMsg(err));
             setTimeout(() => {
               toast.clear();
             }, 4000);
+            throw new Error(err);
           });
       }
     }

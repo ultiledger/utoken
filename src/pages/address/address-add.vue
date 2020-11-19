@@ -150,6 +150,7 @@
         } else if (this.isRipple) {
           return this.$t('transaction.inputTagPlaceholder');
         }
+        return '';
       },
       needMemoOrTagTip () {
         if (this.isStellar) {
@@ -157,6 +158,7 @@
         } else if (this.isRipple) {
           return this.$t('transaction.xrpExchangeAddress');
         }
+        return '';
       },
       isValidMemo () {
         if (this.form.labelValue && this.isStellar) {

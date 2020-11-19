@@ -1,7 +1,11 @@
 <template>
   <div class="asset-item">
     <div class="top-wrapper">
-      <div class="asset-top-card" @click="topCardClick" :class="`${data.type}-bg`">
+      <div
+        class="asset-top-card"
+        @click="topCardClick"
+        :class="`${data.type}-bg`"
+      >
         <div class="bg">
           <img src="static/img/card-bg.png" />
         </div>
@@ -16,15 +20,25 @@
               height="25"
               style="vertical-align: middle"
             />
-            <span style="vertical-align: middle">&nbsp;&nbsp;{{data.name}}</span>
+            <span style="vertical-align: middle"
+              >&nbsp;&nbsp;{{ data.name }}</span
+            >
           </div>
-         <div class="content" :class="setStatAmtClass">
+          <div class="content" :class="setStatAmtClass">
             <span class="normal-font">&nbsp;&#8776;&nbsp;</span>
-            <pl-privacy>{{statAmt | currency('', '4') | cutTail}}&nbsp;</pl-privacy>
-            <span class="small-font">&nbsp;{{$store.state.setting.currencyUnit}}</span>
+            <pl-privacy
+              >{{ statAmt | currency("", "4") | cutTail }}&nbsp;</pl-privacy
+            >
+            <span class="small-font"
+              >&nbsp;{{ $store.state.setting.currencyUnit }}</span
+            >
           </div>
           <div class="bottom">
-            <pl-wallet-addr class="small-font" :complete="false" :address="data.address"></pl-wallet-addr>
+            <pl-wallet-addr
+              class="small-font"
+              :complete="false"
+              :address="data.address"
+            ></pl-wallet-addr>
             <span class="pull-right">
               <i class="ultfont ult-ellipsis"></i>
             </span>
@@ -36,10 +50,10 @@
       :offsetTop="214"
       :offsetBottom="51"
       heightType="minHeight"
-      style="overflow-y: hidden;"
+      style="overflow-y: hidden"
     >
       <div class="text-center" v-if="loading">
-        <van-loading style="margin: 10px auto;" />
+        <van-loading style="margin: 10px auto" />
       </div>
       <div v-else>
         <account-activated
@@ -49,10 +63,15 @@
           @transitionActivated="showQRcode(data.type)"
         ></account-activated>
         <div v-else>
-          <div class="asset-bar" v-if="this.balances && this.balances.length > 0">
+          <div
+            class="asset-bar"
+            v-if="this.balances && this.balances.length > 0"
+          >
             <div class="big-font" style="font-weight: bold">
-              <span style="vertical-align: middle;">{{$t('assets.assets')}}</span>
-              <span style="vertical-align: middle;">
+              <span style="vertical-align: middle">{{
+                $t("assets.assets")
+              }}</span>
+              <span style="vertical-align: middle">
                 &nbsp;
                 <van-icon
                   v-if="!$store.state.setting.privacyMode"
@@ -64,7 +83,7 @@
             </div>
             <span
               class="add-btn"
-              style="right: 60px;background-color: #00c2c2"
+              style="right: 60px; background-color: #00c2c2"
               @click="toTrade"
               v-if="showTradeBtn"
             >
@@ -75,14 +94,18 @@
             </span>
           </div>
           <div class="asset-list">
-            <div
-              class="asset-list-item item-block"
-              v-for="(item, key) in assets"
-              :key="key"
-              @click="assetClick(item)"
-            >
-              <div class="content">
-                <table style="width: 100%;">
+            <van-swipe-cell v-for="(item, key) in assets" :key="key">
+              <template #left>
+                <van-button
+                  square
+                  :text="$t('common.detail')"
+                  type="info"
+                  class="swipe-button"
+                  @click="assetClick(item)"
+                />
+              </template>
+              <van-cell class="content">
+                <table style="width: 100%">
                   <tr>
                     <td width="35">
                       <span class="img-icon">
@@ -99,9 +122,13 @@
                       </span>
                     </td>
                     <td width="90">
-                      <div style="vertical-align: middle;" class="big-font">{{item.code}}</div>
+                      <div style="vertical-align: middle" class="big-font">
+                        {{ item.code }}
+                      </div>
                       <span v-if="item.name" class="text-main">
-                        <span v-if="item.name !== 'unknown'">{{item.name}}</span>
+                        <span v-if="item.name !== 'unknown'">{{
+                          item.name
+                        }}</span>
                         <span v-else>
                           <pl-wallet-addr
                             class="x-small-font"
@@ -116,34 +143,74 @@
                     <td class="text-right">
                       <div class="big-font">
                         <!-- item 返回0.0000000001 -->
-                        <pl-privacy :switchable="false">{{item.value | currency('', '8') | cutTail}}</pl-privacy>
+                        <pl-privacy :switchable="false">{{
+                          item.value | currency("", "8") | cutTail
+                        }}</pl-privacy>
                       </div>
                       <div
                         class="text-main small-font"
                         v-if="isShowMarket(item.value, item.code, item.issuer)"
                       >
-                        <div v-if="item.issuer || item.code === 'ETH' || item.code === 'BTC'">
+                        <div
+                          v-if="
+                            item.issuer ||
+                            item.code === 'ETH' ||
+                            item.code === 'BTC'
+                          "
+                        >
                           &#8776;&nbsp;
                           <pl-privacy
                             :suffix="$store.state.setting.currencyUnit"
                             :switchable="false"
-                          >{{item.value | market(item.code, item.issuer)}}</pl-privacy>
+                            >{{
+                              item.value | market(item.code, item.issuer)
+                            }}</pl-privacy
+                          >
                         </div>
                       </div>
                       <div
-                        v-if="(item.code === 'XLM' && !item.issuer) || (item.code === 'XRP' && !item.issuer)"
+                        v-if="
+                          (item.code === 'XLM' && !item.issuer) ||
+                          (item.code === 'XRP' && !item.issuer)
+                        "
                       >
-                        {{$t('assets.frozenNative')}}
+                        {{ $t("assets.frozenNative") }}
                         <pl-privacy
                           :suffix="$store.state.setting.currencyUnit"
                           :switchable="false"
-                        >{{item.frozenNative}} {{item.code}}</pl-privacy>
+                          >{{ item.frozenNative }} {{ item.code }}</pl-privacy
+                        >
                       </div>
                     </td>
                   </tr>
                 </table>
-              </div>
-            </div>
+              </van-cell>
+              <template #right>
+                <van-button
+                  square
+                  type="info"
+                  :text="$t('common.check')"
+                  class="swipe-button"
+                  v-if="isRipple"
+                  @click="check(item)"
+                />
+                <van-button
+                  square
+                  type="info"
+                  :text="$t('common.exchange')"
+                  class="swipe-button"
+                  v-if="isStellar"
+                  @click="exchange(item)"
+                />
+                <van-button
+                  square
+                  type="primary"
+                  :text="$t('common.transferAccounts')"
+                  class="swipe-button"
+                  @click="transfer(item)"
+                />
+              </template>
+            </van-swipe-cell>
           </div>
         </div>
       </div>
@@ -165,16 +232,16 @@ export default {
       type: Object,
       default() {
         return {};
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      loading: false
+      loading: false,
     };
   },
   components: {
-    accountActivated
+    accountActivated,
   },
   created() {
     //console.log(this.data);
@@ -248,7 +315,7 @@ export default {
       let result = 0;
       if (assets && assets.length > 0) {
         let markets = this.$store.state.markets;
-        assets.forEach(item => {
+        assets.forEach((item) => {
           let key = item.issuer ? `${item.code}-${item.issuer}` : item.code;
           let market = markets[key];
           if (market && market.marketPrice) {
@@ -271,7 +338,21 @@ export default {
       } else {
         return "x-x-large-font";
       }
-    }
+    },
+    isStellar() {
+      // 是否是恒星账户
+      if (this.$store.state.account.type === AccountType.stellar) {
+        return true;
+      }
+      return false;
+    },
+    isRipple() {
+      // 是否是瑞波账户
+      if (this.$store.state.account.type === AccountType.ripple) {
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     isShowMarket(value, assetCode, assetIssuer) {
@@ -286,7 +367,8 @@ export default {
       }
       let params = { ...this.data, setBalance: false };
       await this.$store.dispatch("setAccount", params);
-      this.$store.dispatch("setBalances", this.data)
+      this.$store
+        .dispatch("setBalances", this.data)
         .then(() => {
           this.loading = false;
           this.$emit("setSwipeHeight");
@@ -295,14 +377,13 @@ export default {
           this.loading = false;
           this.$emit("setSwipeHeight");
         });
-         
-      if(this.data.type === AccountType.ripple){
-        setTimeout(()=>{
-         this.loading = false;
-         this.$emit("setSwipeHeight");
-        },2000);
-     
-       }
+
+      if (this.data.type === AccountType.ripple) {
+        setTimeout(() => {
+          this.loading = false;
+          this.$emit("setSwipeHeight");
+        }, 2000);
+      }
       // this.$wallet.getInstance().getTrustlines('rDDJqnFgTNnR4c4u8EAAskpet4LUYUZm4A').then(ret => {
       //   console.info(ret);
       // });
@@ -330,14 +411,26 @@ export default {
         this.$dialog
           .confirm({
             title: this.$t("common.tip"),
-            message: this.$t("trade.tradeTip")
+            message: this.$t("trade.tradeTip"),
           })
           .then(() => {
             this.$emit("toTrade");
           });
       }
-    }
-  }
+    },
+    onRefresh() {
+      this.$emit("onRefresh");
+    },
+    transfer(asset) {
+      this.$emit("transfer", asset);
+    },
+    check(asset) {
+      this.$emit("check", asset);
+    },
+    exchange(asset) {
+      this.$emit("exchange", asset);
+    },
+  },
 };
 </script>
 
@@ -444,5 +537,8 @@ export default {
     }
     margin-bottom: 20px;
   }
+}
+.swipe-button {
+  height: 100%;
 }
 </style>

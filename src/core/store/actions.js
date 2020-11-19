@@ -13,8 +13,14 @@ import Vue from 'vue';
  * @param dispatch
  * @param account
  */
-export const setAccount = async ({commit, state, dispatch}, account) => {
-  let tempAccount = {...state.account};
+export const setAccount = async ({
+  commit,
+  state,
+  dispatch
+}, account) => {
+  let tempAccount = {
+    ...state.account
+  };
   let setBalance = account.setBalance;
   delete account.setBalance;
   if (!tempAccount.type || tempAccount.type !== account.type) {
@@ -41,14 +47,26 @@ export const setAccount = async ({commit, state, dispatch}, account) => {
  * @param type
  * @param url
  */
-export const setNetwork = async ({commit, state, dispatch}, {type, url, accounts}) => {
-  let network = {...state.setting.network};
-  if (url === network[type] ) {
+export const setNetwork = async ({
+  commit,
+  state,
+  dispatch
+}, {
+  type,
+  url,
+  accounts
+}) => {
+  let network = {
+    ...state.setting.network
+  };
+  if (url === network[type]) {
     return;
   }
   network[type] = url;
   commit(types.SET_NETWORK, network);
-  Vue.collecitons.history.removeHistory({acctType: type});
+  Vue.collecitons.history.removeHistory({
+    acctType: type
+  });
   // if (type === state.account.type) {
   //   coins[type].wallet.destroy();
   //   coins[type].wallet.setServer(url);
@@ -58,7 +76,10 @@ export const setNetwork = async ({commit, state, dispatch}, {type, url, accounts
   coins[type].wallet.destroy();
   coins[type].wallet.setServer(url);
   accounts.forEach((item) => {
-    dispatch('setBalances', {address:item.address,type:type});
+    dispatch('setBalances', {
+      address: item.address,
+      type: type
+    });
   });
 };
 
@@ -67,7 +88,13 @@ export const setNetwork = async ({commit, state, dispatch}, {type, url, accounts
  * @param commit
  * @param adress
  */
-export const setActivated =  async ({commit, state}, {type, address}) => {
+export const setActivated = async ({
+  commit,
+  state
+}, {
+  type,
+  address
+}) => {
   let activated = await coins[type].wallet.isActivated(address);
   let activatedMap = {};
   activatedMap = JSON.parse(JSON.stringify(state.activatedMap));
@@ -81,7 +108,11 @@ export const setActivated =  async ({commit, state}, {type, address}) => {
  * @param commit
  * @param adress
  */
-export const setBalances = async ({commit, state, dispatch}, params) => {
+export const setBalances = async ({
+  commit,
+  state,
+  dispatch
+}, params) => {
   // console.info(params);
   let address, type;
   if (typeof params === 'string') {
@@ -92,29 +123,31 @@ export const setBalances = async ({commit, state, dispatch}, params) => {
     type = params.type;
   }
   //return new Promise(async (resolve, reject) => {
-    let assets = Vue.collecitons.asset.findByAddress(address);
-    let assetCodes = assets.map(item => {
-      return item.code;
-    });
-    let account = {...state.account};
+  let assets = Vue.collecitons.asset.findByAddress(address);
+  let assetCodes = assets.map(item => {
+    return item.code;
+  });
+  let account = {
+    ...state.account
+  };
+  // if (!state.activatedMap[account.address]) {
+  await dispatch('setActivated', account);
+  // }
+  coins[type].wallet.getBalances(address, assetCodes).then(ret => {
+    let balances = {};
+    if (state.balances) {
+      balances = JSON.parse(JSON.stringify(state.balances));
+    }
+    balances[address] = ret;
+    commit(types.SET_BALANCES, balances);
     // if (!state.activatedMap[account.address]) {
-      await dispatch('setActivated', account);
+    //   await dispatch('setActivated', account);
     // }
-    coins[type].wallet.getBalances(address, assetCodes).then( ret => {
-      let balances = {};
-      if (state.balances) {
-        balances = JSON.parse(JSON.stringify(state.balances));
-      }
-      balances[address] = ret;
-      commit(types.SET_BALANCES, balances);
-      // if (!state.activatedMap[account.address]) {
-      //   await dispatch('setActivated', account);
-      // }
-      //resolve();
-    }).catch(err => {
-      throw new Error(err);
-      //reject(err);
-    });
+    //resolve();
+  }).catch(err => {
+    throw new Error(err);
+    //reject(err);
+  });
   //});
 };
 
@@ -125,7 +158,9 @@ export const setBalances = async ({commit, state, dispatch}, params) => {
  * @param commit
  * @param adress
  */
-export const setSetting = ({commit}, setting) => {
+export const setSetting = ({
+  commit
+}, setting) => {
   let tempSetting = Vue.collecitons.asset.findByAddress();
   if (tempSetting) {
     Object.keys(setting).forEach(key => {
@@ -142,7 +177,9 @@ export const setSetting = ({commit}, setting) => {
  * @param commit
  * @param gesturePwd
  */
-export const setGesturePwd = ({commit}, gesturePwd) => {
+export const setGesturePwd = ({
+  commit
+}, gesturePwd) => {
   commit(types.SET_GESTUREPWD, gesturePwd);
 };
 
@@ -151,7 +188,11 @@ export const setGesturePwd = ({commit}, gesturePwd) => {
  * @param commit
  * @param adress
  */
-export const initData = ({commit, state, dispatch}) => {
+export const initData = ({
+  commit,
+  state,
+  dispatch
+}) => {
   let setting = Vue.collecitons.setting.findSetting();
   if (setting && setting.defaultAddress) {
     let updateSetting = JSON.parse(JSON.stringify(setting));
@@ -162,8 +203,10 @@ export const initData = ({commit, state, dispatch}) => {
     doInitScript(updateSetting, dispatch);
     let account = Vue.collecitons.account.findByAddress(setting.defaultAddress);
     dispatch('setAccount', account);
-  } else if (!setting){
-    setting = {...state.setting};
+  } else if (!setting) {
+    setting = {
+      ...state.setting
+    };
     Vue.collecitons.setting.insertSetting(JSON.parse(JSON.stringify(setting)));
   }
   tokenConfigHepler.settingConfig();
@@ -174,11 +217,13 @@ export const initData = ({commit, state, dispatch}) => {
 
 
 const doInitScript = (setting, dispatch) => {
-  Vue.collecitons.history.removeHistory({acctType: 'stellar'});
+  Vue.collecitons.history.removeHistory({
+    acctType: 'stellar'
+  });
   if (!window.cordova || !window.cordova.getAppVersion) {
     return;
   }
-  window.cordova.getAppVersion.getVersionNumber().then( (version) => {
+  window.cordova.getAppVersion.getVersionNumber().then((version) => {
     //console.info('setting.appVersion', setting.appVersion);
     //console.info('appVersion', version);
     if (version !== setting.appVersion) {
@@ -198,7 +243,10 @@ const doInitScript = (setting, dispatch) => {
  * @param commit
  * @param market
  */
-export const setMarket = ({commit, state}, market) => {
+export const setMarket = ({
+  commit,
+  state
+}, market) => {
   let markets = JSON.parse(JSON.stringify(state.markets));
   Object.keys(market).forEach(key => {
     markets[key] = market[key];
@@ -212,7 +260,10 @@ export const setMarket = ({commit, state}, market) => {
  * @param commit
  * @param market
  */
-export const setPasswordMap = ({commit, state}, passwordMapObj) => {
+export const setPasswordMap = ({
+  commit,
+  state
+}, passwordMapObj) => {
   let passwordMap = JSON.parse(JSON.stringify(state.passwordMap));
   if (!passwordMapObj) {
     //console.info('clear password');
@@ -230,7 +281,9 @@ export const setPasswordMap = ({commit, state}, passwordMapObj) => {
  * @param commit
  * @param currencyUnit
  */
-export const setCurrencyUnit = ({commit}, currencyUnit) => {
+export const setCurrencyUnit = ({
+  commit
+}, currencyUnit) => {
   commit(types.SET_CURRENCY_UNIT, currencyUnit);
   getMarket();
 };
@@ -240,7 +293,9 @@ export const setCurrencyUnit = ({commit}, currencyUnit) => {
  * @param commit
  * @param value
  */
-export const setLanguage = ({commit}, value) => {
+export const setLanguage = ({
+  commit
+}, value) => {
   commit(types.SET_LANGUAGE, value);
 };
 /**
@@ -248,7 +303,9 @@ export const setLanguage = ({commit}, value) => {
  * @param commit
  * @param value
  */
-export const setDefaultAddress = ({commit}, value) => {
+export const setDefaultAddress = ({
+  commit
+}, value) => {
   commit(types.SET_DEFAULT_ADDRESS, value);
 };
 
@@ -257,7 +314,9 @@ export const setDefaultAddress = ({commit}, value) => {
  * @param commit
  * @param value
  */
-export const setTokenConfig = ({commit}, value) => {
+export const setTokenConfig = ({
+  commit
+}, value) => {
   Vue.collecitons.setting.updateSetting(setting => {
     return setting.tokenConfig = value;
   });
@@ -269,7 +328,9 @@ export const setTokenConfig = ({commit}, value) => {
  * @param commit
  * @param value
  */
-export const setPrivacyMode = ({commit}, value) => {
+export const setPrivacyMode = ({
+  commit
+}, value) => {
   Vue.collecitons.setting.updateSetting(setting => {
     return setting.privacyMode = value;
   });
@@ -281,7 +342,9 @@ export const setPrivacyMode = ({commit}, value) => {
  * @param commit
  * @param value
  */
-export const setAppVersion = ({commit}, value) => {
+export const setAppVersion = ({
+  commit
+}, value) => {
   Vue.collecitons.setting.updateSetting(setting => {
     return setting.appVersion = value;
   });
@@ -293,6 +356,8 @@ export const setAppVersion = ({commit}, value) => {
  * @param commit
  * @param value
  */
-export const setMyTokenApi = ({commit}, value) => {
+export const setMyTokenApi = ({
+  commit
+}, value) => {
   commit(types.SET_MYTOKEN_API, value);
 };

@@ -103,9 +103,9 @@
           }
 
         }).catch((err) => {
-          console.info(err);
           this.$toast(this.$t('trade.networkError'));
           this.lastBooks = [];
+          throw new Error(err);
         });
       },
       processStellarLastBooks (item) {

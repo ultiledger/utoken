@@ -18,7 +18,7 @@
   export default {
     props: {
       title: String,
-      iconName: '',
+      iconName: String,
       lineHeight: String,
       subTip: String
     }

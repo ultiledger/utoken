@@ -1,17 +1,21 @@
 <template>
-  <div style="width: 100%;" class="assets-container">
+  <div style="width: 100%" class="assets-container">
     <van-nav-bar>
       <span slot="left" @click="toScan">
         <i class="ultfont ult-scan"></i>
       </span>
-      <span slot="title">{{$t('assets.assets')}}</span>
+      <span slot="title">{{ $t("assets.assets") }}</span>
       <span slot="right" @click="viewAccounts">
         <i class="ultfont ult-menu"></i>
       </span>
     </van-nav-bar>
 
     <pl-content-block :offsetTop="46" :offsetBottom="51" ref="contentBlock">
-      <van-pull-refresh v-model="isLoading" @refresh="onRefresh" style="min-height: 100%;">
+      <van-pull-refresh
+        v-model="isLoading"
+        @refresh="onRefresh"
+        style="min-height: 100%"
+      >
         <van-swipe
           refs="swipe"
           :duration="200"
@@ -21,17 +25,18 @@
           @change="swipeChange"
           ref="swipe"
           :initial-swipe="index"
+          :touchable="false"
         >
           <van-swipe-item
             v-for="(item, key) in wallets"
             :key="key"
             :class="{
-          'asset-active': index === key,
-          'asset-active-prev': index === key + 1,
-          'asset-active-next': index === key - 1,
-          'asset-active-prev-1': index === key + 2,
-           'asset-active-next-1': index === key - 2
-          }"
+              'asset-active': index === key,
+              'asset-active-prev': index === key + 1,
+              'asset-active-next': index === key - 1,
+              'asset-active-prev-1': index === key + 2,
+              'asset-active-next-1': index === key - 2,
+            }"
           >
             <!-- 传递wallets -->
             <asset-item
@@ -43,6 +48,9 @@
               @showQRcode="showQRcode"
               @addAssets="addAssets"
               @toTrade="toTrade"
+              @transfer="transfer"
+              @check="check"
+              @exchange="exchange"
             ></asset-item>
           </van-swipe-item>
         </van-swipe>
@@ -55,13 +63,18 @@
       @updateAcct="setWallets()"
     ></view-accounts>
     <assets-add ref="assetsAdd"></assets-add>
-    <receive-asset ref="receiveAsset" @scanQrcode="toScan" :short-code="shortCode"></receive-asset>
+    <receive-asset
+      ref="receiveAsset"
+      @scanQrcode="toScan"
+      :short-code="shortCode"
+    ></receive-asset>
     <acct-detail ref="acctDetail" @afterDelAcct="setWallets"></acct-detail>
     <asset-detail ref="assetDetail"></asset-detail>
     <send-transaction ref="sendTransaction"></send-transaction>
     <address-add ref="addressAdd"></address-add>
     <trade ref="trade"></trade>
-
+    <stellar-exchange ref="stellarExchange"></stellar-exchange>
+    <ripple-checks ref="rippleChecks"></ripple-checks>
     <van-action-sheet
       v-model="showActions"
       :cancel-text="$t('common.cancelText')"
@@ -83,6 +96,8 @@ import addressAdd from "../address/address-add.vue";
 import trade from "../trade/trade";
 import QRCodeScanner from "core/utils/QRCodeScanner.js";
 import coins from "src/wallet/coins";
+import stellarExchange from "../exchange/stellar-exchange";
+import rippleChecks from "../check/checks";
 export default {
   name: "assets",
   data() {
@@ -93,7 +108,7 @@ export default {
       walletIndexMap: {},
       showActions: false,
       shortCode: "",
-      swipeHeight: 0
+      swipeHeight: 0,
     };
   },
   components: {
@@ -105,21 +120,23 @@ export default {
     assetDetail,
     sendTransaction,
     addressAdd,
-    trade
+    trade,
+    rippleChecks,
+    stellarExchange,
   },
   computed: {
     actions() {
       return [
         {
           name: this.$t("common.transferAccounts"),
-          action: "transfer"
+          action: "transfer",
         },
         {
           name: this.$t("common.addContacts"),
-          action: "addContract"
-        }
+          action: "addContract",
+        },
       ];
-    }
+    },
   },
   watch: {
     index() {
@@ -133,7 +150,7 @@ export default {
 
         this.$refs["assetItem"][this.index].setActive();
       }
-    }
+    },
   },
 
   methods: {
@@ -182,19 +199,19 @@ export default {
         .then(() => {
           this.isLoading = false;
         })
-        .catch(err => {
-          console.info(err);
+        .catch((err) => {
           this.isLoading = false;
+          this.$toast(err);          
         });
       setTimeout(() => {
         this.isLoading = false;
-      }, 3000);
+      }, 4000);
     },
     onSelect(item) {
       // 点击选项时默认不会关闭菜单，可以手动关闭
       this.showActions = false;
       let asset = {
-        code: this.shortType(this.$store.state.account.type)
+        code: this.shortType(this.$store.state.account.type),
       };
       switch (item.action) {
         case "transfer":
@@ -213,7 +230,7 @@ export default {
     },
     toScan() {
       QRCodeScanner.scan(this).then(
-        res => {
+        (res) => {
           if (res && res.address && res.address !== "") {
             this.address = res.address;
             if (res.transferAmt) {
@@ -224,8 +241,8 @@ export default {
             this.$toast(this.$t("assets.scanFailTip"));
           }
         },
-        errorMsg => {
-          console.log(errorMsg);
+        (errorMsg) => {
+          //throw new Error(err);(errorMsg);
           this.$toast(errorMsg);
         }
       );
@@ -247,7 +264,16 @@ export default {
     toTrade() {
       // 交易
       this.$refs.trade.show();
-    }
+    },
+    transfer(asset) {
+      this.$refs.sendTransaction.show(asset);
+    },
+    check(asset) {
+      this.$refs.rippleChecks.show(asset);
+    },
+    exchange(asset) {
+      this.$refs.stellarExchange.show(asset);
+    },
   },
   activated() {
     let params = this.$route.params;
@@ -274,7 +300,7 @@ export default {
     // this.wallets = [];
 
     //console.log(this.index);
-  }
+  },
 };
 </script>
 <style lang="scss" rel="stylesheet/scss">

@@ -41,6 +41,7 @@ class RippleWallet{
           throw new Error('Connection is closed normally.');
         }
       });
+      this.server.connect().catch(err => {throw new Error(err);});
     }
   }
 

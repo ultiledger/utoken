@@ -34,7 +34,7 @@
             window.sharesdk.share(platformType,
                                   shareType, shareInfo,
                                   (success) => {
-                                    console.log('分享成功：' + success);
+                                    this.$toast('分享成功：' + success);
                                   },
                                   (fail) => {
                                     if (fail.state != window.ShareSDK.ResponseState.Cancel) {
