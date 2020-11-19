@@ -255,14 +255,14 @@
         this.$wallet.acctDel(cryptor.decryptAES(this.$store.state.account.secret, this.form.password), this.form.receiveAddress, options)
           .then(ret => {
             if (ret && ret.resultCode === 'tesSUCCESS') {
-              console.info(ret);
+              //console.info(ret);
               toast.message = this.$t('transaction.transactionBroadcastSuccess');
               setTimeout(() => {
                 toast.clear();
                 this.close();
               }, 3000);
             } else {
-              console.error(ret);
+              //console.error(ret);
               this.$toast(ret.resultMessage);
               setTimeout(() => {
                 toast.clear();
@@ -270,11 +270,12 @@
             }
           })
           .catch(err => {
-            console.error(err);
+            //console.error(err);
             toast.message = this.$t('common.transactionFail');
             setTimeout(() => {
               toast.clear();
             }, 3500);
+            throw new Error(err);
           });
       }
     }

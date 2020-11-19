@@ -177,8 +177,7 @@
         this.disabled = true;
         window.canBack = false;
         return this.$wallet.changeTrust(secret,  asset.code, asset.issuer, amount).then(ret => {
-          console.info(ret);
-
+          //console.info(ret);
           if (ret && ret.resultCode === 'tesSUCCESS') {
             this.checkedTrustState(asset.selected, asset).then(() => {
               asset.selected = !asset.selected;
@@ -194,11 +193,12 @@
             window.canBack = true;
           }
         }).catch(err => {
-          console.info(err);
+          //console.info(err);
           this.$toast(this.$t('assets.changeTrustFail'));
           asset.loading = false;
           this.disabled = false;
           window.canBack = true;
+          throw new Error(err);
         });
       },
       onRefresh () {

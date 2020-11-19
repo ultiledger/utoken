@@ -101,7 +101,7 @@
         this.form.defaultRipple = false;
         this.form.requireDestinationTag = false;
         this.$wallet.getAccountSettings(this.currentAccount.address).then(accountSetting => {
-          console.info(accountSetting);
+          //console.info(accountSetting);
           if (Object.keys(accountSetting).length > 0) {
             if (accountSetting.defaultRipple) {
               this.form.defaultRipple = accountSetting.defaultRipple;
