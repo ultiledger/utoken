@@ -201,7 +201,7 @@ export default {
         })
         .catch((err) => {
           this.isLoading = false;
-          this.$toast(err);          
+          throw new Error(err);          
         });
       setTimeout(() => {
         this.isLoading = false;

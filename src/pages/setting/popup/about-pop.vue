@@ -70,7 +70,7 @@
         this.versionCode = newVersionInfo.tag_name.toString();
       }).catch((err) => {
         if (err) {
-          this.$toast(err);
+          throw new Error(err);
         }
       });
       if (!(window.cordova && window.cordova.getAppVersion)) {

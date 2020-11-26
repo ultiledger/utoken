@@ -84,11 +84,11 @@ export default {
         }
       }, (errorMsg) => {
         if (errorMsg) {
-          this.$toast(errorMsg);
+          throw new Error(errorMsg);
         }
       }).catch((err) => {
         if (err) {
-          this.$toast(err);
+          throw new Error(err);
         }
       });
     }
