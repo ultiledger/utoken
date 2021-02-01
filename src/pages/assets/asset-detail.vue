@@ -30,7 +30,7 @@
         <pl-content-block :offsetTop="46" :offsetBottom="45" heightType="minHeight" style="overflow-y: hidden;">
           <div class="asset-blc text-center item-block">
             <img v-if="asset.logo" :src="asset.logo" style="width:36px;height: 36px;">
-            <img v-else-if="asset.code === 'XRP'" :src="`static/img/${asset.code}-1@3x.png`" style="width:36px;height: 36px;"/>
+            <!-- <img v-else-if="asset.code === 'XRP'" :src="`static/img/${asset.code}-1@3x.png`" style="width:36px;height: 36px;"/> -->
             <img v-else :src="`static/img/${asset.code}@3x.png`" style="width:36px;height: 36px;" onerror="this.src='static/img/unknown.png'"/>
             <p class="x-x-large-font text-main" style="line-height: 45px;">{{balance | currency('', '8') | cutTail}}</p>
             <p class="small-font text-primary" style="line-height: 20px;" v-if="isShowMarket(balance, asset.code, asset.issuer)">≈&nbsp;{{balance | market(asset.code, asset.issuer)}}</p>

@@ -10,11 +10,11 @@
           v-for="(item, index) in accounts"
         >
           <span class="content-left__icon type-select__icon">
-            <img
+            <!-- <img
               v-if="item.code === 'XRP'"
               :src="`static/img/${item.code}-1@3x.png`"
-            />
-            <img v-else :src="`static/img/${item.code}@3x.png`" />
+            /> -->
+            <img :src="`static/img/${item.code}@3x.png`" />
           </span>
           <span class="type-select__title">
             {{ item.name }}

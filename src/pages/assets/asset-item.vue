@@ -110,10 +110,10 @@
                     <td width="35">
                       <span class="img-icon">
                         <img v-if="item.logo" :src="item.logo" />
-                        <img
+                        <!-- <img
                           v-else-if="item.code === 'XRP'"
                           :src="`static/img/${item.code}-1@3x.png`"
-                        />
+                        /> -->
                         <img
                           v-else
                           :src="`static/img/${item.code}@3x.png`"

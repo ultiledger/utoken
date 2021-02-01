@@ -24,11 +24,11 @@
             :key="index"
             @click="toSelect(item)">
                  <span slot="icon" class="content-left__icon">
-                   <img
+                   <!-- <img
                           v-if="item.coinType === 'XRP'"
                           :src="`static/img/${item.coinType}-1@3x.png`"
-                        />
-                    <img v-else :src="`static/img/${item.coinType}@3x.png`" >
+                        /> -->
+                    <img :src="`static/img/${item.coinType}@3x.png`" >
                    <!--<img :src="dprImg(`${item.coinType}.png`)" class="img-icon">-->
                    <!--<img :src="`static/img/tokens/${item.coinType}.png`" style="vertical-align: middle" width="20px" height="20px">-->
                  </span>
