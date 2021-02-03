@@ -85,9 +85,9 @@ class BitcoinWallet{
     const w = wif.decode(fromSecret);
     const fromPair = bitcoin.ECPair.fromPrivateKey(w.privateKey, {network:NETWORK});
     let { address } = bitcoin.payments.p2pkh({ pubkey: fromPair.publicKey,network:NETWORK});
-    //return new Promise(async (resolve, reject)=>{
-      try {
-        await axios.get(`${this.url}/unspent?active=${address}&cors=true`).then((response) => {
+    return new Promise( (resolve, reject)=>{
+      //try {
+        axios.get(`${this.url}/unspent?active=${address}&cors=true`).then((response) => {
           if (response.status === 200) {
             let amount = options.amount || 0;
             if (typeof amount === 'string') {
@@ -107,19 +107,22 @@ class BitcoinWallet{
             if (typeof response.data !== 'object') {
               bodyObj = JSON.parse(response.data);
             }
-            if (!bodyObj) throw new Error('no utxos back or error');
+            if (!bodyObj) reject(new Error('no utxos back or error'));
             let utxos = bodyObj.unspent_outputs;
             if (utxos.length <= 0) {
               //console.error('no utxo');
-              throw new Error('no utxo');
+              reject(new Error('no utxo'));
+              return;
             }
             let { inputs, outputs, fee } = coinSelect(utxos, targets, feeRate);
             if (!fee) {
-              throw new Error('fee too low');
+              reject(new Error('fee too low'));
+              return;
             }
             if (!inputs || !outputs) {
               //.error('.inputs and .outputs are undefined because no solution was found');
-              throw new Error('inputs and outputs are undefined because no solution was found');
+              reject(new Error('inputs and outputs are undefined because no solution was found'));
+              return;
             }
             //console.log('transaction stat:');
             const txb = new bitcoin.TransactionBuilder(NETWORK);
@@ -138,41 +141,42 @@ class BitcoinWallet{
             //console.log('transaction end:');
             // 广播(广播成功之后返回transition submitted)
             if (func) {
-              func(this.url, txb.build().toHex());
+              func(this.url, txb.build().toHex(), resolve, reject);
             } else {
               pushtx.pushtx(txb.build().toHex()).then((ret) => {
-                return ret;
+                resolve(ret);
               }).catch(err => {
-                throw new Error(err);
+                reject(err);
               });
             }
           }
         }).catch(function (error) {
-          throw new Error(error);
+          reject(error);
         });
-      } catch (err) {
-        throw new Error(err);
-      }
-    //});
+      //} 
+      // catch (err) {
+      //   throw new Error(err);
+      // }
+    });
   }
 
   async getTransactions (address, option = {}) {
-    //return new Promise(async (resolve, reject)=>{
-      try {
+    return new Promise((resolve, reject)=>{
+      //try {
         if (!option.limit) {
           option.limit = 50;
         }
         if (!option.offset) {
           option.offset  = 0;
         }
-        let page = await axios.get(`${this.url}/multiaddr?active=${address}&offset=${option.offset}&n=${option.limit}&cors=true`);
+        axios.get(`${this.url}/multiaddr?active=${address}&offset=${option.offset}&n=${option.limit}&cors=true`).then( page =>{
         if (page) {
-          return page.data;
+          resolve(page.data);
         }
-      } catch (err) {
-        throw new Error(err);
-      }
-  //  });
+      }).catch (err=> {
+        reject(err);
+      });
+    });
   }
 
   isValidAddress (address) {

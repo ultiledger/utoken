@@ -1,19 +1,27 @@
-import {RippleAPI} from 'ripple-lib';
-import {isValidXAddress,xAddressToClassicAddress} from 'ripple-address-codec';
-import {AccountType, CoinType} from '../constants';
+import {
+  RippleAPI
+} from 'ripple-lib';
+import {
+  isValidXAddress,
+  xAddressToClassicAddress
+} from 'ripple-address-codec';
+import {
+  AccountType,
+  CoinType
+} from '../constants';
 import tradingPlatformConfig from '../config/trading-platform';
 import rippleKeypairs from 'ripple-keypairs';
 import Big from 'big.js';
 
-const round = function(dight, howMany) {
-  if(howMany) {
+const round = function (dight, howMany) {
+  if (howMany) {
     dight = Math.round(dight * Math.pow(10, howMany)) / Math.pow(10, howMany);
   } else {
     dight = Math.round(dight);
   }
   return dight;
 };
-class RippleWallet{
+class RippleWallet {
   constructor(url, option = {}) {
     if (url) {
       this.setServer(url);
@@ -22,11 +30,13 @@ class RippleWallet{
     this.option = option;
   }
 
-  setServer (url) {
+  setServer(url) {
     this.url = url;
     if (!this.server || !this.server.isConnected()) {
       this.server = new RippleAPI({
-        server: url, maxFeeXRP: '0.05',timeout:16000
+        server: url,
+        maxFeeXRP: '0.05',
+        timeout: 16000
       });
       this.server.on('error', (errorCode, errorMessage) => {
         throw new Error(errorCode + ': ' + errorMessage);
@@ -41,11 +51,13 @@ class RippleWallet{
           throw new Error('Connection is closed normally.');
         }
       });
-      this.server.connect().catch(err => {throw new Error(err);});
+      this.server.connect().catch(err => {
+        throw new Error(err);
+      });
     }
   }
 
-  destroy () {
+  destroy() {
     if (this.server) {
       if (this.server.isConnected()) {
         this.server.disconnect();
@@ -53,24 +65,24 @@ class RippleWallet{
     }
   }
 
-  getInstance () {
+  getInstance() {
     return this.server;
   }
 
-  async isActivated (address) {
+  async isActivated(address) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-    return new Promise((resolve)=>{
-      let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
+    return new Promise((resolve) => {
+      let classicAddress = isValidXAddress(address) ? xAddressToClassicAddress(address).classicAddress : address;
       this.server.getAccountInfo(classicAddress)
         .then(() => {
           resolve(true);
         }).catch(e => {
-        if (e.data.error === 'actNotFound') {
-          resolve(false);
-        }
-      });
+          if (e.data.error === 'actNotFound') {
+            resolve(false);
+          }
+        });
     });
   }
 
@@ -101,16 +113,16 @@ class RippleWallet{
   //   });
   // }
 
-  async getBalances (address) {
+  async getBalances(address) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-   // console.log("in ripple getBalance");
+    // console.log("in ripple getBalance");
     try {
-      let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
+      let classicAddress = isValidXAddress(address) ? xAddressToClassicAddress(address).classicAddress : address;
       let ret = await this.server.getBalances(classicAddress);
       let balances = [];
-      let native={};
+      let native = {};
       ret.forEach(item => {
         if (item.currency === CoinType.XRP) {
           native = {
@@ -133,8 +145,8 @@ class RippleWallet{
     } catch (e) {
       // console.error(e);
       return [{
-          value: '0',
-          code: CoinType.XRP
+        value: '0',
+        code: CoinType.XRP
       }];
     }
   }
@@ -143,11 +155,12 @@ class RippleWallet{
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-    //return new Promise(async (resolve) => {
-      let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
-      let settings = await this.server.getSettings(classicAddress);
-      return settings;
-    //});
+    return new Promise((resolve) => {
+      let classicAddress = isValidXAddress(address) ? xAddressToClassicAddress(address).classicAddress : address;
+      this.server.getSettings(classicAddress).then(settings => {
+        resolve(settings);
+      });
+    });
   }
 
   async isTrustAsset(address, assetCode, assetIssuer) {
@@ -157,7 +170,7 @@ class RippleWallet{
     if (CoinType.XRP === assetCode && !assetIssuer) {
       return true;
     }
-    let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
+    let classicAddress = isValidXAddress(address) ? xAddressToClassicAddress(address).classicAddress : address;
     if (address && assetIssuer && address === assetIssuer) {
       return true;
     }
@@ -179,13 +192,13 @@ class RippleWallet{
     return flag;
   }
 
-  async getTransactions (address, option = {}) {
+  async getTransactions(address, option = {}) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-   // return new Promise(async (resolve, reject)=>{
+    return new Promise((resolve, reject) => {
       try {
-        let classicAddress = isValidXAddress(address)? xAddressToClassicAddress(address).classicAddress:address;
+        let classicAddress = isValidXAddress(address) ? xAddressToClassicAddress(address).classicAddress : address;
         const options = {
           account: classicAddress,
           limit: 50
@@ -193,21 +206,35 @@ class RippleWallet{
         const command = 'account_tx';
         let result = {};
         if (option.hasMore && option.historys) {
-          let rsp2 = await this.server.requestNextPage(command, options, option.historys);
+          this.server.requestNextPage(command, options, option.historys).then(rsp2 =>{
           if (rsp2 && rsp2.marker) {
-            result = {'hashMore': true, 'data': rsp2};
+            result = {
+              'hashMore': true,
+              'data': rsp2
+            };
           } else {
-            result = {'hashMore': false, 'data': rsp2};
+            result = {
+              'hashMore': false,
+              'data': rsp2
+            };
           }
+        });
         } else {
-          let rsp = await this.server.request(command, options);
+          this.server.request(command, options).then(rsp =>{
           if (rsp && rsp.marker) {
-            result = {'hashMore': true, 'data': rsp};
+            result = {
+              'hashMore': true,
+              'data': rsp
+            };
           } else {
-            result = {'hashMore': false, 'data': rsp};
+            result = {
+              'hashMore': false,
+              'data': rsp
+            };
           }
+          });
         }
-        return result;
+        resolve(result);
         /* const serverInfo = await this.server.getServerInfo();
         const ledgers = serverInfo.completeLedgers.split('-');
         const minLedgerVersion = Number(ledgers[0]);
@@ -222,12 +249,12 @@ class RippleWallet{
         resolve(transactions); */
       } catch (err) {
         ////console.error(err);
-        throw new Error(err);
+        reject(err);
       }
-  //  });
+    });
   }
 
-  async sendTransaction (fromSecret, to, amount, option = {}) {
+  async sendTransaction(fromSecret, to, amount, option = {}) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
@@ -264,42 +291,52 @@ class RippleWallet{
       let tag = new Number(option.tag);
       payment.destination.tag = tag.valueOf();
     }
-    payment.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
+    payment.memos = [{
+      data: 'utoken.cash',
+      type: 'client',
+      format: 'plain/text'
+    }];
     if (option.memos) {
-      payment.memos.push({data: encodeURIComponent(option.memos), type: 'memo', format: 'plain/text'});
+      payment.memos.push({
+        data: encodeURIComponent(option.memos),
+        type: 'memo',
+        format: 'plain/text'
+      });
     }
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       this.server.preparePayment(fromAddress, payment).then(prepared => {
-        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+        const {
+          signedTransaction
+        } = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction, true)
           .then(result => {
             // console.info(result);
             ////console.info(result);
             resolve(result);
-          }).catch (err => {
-          ////console.info(err);
-          reject(err);
-        });
-      }).catch (err => {
+          }).catch(err => {
+            ////console.info(err);
+            reject(err);
+          });
+      }).catch(err => {
         ////console.info(err);
         reject(err);
       });
     });
   }
 
-  async sendCheck (fromSecret, to, amount, option = {}) {
+  async sendCheck(fromSecret, to, amount, option = {}) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
     let currency = option.assetCode || CoinType.XRP;
-    let checkcreate = {      
+    let checkcreate = {
       destination: to,
       sendMax: {
-          value: amount,
-          currency: currency
-        }      
+        value: amount,
+        currency: currency
+      }
     };
     if (option.assetIssuer) {
       checkcreate.sendMax.counterparty = option.assetIssuer;
@@ -308,114 +345,124 @@ class RippleWallet{
       let tag = new Number(option.tag);
       checkcreate.destinationTag = tag.valueOf();
     }
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       this.server.prepareCheckCreate(fromAddress, checkcreate).then(prepared => {
-        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+        const {
+          signedTransaction
+        } = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             resolve(result);
-          }).catch (err => {
-          //console.info(err);
-          reject(err);
-        });
-      }).catch (err => {
+          }).catch(err => {
+            //console.info(err);
+            reject(err);
+          });
+      }).catch(err => {
         //console.info(err);
         reject(err);
       });
     });
   }
-  async cancelCheck (check , address, fromSecret) {
+  async cancelCheck(check, address, fromSecret) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-   // return new Promise(async (resolve, reject) => {
-      try {
-        const checkCancellation = {checkID: check.id};
-        let prepared = await this.server.prepareCheckCancel(address, checkCancellation);
-        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+    return new Promise((resolve, reject) => {
+      const checkCancellation = {
+        checkID: check.id
+      };
+      this.server.prepareCheckCancel(address, checkCancellation).then(prepared => {
+        const {
+          signedTransaction
+        } = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
-              return result;
+              resolve(result);
             } else {
-              throw new Error(result.resultMessage);
+              reject(result.resultMessage);
             }
-          }).catch (err => {
-          //console.info(err);
-          throw new Error(err);
-        });
-      } catch (err) {
-        throw new Error(err);
-      }
-  //  });
+          }).catch(err => {
+            //console.info(err);
+            reject(err);
+          });
+      }).catch(err => {
+        //console.info(err);
+        reject(err);
+      });
+    });
   }
-  async checkCash (check , address, fromSecret) {
+  async checkCash(check, address, fromSecret) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-   // return new Promise(async (resolve, reject) => {
-      try {
-        const cash = {
-          checkID: check.id,
-          amount:{
-            currency: check.code,
-            value: check.amount
-          }
-        };
-        if (check.issuer) {
-          cash.amount.counterparty = check.issuer;
+    return new Promise((resolve, reject) => {
+      //try {
+      const cash = {
+        checkID: check.id,
+        amount: {
+          currency: check.code,
+          value: check.amount
         }
-        let prepared = await this.server.prepareCheckCash(address, cash);
-        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+      };
+      if (check.issuer) {
+        cash.amount.counterparty = check.issuer;
+      }
+      this.server.prepareCheckCash(address, cash).then(prepared => {
+        const {
+          signedTransaction
+        } = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
-              return result;
+              resolve(result);
             } else {
-              throw new Error(result.resultMessage);
+              reject(result.resultMessage);
             }
-          }).catch (err => {
-          //console.info(err);
-          throw new Error(err);
-        });
-      } catch (err) {
-        throw new Error(err);
-      }
-   // });
+          }).catch(err => {
+            //console.info(err);
+            reject(err);
+          });
+      }).catch(err => {
+        reject(err);
+      });
+    });
   }
-  async queryChecks (address, optional = {}) {
+  async queryChecks(address, optional = {}) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-   // return new Promise(async (resolve, reject)=>{
-      try {
-        let options = {
-          type:"check"
-        };
-        if (!optional.limit) {
-          options.limit = 200;
-        } else {
-          options.limit = optional.limit;
-        }
-        let page = await this.server.getAccountObjects(address, options);
+    return new Promise((resolve, reject) => {
+      //try {
+      let options = {
+        type: "check"
+      };
+      if (!optional.limit) {
+        options.limit = 200;
+      } else {
+        options.limit = optional.limit;
+      }
+      this.server.getAccountObjects(address, options).then(page => {
         ////console.info(page);
-        return page;
-      } catch (err) {
-        throw new Error(err);
-      }
-   // });
+        resolve(page);
+      }).catch(err => {
+        reject(err);
+      });
+    });
   }
-  async acctDel (fromSecret, to, option = {}) {
+  async acctDel(fromSecret, to, option = {}) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
     const keypair = rippleKeypairs.deriveKeypair(fromSecret);
     const fromAddress = rippleKeypairs.deriveAddress(keypair.publicKey);
-    const localInstructions = { maxFee: '5.0'};
-    let classicAddress = isValidXAddress(to)? xAddressToClassicAddress(to).classicAddress:to;
+    const localInstructions = {
+      maxFee: '5.0'
+    };
+    let classicAddress = isValidXAddress(to) ? xAddressToClassicAddress(to).classicAddress : to;
 
     let tx = {
       TransactionType: 'AccountDelete',
@@ -435,26 +482,30 @@ class RippleWallet{
     // if (option.memos) {
     //   acctdel.memos.push({data: encodeURIComponent(option.memos), type: 'memo', format: 'plain/text'});
     // }
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       this.server.prepareTransaction(tx, localInstructions).then(prepared => {
         // console.log(prepared);
-        const {signedTransaction} =new RippleAPI({maxFeeXRP: '5.0'}).sign(prepared.txJSON, fromSecret);
+        const {
+          signedTransaction
+        } = new RippleAPI({
+          maxFeeXRP: '5.0'
+        }).sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction, true)
           .then(result => {
             // console.info(result);
             ////console.info(result);
             resolve(result);
-          }).catch (err => {
-          ////console.info(err);
-          reject(err);
-        });
-      }).catch (err => {
+          }).catch(err => {
+            ////console.info(err);
+            reject(err);
+          });
+      }).catch(err => {
         ////console.info(err);
         reject(err);
       });
     });
   }
- 
+
   async changeTrust(fromSecret, code, issuer, limit) {
     if (!this.server.isConnected()) {
       await this.server.connect();
@@ -468,47 +519,61 @@ class RippleWallet{
       ripplingDisabled: true
       // ripplingDisabled: ripplingDisabled
     };
-    trustline.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
+    trustline.memos = [{
+      data: 'utoken.cash',
+      type: 'client',
+      format: 'plain/text'
+    }];
     // //console.info(ripplingDisabled);
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       this.server.prepareTrustline(fromAddress, trustline).then(prepared => {
-        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+        const {
+          signedTransaction
+        } = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             resolve(result);
-          }).catch (err => {
-          //console.info(err);
-          reject(err);
-        });
-      }).catch (err => {
+          }).catch(err => {
+            //console.info(err);
+            reject(err);
+          });
+      }).catch(err => {
         ////console.info(err);
         reject(err);
       });
     });
   }
 
-  isValidAddress (address) {
+  isValidAddress(address) {
     return this.server.isValidAddress(address);
   }
 
-  isTradingPlatformAddress (address) {
+  isTradingPlatformAddress(address) {
     let config = tradingPlatformConfig[AccountType.ripple];
     return config[address];
   }
 
   getAccount(key) {
-    let options = {'entropy':key};
+    let options = {
+      'entropy': key
+    };
     const secret = rippleKeypairs.generateSeed(options);
     const keypair = rippleKeypairs.deriveKeypair(secret);
     const address = rippleKeypairs.deriveAddress(keypair.publicKey);
-    return { secret, address };
+    return {
+      secret,
+      address
+    };
   }
 
   getAccountFromSecret(secret) {
     const keypair = rippleKeypairs.deriveKeypair(secret);
     const address = rippleKeypairs.deriveAddress(keypair.publicKey);
-    return { secret, address };
+    return {
+      secret,
+      address
+    };
   }
 
   /**
@@ -517,8 +582,8 @@ class RippleWallet{
    * @param counterSelling (对手货币，包含code和合约)
    * @returns {Promise<any>}
    */
-  async queryBook (baseBuy, counterSelling) {
-  //  return new Promise(async (resolve, reject)=>{
+  async queryBook(baseBuy, counterSelling) {
+    return new Promise((resolve, reject) => {
       try {
         const orderbook = {
           base: {
@@ -539,7 +604,9 @@ class RippleWallet{
           }
           orderbook.counter.counterparty = counterSelling.issuer;
         }
-        await this.server.getOrderbook(address, orderbook, {limit: 150}).then((data) => {
+        this.server.getOrderbook(address, orderbook, {
+          limit: 150
+        }).then((data) => {
           let result = {
             asks: [],
             bids: []
@@ -547,10 +614,10 @@ class RippleWallet{
           data.asks.map(ret => {
             let amount = ret.specification.quantity.value;
             let price = Number(new Big(ret.specification.totalPrice.value).div(ret.specification.quantity.value).toFixed(7).toString()).toString();
-            if(ret.state){
+            if (ret.state) {
               amount = ret.state.fundedAmount.value;
             }
-            if (Number(amount)===Number(0)){
+            if (Number(amount) === Number(0)) {
               return;
             }
             let r = {
@@ -558,13 +625,13 @@ class RippleWallet{
               price: price
             };
             let pop = result.asks.pop();
-            if(!pop){
+            if (!pop) {
               result.asks.push(r);
-            }else {
-              if (pop.price === r.price){
+            } else {
+              if (pop.price === r.price) {
                 pop.amount = Number(new Big(pop.amount).add(r.amount).toFixed(7).toString()).toString();
                 result.asks.push(pop);
-              }else {
+              } else {
                 result.asks.push(pop);
                 result.asks.push(r);
               }
@@ -572,11 +639,11 @@ class RippleWallet{
           });
           data.bids.map(ret => {
             let amount = ret.specification.quantity.value;
-            let price =  Number(new Big(ret.specification.totalPrice.value).div(ret.specification.quantity.value).toFixed(7).toString()).toString();
-            if(ret.state){
+            let price = Number(new Big(ret.specification.totalPrice.value).div(ret.specification.quantity.value).toFixed(7).toString()).toString();
+            if (ret.state) {
               amount = ret.state.priceOfFundedAmount.value;
             }
-            if (Number(amount)===Number(0)){
+            if (Number(amount) === Number(0)) {
               return;
             }
             let r = {
@@ -584,27 +651,27 @@ class RippleWallet{
               price: price
             };
             let pop = result.bids.pop();
-            if(!pop){
+            if (!pop) {
               result.bids.push(r);
-            }else {
-              if (pop.price === r.price){
+            } else {
+              if (pop.price === r.price) {
                 pop.amount = Number(new Big(pop.amount).add(r.amount).toFixed(7).toString()).toString();
                 result.bids.push(pop);
-              }else {
+              } else {
                 result.bids.push(pop);
                 result.bids.push(r);
               }
             }
           });
-          return result;
+          resolve(result);
         }).catch((err) => {
           //console.error(err);
-          throw new Error(err);
+          reject(err);
         });
       } catch (err) {
-        throw new Error(err);
+        reject(err);
       }
-   // });
+    });
   }
 
   /**
@@ -613,23 +680,23 @@ class RippleWallet{
    * @param optional (可选项)
    * @returns {Promise<any>}
    */
-  async queryOffers (address, optional = {}) {
+  async queryOffers(address, optional = {}) {
     ////console.debug('offers', address);
-   // return new Promise(async (resolve, reject)=>{
-      try {
-        let options = {};
-        if (!optional.limit) {
-          options.limit = 200;
-        } else {
-          options.limit = optional.limit;
-        }
-        let page = await this.server.getOrders(address, options);
-        ////console.info(page);
-        return page;
-      } catch (err) {
-        throw new Error(err);
+    return new Promise((resolve, reject) => {
+      //try {
+      let options = {};
+      if (!optional.limit) {
+        options.limit = 200;
+      } else {
+        options.limit = optional.limit;
       }
-  //  });
+      this.server.getOrders(address, options).then(page => {
+        ////console.info(page);
+        resolve(page);
+      }).catch(err => {
+        reject(err);
+      });
+    });
   }
 
   /**
@@ -643,55 +710,61 @@ class RippleWallet{
    * @param direction (方向-买入还是卖出)
    * @returns {Promise<any>}
    */
-  async sendOffer(selling, buying, amount, price , address, fromSecret, direction) {
+  async sendOffer(selling, buying, amount, price, address, fromSecret, direction) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-   // return new Promise(async (resolve, reject) => {
-      try {
-        let totalPrice = Number(new Big(amount).times(price).toString());
-        const order = {
-          'direction': direction,
-          'quantity': {
-            'currency': buying.code
-          },
-          'totalPrice': {
-            'currency': selling.code
-          },
-          "passive": false,
-          "fillOrKill": false
-        };
-        if (selling.issuer) {
-          order.totalPrice.counterparty = selling.issuer;
-          order.totalPrice.value = round(totalPrice,8).toString();
-        }else{
-          order.totalPrice.value =  round(totalPrice,6).toString();
-        }
-        if (buying.issuer) {
-          order.quantity.counterparty = buying.issuer;
-          order.quantity.value = amount.toString();
-        }else{
-          order.quantity.value = round(amount,6).toString();
-        }
-        order.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
-        let prepared = await this.server.prepareOrder(address, order);
-        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+    return new Promise((resolve, reject) => {
+      // try {
+      let totalPrice = Number(new Big(amount).times(price).toString());
+      const order = {
+        'direction': direction,
+        'quantity': {
+          'currency': buying.code
+        },
+        'totalPrice': {
+          'currency': selling.code
+        },
+        "passive": false,
+        "fillOrKill": false
+      };
+      if (selling.issuer) {
+        order.totalPrice.counterparty = selling.issuer;
+        order.totalPrice.value = round(totalPrice, 8).toString();
+      } else {
+        order.totalPrice.value = round(totalPrice, 6).toString();
+      }
+      if (buying.issuer) {
+        order.quantity.counterparty = buying.issuer;
+        order.quantity.value = amount.toString();
+      } else {
+        order.quantity.value = round(amount, 6).toString();
+      }
+      order.memos = [{
+        data: 'utoken.cash',
+        type: 'client',
+        format: 'plain/text'
+      }];
+      this.server.prepareOrder(address, order).then(prepared => {
+        const {
+          signedTransaction
+        } = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
-              return result;
+              resolve(result);
             } else {
-              throw new Error(result.resultMessage);
+              reject(result.resultMessage);
             }
-          }).catch (err => {
-          //console.info(err);
-          throw new Error(err);
-        });
-      } catch (err) {
-        throw new Error(err);
-      }
-   // });
+          }).catch(err => {
+            //console.info(err);
+            reject(err);
+          });
+      }).catch(err => {
+        reject(err);
+      });
+    });
   }
 
   /**
@@ -701,38 +774,49 @@ class RippleWallet{
    * @param fromSecret
    * @returns {Promise<any>}
    */
-  async cancelOffer (offer , address, fromSecret) {
+  async cancelOffer(offer, address, fromSecret) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-   // return new Promise(async (resolve, reject) => {
-      try {
-        const orderCancellation = {orderSequence: offer.id};
-        orderCancellation.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
-        let prepared = await this.server.prepareOrderCancellation(address, orderCancellation);
-        const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+    return new Promise((resolve, reject) => {
+      //try {
+      const orderCancellation = {
+        orderSequence: offer.id
+      };
+      orderCancellation.memos = [{
+        data: 'utoken.cash',
+        type: 'client',
+        format: 'plain/text'
+      }];
+      this.server.prepareOrderCancellation(address, orderCancellation).then(prepared => {
+        const {
+          signedTransaction
+        } = this.server.sign(prepared.txJSON, fromSecret);
         this.server.submit(signedTransaction, true)
           .then(result => {
             //console.info(result);
             if (result && result.resultCode === 'tesSUCCESS') {
-              return result;
+              resolve(result);
             } else {
-              throw new Error(result.resultMessage);
+              reject(result.resultMessage);
             }
-          }).catch (err => {
-          //console.info(err);
-          throw new Error(err);
-        });
-      } catch (err) {
-        throw new Error(err);
-      }
-   // });
+          }).catch(err => {
+            //console.info(err);
+            reject(err);
+          });
+      }).catch(err => {
+        reject(err);
+      });
+    });
   }
 
-  async queryLastBook (baseBuy, counterSelling, optional = {}) {
+  async queryLastBook(baseBuy, counterSelling, optional = {}) {
     return new Promise((resolve, reject) => {
-      try{
-        let options = {limit: 1, descending: true};
+      try {
+        let options = {
+          limit: 1,
+          descending: true
+        };
         optional.descending = options.descending;
         if (optional.limit) {
           options.limit = optional.limit;
@@ -742,17 +826,19 @@ class RippleWallet{
           url = `https://data.ripple.com/v2/accounts/${optional.forAccount}/exchanges?descending=true&limit=200`;
           //url = `https://data.ripple.com/v2/accounts/${optional.forAccount}/exchanges?/${baseBuy.code}+${baseBuy.issuer}/${counterSelling.code}+${counterSelling.issuer}?limit=${optional.limit}&descending=${optional.descending}`;
         }
-        let xmlhttp = new XMLHttpRequest();  // 创建异步请求
+        let xmlhttp = new XMLHttpRequest(); // 创建异步请求
         xmlhttp.onreadystatechange = () => {
           if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             resolve(JSON.parse(xmlhttp.responseText));
           } else if (xmlhttp.status === 400) {
-            resolve({data: []});
+            resolve({
+              data: []
+            });
           }
         };
         xmlhttp.open('GET', url);
         xmlhttp.send();
-      }catch (err) {
+      } catch (err) {
         reject(err);
       }
     });
@@ -765,24 +851,30 @@ class RippleWallet{
    * @param settings
    * @returns {Promise<void>}
    */
-  async accountSettings (address, fromSecret, settings) {
+  async accountSettings(address, fromSecret, settings) {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       try {
-        settings.memos = [{data: 'utoken.cash', type: 'client', format: 'plain/text'}];
+        settings.memos = [{
+          data: 'utoken.cash',
+          type: 'client',
+          format: 'plain/text'
+        }];
         this.server.prepareSettings(address, settings).then(prepared => {
-          const {signedTransaction} = this.server.sign(prepared.txJSON, fromSecret);
+          const {
+            signedTransaction
+          } = this.server.sign(prepared.txJSON, fromSecret);
           this.server.submit(signedTransaction, true).then(ret => {
             resolve(ret);
-          }).catch (err => {
+          }).catch(err => {
             reject(err);
           });
         }).catch(err => {
           reject(err);
         });
-      }catch (e) {
+      } catch (e) {
         reject(e);
       }
     });

@@ -125,7 +125,7 @@
             setTimeout(() => {
               toast.clear();
               this.getChecks();
-            }, 1000);
+            }, 3000);
           }
         }).catch(err => {
           // console.info(err);
@@ -146,7 +146,8 @@
         const toast = this.$toast.loading({
           duration: 0,
           forbidClick: true,
-          loadingType: 'circular'
+          loadingType: 'circular',
+          message: this.$t('transaction.inTransactionMessage')
         });
         let check = {
           id: item.id,
@@ -157,12 +158,13 @@
           check.issuer = item.issuer;
         }
         this.$wallet.checkCash(check, this.address, cryptor.decryptAES(this.secret, password)).then(ret => {
+          //console.info(ret);
           if (ret) {
             toast.message = this.$t('transaction.transactionBroadcastSuccess');
-            setTimeout(() => {
-              toast.clear();
-              this.getChecks();
-            }, 1000);
+              setTimeout(() => {
+                toast.clear();
+                this.getChecks();
+              }, 3000);
           }
         }).catch(err => {
           // console.info(err);
