@@ -131,7 +131,7 @@
           let item = {...token, canSelect: true, selected: selected, loading: false};
           if (item.id === coin.symbol){
             item.code = coin.symbol;
-            item.logo = "static/img/"+item.code+"-1@3x.png";
+            item.logo = "static/img/"+item.code+"@3x.png";
             item.canSelect = false;
             item.loading = false;
           }

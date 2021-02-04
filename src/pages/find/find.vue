@@ -63,14 +63,14 @@
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
             link: 'https://xrpintel.com/accounts',
-            imgUrl: 'static/img/XRP-1@3x.png'
+            imgUrl: 'static/img/XRP@3x.png'
           },
           {
             title: this.$t('find.xrpTitle'),
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
             link: 'https://xrpscan.com',
-            imgUrl: 'static/img/XRP-1@3x.png'
+            imgUrl: 'static/img/XRP@3x.png'
           },
           {
             title: this.$t('find.xmlTitle'),
@@ -98,7 +98,7 @@
             subTitle: this.$t('find.fomo3DSubTitle'),
             desc: this.$t('find.fomo3DDsc'),
             link: 'http://chart.ripplefox.com',
-            imgUrl: 'static/img/XRP-1@3x.png'
+            imgUrl: 'static/img/XRP@3x.png'
           }
         ];
       },
@@ -116,7 +116,7 @@
             subTitle: this.$t('find.xrpSubTitle'),
             desc: this.$t('find.xrpDesc'),
             link: 'https://xrp1ntel.com/accounts',
-            imgUrl: 'static/img/XRP-1@3x.png'
+            imgUrl: 'static/img/XRP@3x.png'
           },
           {
             title: this.$t('find.xmlTitle'),
