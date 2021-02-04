@@ -196,7 +196,7 @@ class RippleWallet {
     if (!this.server.isConnected()) {
       await this.server.connect();
     }
-    return new Promise((resolve, reject) => {
+    //return new Promise((resolve, reject) => {
       try {
         let classicAddress = isValidXAddress(address) ? xAddressToClassicAddress(address).classicAddress : address;
         const options = {
@@ -206,7 +206,7 @@ class RippleWallet {
         const command = 'account_tx';
         let result = {};
         if (option.hasMore && option.historys) {
-          this.server.requestNextPage(command, options, option.historys).then(rsp2 =>{
+          let rsp2 = await this.server.requestNextPage(command, options, option.historys);
           if (rsp2 && rsp2.marker) {
             result = {
               'hashMore': true,
@@ -218,9 +218,9 @@ class RippleWallet {
               'data': rsp2
             };
           }
-        });
+        //});
         } else {
-          this.server.request(command, options).then(rsp =>{
+          let rsp = await this.server.request(command, options);
           if (rsp && rsp.marker) {
             result = {
               'hashMore': true,
@@ -232,9 +232,9 @@ class RippleWallet {
               'data': rsp
             };
           }
-          });
+         // });
         }
-        resolve(result);
+        return result;
         /* const serverInfo = await this.server.getServerInfo();
         const ledgers = serverInfo.completeLedgers.split('-');
         const minLedgerVersion = Number(ledgers[0]);
@@ -249,9 +249,9 @@ class RippleWallet {
         resolve(transactions); */
       } catch (err) {
         ////console.error(err);
-        reject(err);
+        throw new Error(err);
       }
-    });
+    //});
   }
 
   async sendTransaction(fromSecret, to, amount, option = {}) {
