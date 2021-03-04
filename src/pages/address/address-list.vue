@@ -4,7 +4,7 @@
       v-model="showPop"
       position="right"
       class="popup-wapper"
-      style="width:100%;"
+      style="width:100%;height: 100%;"
       get-container="body"
     >
       <van-nav-bar
