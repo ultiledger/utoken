@@ -21,6 +21,7 @@ import coins from './wallet/coins';
 import api from './core/api';
 import getMarket from './core/utils/market';
 import './core/mixins/dpr-img';
+import '@vant/touch-emulator';
 
 window.canBack = true;
 process.versions = {};

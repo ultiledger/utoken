@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^1.0.2",
+    "@vant/touch-emulator": "^1.2.0",
     "axios": "^0.21.1",
     "big.js": "^5.2.2",
     "core-js": "^3.6.5",
