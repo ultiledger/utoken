@@ -62,6 +62,7 @@ module.exports = {
       });
   },
   devServer: { // 开发服务器配置
+    disableHostCheck: true,
     historyApiFallback: false,
     noInfo: false,
     host: config.dev.host,
