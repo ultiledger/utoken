@@ -1,4 +1,5 @@
 const path = require('path');
+const appConfig = require('./app.config.js');
 const config = require('./config');
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const PATHS = {
@@ -8,6 +9,19 @@ const PATHS = {
 module.exports = {
   // transpileDependencies: ['bitcoinjs-lib', 'bip32', 'ripple-lib', 'ethereumjs-tx', 'rlp', 'eth-lib', 'agent-base', 'tiny-secp256k1'],
   publicPath:  process.env.NODE_ENV === 'production'?'': '/',
+  pwa: {
+    name: appConfig.pwa.name,
+    themeColor: '#1969ff',
+    msTileColor: '#1969ff',
+    assetsVersion: '4',
+    manifestOptions: {
+        background_color: '#1969ff',
+        categories: appConfig.pwa.categories,
+    },
+    workboxOptions: {
+        skipWaiting: true,
+    },
+  },
   chainWebpack: vwconfig => { // 主要修改一些公共配置
     // 指定输出目录及文件命名方式
     vwconfig.output
@@ -60,7 +74,12 @@ module.exports = {
         name: '[path][name].[ext]',
         outputPath: 'images/'
       });
+      if (!appConfig.usePWA) {
+        config.plugins.delete('pwa');
+        config.plugins.delete('workbox');
+    }
   },
+  
   devServer: { // 开发服务器配置
     disableHostCheck: true,
     historyApiFallback: false,

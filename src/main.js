@@ -22,6 +22,7 @@ import api from './core/api';
 import getMarket from './core/utils/market';
 import './core/mixins/dpr-img';
 import '@vant/touch-emulator';
+import './registerServiceWorker';
 
 window.canBack = true;
 process.versions = {};
