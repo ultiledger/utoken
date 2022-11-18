@@ -34,7 +34,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-plugin-eslint": "^3.12.1",
-    "@vue/cli-service": "^3.12.1",
+    "@vue/cli-service": "^5.0.8",
     "babel-plugin-import": "^1.12.2",
     "bip39": "^2.5.0",
     "bitcoinjs-lib": "^4.0.2",
